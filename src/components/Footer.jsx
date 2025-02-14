@@ -62,7 +62,7 @@ const Footer = () => {
             </div>
             <div className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-15">
                 <p className="text-muted-foreground">
-                    &copy; 2024 Raj Aghera. All rights reserved.
+                    &copy; 2025 Raj Aghera. All rights reserved.
                 </p>
                 <nav className="sm:ml-auto flex gap-4 sm:gap-6">
                     <div className="hover:underline underline-offset-4">
