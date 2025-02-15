@@ -51,7 +51,7 @@ const Footer = () => {
                 </div>
                 <div className="flex flex-col space-y-3">
                     <span className="font-semibold text-[20px] my-3">Subscribe</span>
-                    <div className="flex bg-white shadow rounded-2xl p-2 w-2xs justify-between">
+                    <div className="flex bg-white shadow rounded-2xl pl-4 py-2 w-2xs justify-between">
                         <Input variant="unstyled" placeholder="Your emaul address" />
                         <Button variant="transparent" color="#2e6f40">Send</Button>
                     </div>

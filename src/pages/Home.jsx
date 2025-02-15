@@ -1,6 +1,9 @@
 import { Button } from "@mantine/core";
 import { ShieldCheck, Star } from "lucide-react";
 
+
+import PopularServices from "../components/PopularServices";
+
 function Home() {
   return (
     <div>
@@ -40,6 +43,15 @@ function Home() {
           </div>
           <img src="https://demoapus1.com/freeio/wp-content/uploads/2023/07/h11.png" alt="image" />
         </div>
+      </section>
+      <section className="bg-[#cfffdc]">
+        <div className="text-center py-14 leading-12">
+          <h1 className="text-3xl font-semibold">Popular Services</h1>
+          <p>Discover our featured services designed to elevate your experience</p>
+        </div>
+      
+          <PopularServices />
+        
       </section>
     </div>
   )
