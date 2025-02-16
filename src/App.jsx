@@ -12,8 +12,7 @@ import Signup from './pages/Signup'
 const App = () => {
 
   const location = useLocation();
-  const hideLayout = ["/login", "/signup"].includes(location.pathname)
-  ;
+  const hideLayout = ["/login", "/signup"].includes(location.pathname);
 
   return (
     <MantineProvider>

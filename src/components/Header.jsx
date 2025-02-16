@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 function Header() {
   return (
-    <nav className="flex justify-between items-center px-10 h-16 border-b border-gray-300 bg-[#253d2c] text-white">
+    <nav className="flex justify-between items-center px-10 h-16 border-b border-gray-300 bg-[#253d2c] text-white w-full">
       <div className="flex items-center space-x-5 text-[15px]">
         <div className="text-xl font-semibold mr-10">
           <Link to='/'>ProGigs</Link>
@@ -15,8 +15,12 @@ function Header() {
         <span className="font-normal">Blogs</span>
       </div>
       <div className="space-x-5">
-      <Button variant="transparent" color="#ffffff"><Link to='/login'>Login</Link></Button>
-      <Button variant="filled" color="#2e6f40"><Link to='/signup'>signup</Link></Button>
+      <Link to='/login'>
+        <Button variant="transparent" color="#ffffff">Login</Button>
+      </Link>
+      <Link to='/signup'>
+        <Button variant="filled" color="#2e6f40">signup</Button>
+      </Link>
       </div>
     </nav>
   )
