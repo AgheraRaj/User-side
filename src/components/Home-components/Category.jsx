@@ -44,7 +44,7 @@ const categories = [
   
   function Category() {
     return (
-        <div className="grid grid-cols-5 grid-rows-2 gap-10 px-20 pb-14">
+        <div className="grid grid-cols-5 grid-rows-2 gap-10 px-20">
         {categories.map((category, index) => (
           <div
             key={index}

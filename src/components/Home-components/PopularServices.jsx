@@ -27,7 +27,7 @@ const PopularServices = () => {
     };
 
     return (
-        <div className="relative w-full flex items-center justify-center px-20 pb-18">
+        <div className="relative w-full flex items-center justify-center px-20">
             {/* Left Scroll Button */}
             <button onClick={() => scroll("left")} className="absolute left-5 bg-white p-3 rounded-full shadow-md">
                 <ChevronLeft size={30} />
