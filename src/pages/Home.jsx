@@ -48,7 +48,9 @@ function Home() {
           <h1 className="text-5xl font-semibold leading-15">Find the perfect freelancer services for your business</h1>
           <p>Work with talented people at the most affordable price to get the most out of your time and cost</p>
           <div className="flex space-x-5">
-            <Button variant="filled" color="#2e6f40" size="lg">Find Work</Button>
+            <Link to="/job-list">
+              <Button variant="filled" color="#2e6f40" size="lg">Find Work</Button>
+            </Link>
             <Button variant="outline" color="#2e6f40" size="lg">Find Talent</Button>
           </div>
           <div className="mt-10">
