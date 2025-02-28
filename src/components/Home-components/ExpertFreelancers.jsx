@@ -37,8 +37,8 @@ function ExpertFreelancers() {
             <Card className='w-[248px] text-center transition duration-300 ease-in-out hover:scale-105' shadow="sm" padding="sm" radius="md" withBorder>
               <div className="relative flex justify-center p-5">
                 <Image src={freelancer.thumbnail || "https://via.placeholder.com/80"} className="w-20 h-20 rounded-full" />
-                <button className="absolute top-0 right-0 p-2 bg-white rounded-full shadow-md">
-                  <Heart size={18} className="text-gray-400" />
+                <button className="absolute top-0 right-0 p-2 bg-white rounded-full border border-gray-300">
+                  <Heart size={16} />
                 </button>
               </div>
               <Text fw={600}>{freelancer.name}</Text>

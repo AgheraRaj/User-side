@@ -55,12 +55,12 @@ function Header() {
       {/* Hire Freelancer Dropdown Content */}
       {showHireDropdown && (
         <div
-          className="absolute top-16 right-0 w-[1360px] border-t border-gray-300 shadow-md flex"
+          className="absolute top-16 right-0 w-[1360px] bg-white border-t border-gray-300 shadow-md flex"
           onMouseEnter={() => setShowHireDropdown(true)}
           onMouseLeave={() => setShowHireDropdown(false)}
         >
           {/* Left Panel */}
-          <div className="w-[40%] bg-white flex flex-col space-y-3 p-4">
+          <div className="w-[40%] flex flex-col space-y-3 p-4">
             <div
               className="border-[#2E6F40] border h-24 rounded-md p-4 flex items-center justify-between cursor-pointer hover:bg-[#2e6f400d]"
               onMouseEnter={() => setActiveSubMenu("skill")}
@@ -94,7 +94,7 @@ function Header() {
 
           {/* Right Panel (Submenu) */}
           {activeSubMenu && (
-            <div className="w-full bg-white p-5  border-l border-[#2E6F40]">
+            <div className="w-full p-5  border-l border-[#2E6F40]">
               {activeSubMenu === "skill" && (
                 <div className="flex">
                   <div className="grid grid-cols-3 grid-rows-2 gap-5">
@@ -218,12 +218,12 @@ function Header() {
       {/* Find Work Dropdown Content */}
       {showFindWorkDropdown && (
         <div
-          className="absolute top-16 right-0 w-[1210px] flex bg-white border-t border-gray-300 shadow-md"
+          className="absolute top-16 right-0 w-[1210px] bg-white flex border-t border-gray-300 shadow-md"
           onMouseEnter={() => setShowFindWorkDropdown(true)}
           onMouseLeave={() => setShowFindWorkDropdown(false)}
         >
           {/* Left Panel */}
-          <div className="w-[40%] bg-white flex flex-col space-y-3 p-4">
+          <div className="w-[40%]  flex flex-col space-y-3 p-4">
             <div
               className="border-[#2E6F40] border h-24 rounded-md p-4 flex items-center justify-between cursor-pointer hover:bg-[#2e6f400d]"
               onMouseEnter={() => setActiveSubMenu("skill")}
@@ -257,7 +257,7 @@ function Header() {
 
           {/* Right Panel (Submenu) */}
           {activeSubMenu && (
-            <div className="w-full bg-white p-5  border-l border-[#2E6F40]">
+            <div className="w-full p-5  border-l border-[#2E6F40]">
               {activeSubMenu === "skill" && (
                 <div className="flex">
                   <div className="grid grid-cols-3 grid-rows-2 gap-6 py-2">

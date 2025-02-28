@@ -51,7 +51,9 @@ function Home() {
             <Link to="/job-list">
               <Button variant="filled" color="#2e6f40" size="lg">Find Work</Button>
             </Link>
-            <Button variant="outline" color="#2e6f40" size="lg">Find Talent</Button>
+            <Link to="/talent">
+              <Button variant="outline" color="#2e6f40" size="lg">Find Talent</Button>
+            </Link>
           </div>
           <div className="mt-10">
             <span>Trusted by</span>
