@@ -55,12 +55,12 @@ function Header() {
       {/* Hire Freelancer Dropdown Content */}
       {showHireDropdown && (
         <div
-          className="absolute top-16 right-0 w-[1360px] bg-white border-t border-gray-300 shadow-md flex"
+          className="absolute top-16 right-0 w-full bg-white border-t border-gray-300 shadow-md flex"
           onMouseEnter={() => setShowHireDropdown(true)}
           onMouseLeave={() => setShowHireDropdown(false)}
         >
           {/* Left Panel */}
-          <div className="w-[40%] flex flex-col space-y-3 p-4">
+          <div className=" flex flex-col space-y-3 p-5"> {/* remove 40% width */}
             <div
               className="border-[#2E6F40] border h-24 rounded-md p-4 flex items-center justify-between cursor-pointer hover:bg-[#2e6f400d]"
               onMouseEnter={() => setActiveSubMenu("skill")}
@@ -88,7 +88,7 @@ function Header() {
                 <h1 className="font-semibold">By Category</h1>
                 <p className="text-sm">Find freelancers that suit a certain project category.</p>
               </div>
-              
+
             </div>
           </div>
 
@@ -96,57 +96,59 @@ function Header() {
           {activeSubMenu && (
             <div className="w-full p-5  border-l border-[#2E6F40]">
               {activeSubMenu === "skill" && (
-                <div className="flex">
+                <div className="flex justify-start gap-10">
                   <div className="grid grid-cols-3 grid-rows-2 gap-5">
 
-                    <div className="flex flex-col transition-transform duration-300 hover:scale-105">
+                    <div className="flex flex-col border border-black rounded-md ">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/graphic-design.png" alt="" className="rounded-t-md" />
-                      <div className="font-semibold bg-black text-white h-20 rounded-b-md flex justify-center items-center">Graphic designers</div>
+                      <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Graphic designers</div>
                     </div>
 
-                    <div className="flex flex-col transition-transform duration-300 hover:scale-105">
+                    <div className="flex flex-col border border-black rounded-md">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/website.png" alt="" className="rounded-t-md" />
-                      <div className="font-semibold bg-black text-white h-20 rounded-b-md flex justify-center items-center">Website designers</div>
+                      <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Website designers</div>
                     </div>
 
-                    <div className="flex flex-col transition-transform duration-300 hover:scale-105">
+                    <div className="flex flex-col border border-black rounded-md">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/mobile.png" alt="" className="rounded-t-md" />
-                      <div className="font-semibold bg-black text-white h-20 rounded-b-md flex justify-center items-center">Mobile app developers</div>
+                      <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Mobile app developers</div>
                     </div>
 
-                    <div className="flex flex-col transition-transform duration-300 hover:scale-105">
+                    <div className="flex flex-col border border-black rounded-md">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/sd.png" alt="" className="rounded-t-md" />
-                      <div className="font-semibold bg-black text-white h-20 rounded-b-md flex justify-center items-center">Softewar developers</div>
+                      <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Softewar developers</div>
                     </div>
 
-                    <div className="flex flex-col transition-transform duration-300 hover:scale-105">
+                    <div className="flex flex-col border border-black rounded-md">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/3d.png" alt="" className="rounded-t-md" />
-                      <div className="font-semibold bg-black text-white h-20 rounded-b-md flex justify-center items-center">3D artists</div>
+                      <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">3D artists</div>
                     </div>
 
-                    <div className="flex flex-col transition-transform duration-300 hover:scale-105">
+                    <div className="flex flex-col border border-black rounded-md">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/illustration.png" alt="" className="rounded-t-md" />
-                      <div className="font-semibold bg-black text-white h-20 rounded-b-md flex justify-center items-center">Illustration</div>
+                      <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Illustration</div>
                     </div>
 
                   </div>
 
-                  <div className="flex flex-col mx-auto">
-                  <h2 className="text-lg font-semibold mb-3">Other popular skills</h2>
-                  <ul className="space-y-2">
-                    <li className="cursor-pointer">Web developers</li>
-                    <li className="cursor-pointer">Writers</li>
-                    <li className="cursor-pointer">Marketing specialists</li>
-                    <li className="cursor-pointer">SEO specialists</li>
-                    <li className="cursor-pointer">Data entry clerks</li>
-                    <li className="cursor-pointer">Virtual assistants</li>
-                    <li className="cursor-pointer">Translators</li>
-                    <li className="cursor-pointer">Financial exports</li>
-                    <li className="cursor-pointer">Manufacturers</li>
-                    <li className="cursor-pointer">Logistics experts</li>
-                    <li className="cursor-pointer">Fashion designers</li>
-                    <button className="flex items-center gap-1">Find out more <ChevronRight /></button>
-                  </ul>
+                  <div className="flex flex-col">
+                    <h2 className="text-lg font-semibold mb-4">Other popular skills</h2>
+                    <ul className="space-y-2">
+                      <li className="cursor-pointer">Web developers</li>
+                      <li className="cursor-pointer">Writers</li>
+                      <li className="cursor-pointer">Marketing specialists</li>
+                      <li className="cursor-pointer">SEO specialists</li>
+                      <li className="cursor-pointer">Data entry clerks</li>
+                      <li className="cursor-pointer">Virtual assistants</li>
+                      <li className="cursor-pointer">Translators</li>
+                      <li className="cursor-pointer">Financial exports</li>
+                      <li className="cursor-pointer">Manufacturers</li>
+                      <li className="cursor-pointer">Logistics experts</li>
+                      <li className="cursor-pointer">Fashion designers</li>
+                      <div className="font-semibold">
+                        <button className="flex items-center gap-1 text-[#2E6F40]">Find out more <ChevronRight /></button>
+                      </div>
+                    </ul>
                   </div>
                 </div>
               )}
@@ -154,60 +156,58 @@ function Header() {
               {activeSubMenu === "location" && (
                 <div className="flex">
 
-                <div className="flex flex-col mx-auto">
-                <h2 className="text-lg font-semibold mb-3">Choose from millions of freelancers worldwide.</h2>
-                <ul className="space-y-2">
-                  <li className="cursor-pointer">United States</li>
-                  <li className="cursor-pointer">United Kingdom</li>
-                  <li className="cursor-pointer">Canada</li>
-                  <li className="cursor-pointer">India</li>
-                  <li className="cursor-pointer">Australia</li>
-                  <li className="cursor-pointer">Paris</li>
-                  <li className="cursor-pointer">Bangladesh</li>
-                  <li className="cursor-pointer">Indonesia</li>
-                  <li className="cursor-pointer">Brazil</li>
-                  <li className="cursor-pointer">China</li>
-                  <li className="cursor-pointer">Turkey</li>
-                  <li className="cursor-pointer">Philippines</li>
-                  <button className="flex items-center gap-1">Find out more <ChevronRight /></button>
-                </ul>
+                  <div className="flex flex-col">
+                    <h2 className="text-lg font-semibold w-xs mb-4">Choose from millions of freelancers worldwide.</h2>
+                    <ul className="space-y-2">
+                      <li className="cursor-pointer">United States</li>
+                      <li className="cursor-pointer">United Kingdom</li>
+                      <li className="cursor-pointer">Canada</li>
+                      <li className="cursor-pointer">India</li>
+                      <li className="cursor-pointer">Australia</li>
+                      <li className="cursor-pointer">Paris</li>
+                      <li className="cursor-pointer">Bangladesh</li>
+                      <li className="cursor-pointer">Indonesia</li>
+                      <li className="cursor-pointer">Brazil</li>
+                      <li className="cursor-pointer">China</li>
+                      <li className="cursor-pointer">Turkey</li>
+                      <li className="cursor-pointer">Philippines</li>
+                      <div className="font-semibold">
+                        <button className="flex items-center gap-1 text-[#2E6F40]">Find out more <ChevronRight /></button>
+                      </div>
+                    </ul>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="flex flex-col border border-black rounded-md size-72">
+                      <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-1.jpg" alt="" className="rounded-t-md" />
+                      <div className="font-semibold h-24 rounded-b-md flex flex-col justify-center text-start px-2">
+                        <p>Working with international freelancers</p>
+                        <button className="flex items-center gap-1 text-[#2E6F40]">Find out more <ChevronRight /></button>
+                      </div>
+                    </div>
+                    <div className="flex flex-col border border-black rounded-md size-72">
+                      <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-2.jpg" alt="" className="rounded-t-md" />
+                      <div className="font-semibold h-24 rounded-b-md flex flex-col justify-center text-start px-2">
+                        <p>Where to find the best developers</p>
+                        <button className="flex items-center gap-1 text-[#2E6F40]">Find out more <ChevronRight /></button>
+                      </div>
+                    </div>
+                    <div className="flex flex-col border border-black rounded-md size-72">
+                      <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-3.jpg" alt="" className="rounded-t-md" />
+                      <div className="font-semibold h-24 rounded-b-md flex flex-col justify-center text-start px-2">
+                        <p>Do you need a local freelancer?</p>
+                        <button className="flex items-center gap-1 text-[#2E6F40]">Find out more <ChevronRight /></button>
+                      </div>
+                    </div>
+                    <div className="flex flex-col border border-black rounded-md size-72">
+                      <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-4.jpg" alt="" className="rounded-t-md" />
+                      <div className="font-semibold h-24 rounded-b-md flex flex-col justify-center text-start px-2">
+                        <p>Building an international team</p>
+                        <button className="flex items-center gap-1 text-[#2E6F40]">Find out more <ChevronRight /></button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-
-                <div className="grid grid-cols-2 grid-rows-2 gap-5 ">
-                  <div className="flex flex-col transition-transform duration-300 hover:scale-105">
-                    <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-1.jpg" alt="" className="rounded-t-md" />
-                    <div className="font-semibold bg-black text-white h-24 rounded-b-md flex flex-col justify-center text-start px-2">
-                      <p>Working with international freelancers</p>
-                      <button className="flex items-center gap-1 text-[#68BA7F]">Find out more <ChevronRight /></button>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col transition-transform duration-300 hover:scale-105">
-                    <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-2.jpg" alt="" className="rounded-t-md" />
-                    <div className="font-semibold bg-black text-white h-24 rounded-b-md flex flex-col justify-center text-start px-2">
-                      <p>Where to find the best developers</p>
-                      <button className="flex items-center gap-1 text-[#68BA7F]">Find out more <ChevronRight /></button>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col transition-transform duration-300 hover:scale-105">
-                    <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-3.jpg" alt="" className="rounded-t-md" />
-                    <div className="font-semibold bg-black text-white h-24 rounded-b-md flex flex-col justify-center text-start px-2">
-                      <p>Do you need a local freelancer?</p>
-                      <button className="flex items-center gap-1 text-[#68BA7F]">Find out more <ChevronRight /></button>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col transition-transform duration-300 hover:scale-105">
-                    <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-4.jpg" alt="" className="rounded-t-md" />
-                    <div className="font-semibold bg-black text-white h-24 rounded-b-md flex flex-col justify-center text-start px-2">
-                      <p>Building an international team</p>
-                      <button className="flex items-center gap-1 text-[#68BA7F]">Find out more <ChevronRight /></button>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
               )}
 
             </div>
@@ -218,12 +218,12 @@ function Header() {
       {/* Find Work Dropdown Content */}
       {showFindWorkDropdown && (
         <div
-          className="absolute top-16 right-0 w-[1210px] bg-white flex border-t border-gray-300 shadow-md"
+          className="absolute top-16 right-0 w-full bg-white flex border-t border-gray-300 shadow-md"
           onMouseEnter={() => setShowFindWorkDropdown(true)}
           onMouseLeave={() => setShowFindWorkDropdown(false)}
         >
           {/* Left Panel */}
-          <div className="w-[40%]  flex flex-col space-y-3 p-4">
+          <div className="flex flex-col space-y-3 p-4">
             <div
               className="border-[#2E6F40] border h-24 rounded-md p-4 flex items-center justify-between cursor-pointer hover:bg-[#2e6f400d]"
               onMouseEnter={() => setActiveSubMenu("skill")}
@@ -251,7 +251,7 @@ function Header() {
                 <h1 className="font-semibold">Featured jobs</h1>
                 <p className="text-sm">Explore our current list of excited top featured projects.</p>
               </div>
-              
+
             </div>
           </div>
 
@@ -259,55 +259,57 @@ function Header() {
           {activeSubMenu && (
             <div className="w-full p-5  border-l border-[#2E6F40]">
               {activeSubMenu === "skill" && (
-                <div className="flex">
-                  <div className="grid grid-cols-3 grid-rows-2 gap-6 py-2">
+                <div className="flex gap-10">
+                  <div className="grid grid-cols-3 gap-5 ">
 
-                    <div className="flex flex-col size-44 transition-transform duration-300 hover:scale-105">
+                    <div className="flex flex-col border border-black rounded-md">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/find-job/website.png" alt="" className="rounded-t-md" />
-                      <div className="font-semibold bg-black text-white h-16 rounded-b-md flex justify-center items-center">Website jobs</div>
+                      <div className="font-semibold px-3 h-20 rounded-b-md flex justify-center items-center">Website jobs</div>
                     </div>
 
-                    <div className="flex flex-col size-44 transition-transform duration-300 hover:scale-105">
+                    <div className="flex flex-col border border-black rounded-md">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/find-job/graphic-design.png" alt="" className="rounded-t-md" />
-                      <div className="font-semibold bg-black text-white h-16 rounded-b-md flex justify-center items-center">Graphic design jobs</div>
+                      <div className="font-semibold px-3 h-20 rounded-b-md flex justify-center items-center">Graphic design jobs</div>
                     </div>
 
-                    <div className="flex flex-col size-44 transition-transform duration-300 hover:scale-105">
+                    <div className="flex flex-col border border-black rounded-md">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/find-job/data-entry.png" alt="" className="rounded-t-md" />
-                      <div className="font-semibold bg-black text-white h-16 rounded-b-md flex justify-center items-center">Data entry jobs</div>
+                      <div className="font-semibold px-3 h-20 rounded-b-md flex justify-center items-center">Data entry jobs</div>
                     </div>
 
-                    <div className="flex flex-col size-44 transition-transform duration-300 hover:scale-105">
+                    <div className="flex flex-col border border-black rounded-md">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/find-job/mobile.png" alt="" className="rounded-t-md" />
-                      <div className="font-semibold bg-black text-white h-16 rounded-b-md flex justify-center items-center text-center">Mobile app development</div>
+                      <div className="font-semibold px-3 h-20 rounded-b-md flex justify-center items-center text-center">Mobile app development</div>
                     </div>
 
-                    <div className="flex flex-col size-44 transition-transform duration-300 hover:scale-105">
+                    <div className="flex flex-col border border-black rounded-md">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/find-job/internet-marketing.png" alt="" className="rounded-t-md" />
-                      <div className="font-semibold bg-black text-white h-16 rounded-b-md flex justify-center items-center text-center">Internet marketing jobs</div>
+                      <div className="font-semibold px-3 h-20 rounded-b-md flex justify-center items-center text-center">Internet marketing jobs</div>
                     </div>
 
-                    <div className="flex flex-col size-44 transition-transform duration-300 hover:scale-105">
+                    <div className="flex flex-col border border-black rounded-md">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/find-job/local.png" alt="" className="rounded-t-md" />
-                      <div className="font-semibold bg-black text-white h-16 rounded-b-md flex justify-center items-center">Local jobs</div>
+                      <div className="font-semibold px-3 h-20 rounded-b-md flex justify-center items-center">Local jobs</div>
                     </div>
 
                   </div>
 
-                  <div className="flex flex-col ml-7">
-                  <h2 className="text-lg font-semibold mb-3">Other popular jobs</h2>
-                  <ul className="space-y-2">
-                    <li className="cursor-pointer">Software development jobs</li>
-                    <li className="cursor-pointer">Internet marketing jobs</li>
-                    <li className="cursor-pointer">Data entry jobs</li>
-                    <li className="cursor-pointer">SEO jobs</li>
-                    <li className="cursor-pointer">Writing jobs</li>
-                    <li className="cursor-pointer">Legal jobs</li>
-                    <li className="cursor-pointer">Finance jobs</li>
-                    <li className="cursor-pointer">Manufacturing jobs</li>
-                    <li className="cursor-pointer">Logistics jobs</li>
-                    <button className="flex items-center gap-1">Find out more <ChevronRight /></button>
-                  </ul>
+                  <div className="flex flex-col">
+                    <h2 className="text-lg font-semibold mb-3">Other popular jobs</h2>
+                    <ul className="space-y-2">
+                      <li className="cursor-pointer">Software development jobs</li>
+                      <li className="cursor-pointer">Internet marketing jobs</li>
+                      <li className="cursor-pointer">Data entry jobs</li>
+                      <li className="cursor-pointer">SEO jobs</li>
+                      <li className="cursor-pointer">Writing jobs</li>
+                      <li className="cursor-pointer">Legal jobs</li>
+                      <li className="cursor-pointer">Finance jobs</li>
+                      <li className="cursor-pointer">Manufacturing jobs</li>
+                      <li className="cursor-pointer">Logistics jobs</li>
+                      <div className="font-semibold">
+                        <button className="flex items-center gap-1 text-[#2E6F40]">Find out more <ChevronRight /></button>
+                      </div>
+                    </ul>
                   </div>
                 </div>
               )}
@@ -315,60 +317,58 @@ function Header() {
               {activeSubMenu === "location" && (
                 <div className="flex">
 
-                <div className="flex flex-col mx-auto">
-                <h2 className="text-lg font-semibold mb-3">Choose from millions of freelancers worldwide.</h2>
-                <ul className="space-y-2">
-                  <li className="cursor-pointer">United States</li>
-                  <li className="cursor-pointer">United Kingdom</li>
-                  <li className="cursor-pointer">Canada</li>
-                  <li className="cursor-pointer">India</li>
-                  <li className="cursor-pointer">Australia</li>
-                  <li className="cursor-pointer">Paris</li>
-                  <li className="cursor-pointer">Bangladesh</li>
-                  <li className="cursor-pointer">Indonesia</li>
-                  <li className="cursor-pointer">Brazil</li>
-                  <li className="cursor-pointer">China</li>
-                  <li className="cursor-pointer">Turkey</li>
-                  <li className="cursor-pointer">Philippines</li>
-                  <button className="flex items-center gap-1">Find out more <ChevronRight /></button>
-                </ul>
+                  <div className="flex flex-col">
+                    <h2 className="text-lg font-semibold w-xs mb-4">Choose from millions of freelancers worldwide.</h2>
+                    <ul className="space-y-2">
+                      <li className="cursor-pointer">United States</li>
+                      <li className="cursor-pointer">United Kingdom</li>
+                      <li className="cursor-pointer">Canada</li>
+                      <li className="cursor-pointer">India</li>
+                      <li className="cursor-pointer">Australia</li>
+                      <li className="cursor-pointer">Paris</li>
+                      <li className="cursor-pointer">Bangladesh</li>
+                      <li className="cursor-pointer">Indonesia</li>
+                      <li className="cursor-pointer">Brazil</li>
+                      <li className="cursor-pointer">China</li>
+                      <li className="cursor-pointer">Turkey</li>
+                      <li className="cursor-pointer">Philippines</li>
+                      <div className="font-semibold">
+                        <button className="flex items-center gap-1 text-[#2E6F40]">Find out more <ChevronRight /></button>
+                      </div>
+                    </ul>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="flex flex-col border border-black rounded-md size-72">
+                      <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-1.jpg" alt="" className="rounded-t-md" />
+                      <div className="font-semibold h-24 rounded-b-md flex flex-col justify-center text-start px-2">
+                        <p>Working with international freelancers</p>
+                        <button className="flex items-center gap-1 text-[#2E6F40]">Find out more <ChevronRight /></button>
+                      </div>
+                    </div>
+                    <div className="flex flex-col border border-black rounded-md size-72">
+                      <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-2.jpg" alt="" className="rounded-t-md" />
+                      <div className="font-semibold h-24 rounded-b-md flex flex-col justify-center text-start px-2">
+                        <p>Where to find the best developers</p>
+                        <button className="flex items-center gap-1 text-[#2E6F40]">Find out more <ChevronRight /></button>
+                      </div>
+                    </div>
+                    <div className="flex flex-col border border-black rounded-md size-72">
+                      <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-3.jpg" alt="" className="rounded-t-md" />
+                      <div className="font-semibold h-24 rounded-b-md flex flex-col justify-center text-start px-2">
+                        <p>Do you need a local freelancer?</p>
+                        <button className="flex items-center gap-1 text-[#2E6F40]">Find out more <ChevronRight /></button>
+                      </div>
+                    </div>
+                    <div className="flex flex-col border border-black rounded-md size-72">
+                      <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-4.jpg" alt="" className="rounded-t-md" />
+                      <div className="font-semibold h-24 rounded-b-md flex flex-col justify-center text-start px-2">
+                        <p>Building an international team</p>
+                        <button className="flex items-center gap-1 text-[#2E6F40]">Find out more <ChevronRight /></button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-
-                <div className="grid grid-cols-2 grid-rows-2 gap-4">
-                  <div className="flex flex-col">
-                    <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-1.jpg" alt="" className="rounded-t-md" />
-                    <div className="font-semibold bg-black text-white h-24 rounded-b-md flex flex-col justify-center text-start px-2">
-                      <p>Working with international freelancers</p>
-                      <button className="flex items-center gap-1 text-[#68BA7F]">Find out more <ChevronRight /></button>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col">
-                    <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-2.jpg" alt="" className="rounded-t-md" />
-                    <div className="font-semibold bg-black text-white h-24 rounded-b-md flex flex-col justify-center text-start px-2">
-                      <p>Where to find the best developers</p>
-                      <button className="flex items-center gap-1 text-[#68BA7F]">Find out more <ChevronRight /></button>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col">
-                    <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-3.jpg" alt="" className="rounded-t-md" />
-                    <div className="font-semibold bg-black text-white h-24 rounded-b-md flex flex-col justify-center text-start px-2">
-                      <p>Do you need a local freelancer?</p>
-                      <button className="flex items-center gap-1 text-[#68BA7F]">Find out more <ChevronRight /></button>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col">
-                    <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-4.jpg" alt="" className="rounded-t-md" />
-                    <div className="font-semibold bg-black text-white h-24 rounded-b-md flex flex-col justify-center text-start px-2">
-                      <p>Building an international team</p>
-                      <button className="flex items-center gap-1 text-[#68BA7F]">Find out more <ChevronRight /></button>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
               )}
 
             </div>

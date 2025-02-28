@@ -1,4 +1,4 @@
-import { Card, Text, Badge, Button, Group } from "@mantine/core";
+import { Card, Text, Badge, Button, Group, Divider } from "@mantine/core";
 
 const projectData = [
   {
@@ -49,14 +49,11 @@ function Projects() {
       {projectData.map((project, index) => (
         <Card
           key={index}
-          shadow="md"
           padding="lg"
           radius="md"
           withBorder
-          className="relative text-start h-[300px] overflow-hidden duration-300 ease-in-out hover:scale-105 transition-all hover:shadow-xl"
+          className="relative text-start h-[320px] overflow-hidden shadow-xl"
         >
-          {/* Gradient Overlay on Hover */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#2e6f40] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
 
           {/* Title */}
           <Text weight={700} size="xl" mb={10} className="text-[#2e6f40]">
@@ -81,24 +78,28 @@ function Projects() {
                 variant="outline"
                 color="#2e6f40"
                 radius="sm"
-                className="transition-transform duration-300 hover:scale-110"
+                size="md"
               >
                 {tag}
               </Badge>
             ))}
           </Group>
 
+          <div className="w-full">
+            <Divider my="md" />
+          </div>
+
           {/* Proposals and Rate */}
-          <Group position="apart" mb={10}>
+          <div className="flex justify-between items-center">
             <Text size="sm">Proposals: {project.proposals}</Text>
             <Text size="sm" weight={500} className="text-[#2e6f40]">
               {project.rate}
             </Text>
-          </Group>
+          </div>
 
           {/* Apply Now Button */}
           <Button
-            variant="outline"
+            variant="filled"
             color="#2e6f40"
             fullWidth
             radius="md"

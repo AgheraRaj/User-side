@@ -40,8 +40,8 @@ const PopularServices = () => {
                 style={{ width: `${(cardWidth + cardGap) * visibleCards}px` }} 
             >
                 {services.map((service, index) => (
-                    <div key={index} className="min-w-[260px] flex flex-col items-center space-y-3 transition duration-300 ease-in-out hover:scale-105 p-5">
-                        <img src={service.image} alt={service.name} className="rounded-md w-full" />
+                    <div key={index} className="min-w-[260px] flex flex-col items-center space-y-3 p-5">
+                        <img src={service.image} alt={service.name} className="rounded-md w-" />
                         <p className="text-[19px] font-semibold">{service.name}</p>
                     </div>
                 ))}

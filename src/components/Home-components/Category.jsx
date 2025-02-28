@@ -48,7 +48,7 @@ const categories = [
         {categories.map((category, index) => (
           <div
             key={index}
-            className="flex flex-col items-center justify-center space-y-4 p-6 bg-white border rounded-lg shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-lg"
+            className="flex flex-col items-center justify-center space-y-4 p-6 bg-white border border-gray-200 shadow-md rounded-md "
           >
             <img
               src={category.image}

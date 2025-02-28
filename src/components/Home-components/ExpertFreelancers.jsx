@@ -34,7 +34,7 @@ function ExpertFreelancers() {
       <div ref={scrollRef} className="flex overflow-x-scroll no-scrollbar scroll-smooth">
         {freelancers.map((freelancer, index) => (
           <div className='p-3' key={index}>
-            <Card className='w-[248px] text-center transition duration-300 ease-in-out hover:scale-105' shadow="sm" padding="sm" radius="md" withBorder>
+            <Card className='w-[248px] text-center' shadow="sm" padding="sm" radius="md" withBorder>
               <div className="relative flex justify-center p-5">
                 <Image src={freelancer.thumbnail || "https://via.placeholder.com/80"} className="w-20 h-20 rounded-full" />
                 <button className="absolute top-0 right-0 p-2 bg-white rounded-full border border-gray-300">
@@ -48,7 +48,7 @@ function ExpertFreelancers() {
                 <Text size="xs" c="dimmed">({freelancer.reviews} Reviews)</Text>
               </Group>
               <Text size="sm" mt="xs" c="dimmed">{freelancer.services} Services</Text>
-              <Button variant="outline" color='#2e6f40' fullWidth mt="md" radius="md">View Profile</Button>
+              <Button variant="filled" color='#2e6f40' fullWidth mt="md" radius="md">View Profile</Button>
             </Card>
           </div>
         ))}

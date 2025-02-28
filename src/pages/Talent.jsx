@@ -1,6 +1,7 @@
 import { Button, Menu, Text } from "@mantine/core";
 import { ChevronDown, Search } from "lucide-react";
 import { useState } from "react";
+import JobTalent from "../components/Work&Talent-components/JobTalent";
 
 const Talent = () => {
 
@@ -62,7 +63,7 @@ const Talent = () => {
                 </div>
             </section>
             <section>
-
+                <JobTalent />
             </section>
         </>
     )
