@@ -4,7 +4,7 @@ import { Pagination, Autoplay } from "swiper/modules";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
-import { Star } from "lucide-react";
+
 
 const testimonials = [
   {
@@ -37,9 +37,9 @@ export default function TestimonialCarousel() {
         <img src="https://demoapus2.com/freelanhub/wp-content/uploads/2024/07/h51.png" alt="" />
         <h2 className="font-semibold">Customer Reviews</h2>
       </div>
-      
+
       <Swiper
-        spaceBetween={30} 
+        spaceBetween={30}
         pagination={{ clickable: true }}
         autoplay={{ delay: 3000 }}
         loop={true}
@@ -52,16 +52,10 @@ export default function TestimonialCarousel() {
               “{testimonial.quote}”
             </blockquote>
             <div className="mt-4 flex justify-center">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <span
-                  key={i}
-                  className={`text-xl ${
-                    i < testimonial.rating ? "text-[#2e6f40]" : "text-slate-300"
-                  }`}
-                >
-                  <Star />
-                </span>
+              {Array.from({ length: testimonial.rating }).map((_, i) => (
+                <span key={i} className="text-xl text-[#2e6f40]">⭐</span>
               ))}
+
             </div>
             <p className="mt-2 font-semibold">
               {testimonial.name}{" "}

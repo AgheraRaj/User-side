@@ -1,47 +1,47 @@
-import { Button, Card, Menu, Text, Group } from "@mantine/core";
-import { ArrowDownWideNarrow, ChevronDown, Heart } from "lucide-react";
+import { Button, Card, Menu, Text, Group, Divider, Badge } from "@mantine/core";
+import { ArrowDownWideNarrow, ChevronDown } from "lucide-react";
 import { useState } from "react";
 
 const jobs = [
   {
-    id: 1,
-    company: "Upwork",
-    logo: "https://demoapus1.com/freeio/wp-content/uploads/2022/10/employer2.jpg", 
-    title: "Senior/ Staff Nurse",
-    salary: "$50 - $100 / week",
-    categories: ["Business", "Developers"],
-    type: "Full Time",
+    title: "Do projects visualization using structure software",
+    logo: "https://demoapus1.com/freeio/wp-content/uploads/2022/10/employer2.jpg",
+    description: "At vero eos et accusamus et iusto odio dignissimos ducimus...",
     location: "New York",
+    name: "Horizons Corporation",
+    tags: ["Animation", "Figma", "Mobile App"],
+    proposals: 3,
+    rate: "$450 Hourly rate",
   },
   {
-    id: 2,
-    company: "NetTrue",
+    title: "Create unique illustrations for my project",
     logo: "https://demoapus1.com/freeio/wp-content/uploads/2022/10/employer6.jpg",
-    title: "Executive, HR Operations",
-    salary: "$220 - $250 / week",
-    categories: ["Developers", "Lifestyle"],
-    type: "Temporary",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
     location: "New York",
+    name: "Quantum Dynamics",
+    tags: ["Animation", "Photoshop", "Website"],
+    proposals: 0,
+    rate: "$180 Hourly rate",
   },
   {
-    id: 3,
-    company: "DesignBlue",
+    title: "Do SQL queries, SQL database project for my project",
     logo: "https://demoapus1.com/freeio/wp-content/uploads/2022/10/employer5.jpg",
-    title: "Restaurant Team Member",
-    salary: "$50 - $60 / day",
-    categories: ["Developers", "Lifestyle"],
-    type: "Temporary",
+    description: "Duis aute irure dolor in reprehenderit in voluptate velit...",
     location: "New York",
+    name: "Employer",
+    tags: ["CSS", "Photoshop", "Website"],
+    proposals: 1,
+    rate: "$290 Hourly rate",
   },
   {
-    id: 4,
-    company: "NetTrue",
+    title: "Build Excel financial model, forecasts, budget",
     logo: "https://demoapus1.com/freeio/wp-content/uploads/2022/10/employer6.jpg",
-    title: "Restaurant Team Member",
-    salary: "$50 - $60 / day",
-    categories: ["Developers", "Lifestyle"],
-    type: "Temporary",
+    description: "Projects description At vero eos et accusamus et iusto...",
     location: "New York",
+    name: "Fusion Innovations",
+    tags: ["CSS", "Html", "Mobile App"],
+    proposals: 0,
+    rate: "$250 Fixed",
   },
 ];
 
@@ -75,41 +75,68 @@ const JobResults = () => {
       </div>
 
       {/* Job Cards Section */}
-      <div className="grid grid-cols-4 gap-6 px-16">
-        {jobs.map((job) => (
-          <Card key={job.id} padding="lg" radius="md" withBorder className="relative space-y-3">
-            {/* Company Logo & Name */}
-            <div className="flex items-center gap-2">
-              <img src={job.logo} alt={job.company} className="w-15 h-15 rounded-full" />
-              <Text fw={500} size="sm" color="#2E6F40">{job.company}</Text>
-            </div>
-
-            {/* Job Title */}
-            <Text fw={400} size="lg" mt="sm">{job.title}</Text>
-
-            {/* Salary */}
-            <Text fw={500} size="sm" color="dark">
-              {job.salary}
-            </Text>
-
-            {/* Job Categories */}
-            <Group spacing="xs" mt="xs">
-              {job.categories.map((category, index) => (
-                <span key={index} className="text-sm text-gray-500 font-medium">{category}</span>
-              ))}
-              <Text size="sm" fw={500} color="gray">| {job.type}</Text>
-            </Group>
-
-            {/* Location */}
-            <Text size="sm" fw={500} color="gray" mt="sm">{job.location}</Text>
-
-            {/* Favorite Button */}
-            <button className="absolute top-4 right-4 p-2 bg-white rounded-full border border-gray-300">
-                <Heart size={16} />
-            </button>
-          </Card>
-        ))}
-      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mx-auto p-6">
+            {jobs.map((project, index) => (
+              <Card
+                key={index}
+                padding="lg"
+                radius="md"
+                withBorder
+                className="relative text-start w-full min-h-[420px] flex flex-col shadow-lg"
+              >
+                {/* Content Wrapper */}
+                <div className="flex-grow flex flex-col gap-5">
+                  
+                  {/* Logo & Name */}
+                  <div className="flex items-center gap-3">
+                    <img src={project.logo} alt={project.name} className="w-12 h-12 rounded-full object-cover" />
+                    <Text weight={700} size="md" color="#2e6f40" className="line-clamp-2">
+                      {project.name}
+                    </Text>
+                  </div>
+      
+                  {/* Title */}
+                  <Text size="lg" weight={500} className="line-clamp-2">
+                    {project.title}
+                  </Text>
+      
+                  {/* Description */}
+                  <Text size="sm" color="dimmed" className="line-clamp-3">
+                    {project.description}
+                  </Text>
+      
+                  {/* Location and name */}
+                  <Text size="sm" color="gray">
+                    Location: {project.location}
+                  </Text>
+      
+                  {/* Tags */}
+                  <Group spacing="xs" className="my-2 flex-wrap">
+                    {project.tags.map((tag, idx) => (
+                      <Badge key={idx} variant="outline" color="#2e6f40" radius="sm">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </Group>
+                </div>
+      
+                <Divider my="md" />
+      
+                {/* Proposals and Rate */}
+                <div className="flex justify-between items-center">
+                  <Text size="sm">Proposals: {project.proposals}</Text>
+                  <Text size="sm" weight={500} className="text-[#2e6f40]">
+                    {project.rate}
+                  </Text>
+                </div>
+      
+                {/* Apply Now Button */}
+                <Button variant="filled" color="#2e6f40" fullWidth radius="md" className="mt-4">
+                  Apply Now
+                </Button>
+              </Card>
+            ))}
+          </div>
     </div>
   );
 };

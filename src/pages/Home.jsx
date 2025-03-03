@@ -43,7 +43,7 @@ function Home() {
 
   return (
     <div>
-      <section className="px-16 py-10 flex justify-between items-center bg-[#F8F5E9]">
+      <section className="px-16 py-10 flex justify-between items-center ">
         <div className="flex flex-col space-y-10 w-[40%]">
           <h1 className="text-5xl font-semibold leading-15">Find the perfect freelancer services for your business</h1>
           <p>Work with talented people at the most affordable price to get the most out of your time and cost</p>
@@ -84,7 +84,7 @@ function Home() {
           <img src="https://demoapus1.com/freeio/wp-content/uploads/2023/07/h11.png" alt="image" />
         </div>
       </section>
-      <section className="flex flex-col text-center bg-[#9DC08B]">
+      <section className="flex flex-col text-center bg-gray-100">
         <div className="leading-12 my-10">
           <h1 className="text-4xl font-semibold">Browse by Category</h1>
           <p>Explore a wide range of services organized by category</p>
@@ -96,7 +96,7 @@ function Home() {
           </div>
         </Link>
       </section>
-      <section className="flex justify-between items-center px-16 py-16 bg-[#F8F5E9]">
+      <section className="flex justify-between items-center px-16 py-16 ">
         <div>
           <div className="leading-12">
             <h1 className="text-4xl font-semibold">ProGigs! The best choice?</h1>
@@ -115,7 +115,7 @@ function Home() {
           <video className="rounded-2xl" src={Video} autoPlay muted loop />
         </div>
       </section>
-      <section className="flex flex-col text-center bg-[#9DC08B]">
+      <section className="flex flex-col text-center bg-gray-100">
         <div className="leading-12 my-10">
           <h1 className="text-4xl font-semibold">Expert Freelancers</h1>
           <p>Connect with top-rated professionals across various industries</p>
@@ -127,7 +127,7 @@ function Home() {
           </div>
         </Link>
       </section>
-      <section className="flex justify-between items-center px-16 py-16 bg-[#F8F5E9]">
+      <section className="flex justify-between items-center px-16 py-16 ">
         <div>
           <div className="leading-12">
             <h1 className="text-4xl font-semibold">Experience a quicker, simpler, and more effective job search</h1>
@@ -164,7 +164,7 @@ function Home() {
 
         </div>
       </section>
-      <section className="flex flex-col text-center bg-[#9DC08B]">
+      <section className="flex flex-col text-center bg-gray-100">
         <div className="leading-12 my-10">
           <h1 className="text-4xl font-semibold">Feature Services</h1>
           <p>Discover our featured services designed to elevate your experience</p>
@@ -176,10 +176,10 @@ function Home() {
           </div>
         </Link>
       </section>
-      <section className="bg-[#F8F5E9]">
+      <section className="">
         <TestimonialCarousel />
       </section>
-      <section className="flex flex-col text-center bg-[#9DC08B]">
+      <section className="flex flex-col text-center bg-gray-100">
         <div className="leading-12 my-10">
           <h1 className="text-4xl font-semibold">Latest Projects</h1>
           <p>Discover our latest project with cutting-edge features. Explore now!</p>
@@ -191,7 +191,7 @@ function Home() {
           </div>
         </Link>
       </section>
-      <section className="flex flex-col text-center py-14 bg-[#F8F5E9]">
+      <section className="flex flex-col text-center py-14 ">
         <div className="leading-12 pb-10">
           <h1 className="text-4xl font-semibold">4 Steps to become a Seller</h1>
           <p>Recruitment Made Easy in 100 seconds</p>
