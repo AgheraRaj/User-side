@@ -19,7 +19,7 @@ function Category() {
         {categories.map((category, index) => (
           <div
             key={index}
-            className={`flex flex-col items-center p-4 w-[180px] h-[140px] rounded-lg shadow-sm border cursor-pointer transition-all bg-white border-gray-300 text-gray-700 hover:shadow-md"
+            className={`flex flex-col items-center p-4 w-[180px] h-[150px] rounded-lg shadow-sm border cursor-pointer transition-all space-y-2 bg-white border-gray-300 text-gray-700 hover:shadow-md"
             }`}
           >
             <img src={category.icon} alt={category.name} className="w-10 h-10 mb-2" />
