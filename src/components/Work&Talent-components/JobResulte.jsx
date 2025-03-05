@@ -1,6 +1,7 @@
 import { Button, Card, Menu, Text, Group, Divider, Badge } from "@mantine/core";
 import { ArrowDownWideNarrow, ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const jobs = [
   {
@@ -96,9 +97,11 @@ const JobResults = () => {
                   </div>
       
                   {/* Title */}
+                  <Link to="/project-detail">
                   <Text size="lg" weight={500} className="line-clamp-2">
                     {project.title}
                   </Text>
+                  </Link>
       
                   {/* Description */}
                   <Text size="sm" color="dimmed" className="line-clamp-3">

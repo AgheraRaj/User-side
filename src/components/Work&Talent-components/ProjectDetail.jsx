@@ -64,21 +64,27 @@ const ProjectDetail = () => {
     ];
 
     return (
-        <div className="w-full">
+        <div className="w-full bg-gray-50 min-h-screen">
             {/* Navbar */}
-            <nav className="px-20 shadow-md">
-                <ul className="flex gap-8 py-4 font-semibold">
+            <nav className="px-4 md:px-20 shadow-sm bg-white sticky top-0 z-10">
+                <ul className="flex gap-8 py-4 font-medium">
                     <li
                         onClick={() => setSelectedTab('details')}
-                        className={`px-2 pb-2 cursor-pointer transition ${selectedTab === 'details' ? 'text-[#2E6F40] border-b-[3px] border-[#2E6F40]' : 'text-black'
-                            }`}
+                        className={`px-2 pb-2 cursor-pointer transition-all hover:text-[#2E6F40] ${
+                            selectedTab === 'details' 
+                            ? 'text-[#2E6F40] border-b-[3px] border-[#2E6F40]' 
+                            : 'text-gray-600'
+                        }`}
                     >
                         Details
                     </li>
                     <li
                         onClick={() => setSelectedTab('proposals')}
-                        className={`px-2 pb-2 cursor-pointer transition ${selectedTab === 'proposals' ? 'text-[#2E6F40] border-b-[3px] border-[#2E6F40]' : 'text-black'
-                            }`}
+                        className={`px-2 pb-2 cursor-pointer transition-all hover:text-[#2E6F40] ${
+                            selectedTab === 'proposals' 
+                            ? 'text-[#2E6F40] border-b-[3px] border-[#2E6F40]' 
+                            : 'text-gray-600'
+                        }`}
                     >
                         Proposals
                     </li>
@@ -86,13 +92,13 @@ const ProjectDetail = () => {
             </nav>
 
             {/* Content Section */}
-            <div className="py-10 px-20">
+            <div className="py-8 px-4 md:px-20 max-w-7xl mx-auto">
                 {selectedTab === 'details' ? (
-                    <div className="mt-5 flex flex-col lg:flex-row gap-10">
+                    <div className="mt-5 flex flex-col lg:flex-row gap-8">
                         {/* Left Side - Project Info */}
-                        <div className="lg:w-2/3 shadow-md p-5 rounded-md">
-                            <h2 className="text-2xl font-semibold">Project Details</h2>
-                            <p className="mt-5">
+                        <div className="lg:w-2/3 bg-white shadow-sm hover:shadow-md transition-shadow rounded-lg p-6">
+                            <h2 className="text-2xl font-bold text-gray-800">Project Details</h2>
+                            <p className="mt-5 text-gray-600 leading-relaxed space-y-4">
                                 Nihil earum quae in, harum aperiam debitis magnam laboriosam ut tenetur iusto soluta labore odio magni illum perferendis qui id nisi repellendus aut reprehenderit incidunt distinctio modi rerum? Dicta, rem.
                                 Eaque nemo aliquid unde magni doloremque, quod dolorem? Saepe fuga enim quasi pariatur assumenda consequuntur iusto corrupti unde repellendus temporibus. Laudantium necessitatibus nam obcaecati neque ipsam veritatis, culpa totam eveniet.
                                 Sunt esse ullam tempore voluptatem, sed doloremque! Voluptates quia maiores libero nihil natus quae harum, tempora minima explicabo, commodi error autem hic ea nobis sapiente incidunt eveniet neque consequatur at.
@@ -103,83 +109,119 @@ const ProjectDetail = () => {
                             </p>
 
                             {/* Skills Section */}
-                            <h3 className="text-lg font-semibold mt-5">Required Skills</h3>
-                            <div className="mt-5 flex flex-wrap gap-2">
+                            <h3 className="text-xl font-bold text-gray-800 mt-8 mb-4">Required Skills</h3>
+                            <div className="flex flex-wrap gap-2">
                                 {["React", "Next.js", "Tailwind CSS", "Node.js"].map((skill, index) => (
-                                    <span key={index} className="bg-[#E5F3F2] font-semibold text-[#2E6F40] px-3 py-1 text-sm rounded-md">
+                                    <span 
+                                        key={index} 
+                                        className="bg-[#E5F3F2] font-medium text-[#2E6F40] px-4 py-2 text-sm rounded-full hover:bg-[#d0ebe9] transition-colors"
+                                    >
                                         {skill}
                                     </span>
                                 ))}
                             </div>
 
                             {/* Project Status */}
-                            <div className="mt-6 flex items-center gap-3">
-                                <CheckCircle className="text-[#2E6F40]" size={20} />
-                                <span className="text-sm">Project is currently open for proposals.</span>
+                            <div className="mt-8 flex items-center gap-3 bg-[#E5F3F2] p-4 rounded-lg">
+                                <CheckCircle className="text-[#2E6F40]" size={24} />
+                                <span className="text-[#2E6F40] font-medium">Project is currently open for proposals</span>
                             </div>
                         </div>
 
                         {/* Right Side - Client Details */}
-                        <div className="lg:w-2xs h-fit shadow-md p-5 flex flex-col space-y-3 rounded-md">
-                            <h3 className="text-md font-semibold">About the Client</h3>
-                            <p className="text-sm mt-4 flex gap-3"><MapPin size={18} />New York, USA</p>
-                            <p className="text-sm flex gap-3"><CalendarDays size={18} />Joined: March 2022</p>
+                        <div className="lg:w-1/3 bg-white shadow-sm hover:shadow-md transition-shadow rounded-lg p-6">
+                            <h3 className="text-xl font-bold text-gray-800 mb-6">About the Client</h3>
+                            <div className="space-y-4">
+                                <p className="text-gray-600 flex items-center gap-3">
+                                    <MapPin size={20} className="text-gray-400" />
+                                    <span>New York, USA</span>
+                                </p>
+                                <p className="text-gray-600 flex items-center gap-3">
+                                    <CalendarDays size={20} className="text-gray-400" />
+                                    <span>Joined: March 2022</span>
+                                </p>
+                            </div>
+
                             {/* Verification Section */}
-                            <h3 className="text-md font-semibold mt-5">Client Verification</h3>
-                            <div className="mt-4 space-y-3">
-                                <p className="flex gap-3 items-center text-sm"><IdCard size={18} /> identity verified</p>
-                                <p className="flex gap-3 items-center text-sm"><User size={18} /> profile verified</p>
-                                <p className="flex gap-3 items-center text-sm"><CreditCard size={18} /> payment verified</p>
-                                <p className="flex gap-3 items-center text-sm"><Mail size={18} /> email verified</p>
-                                <p className="flex gap-3 items-center text-sm"><Phone size={18} /> phone verified</p>
+                            <h3 className="text-xl font-bold text-gray-800 mt-8 mb-4">Client Verification</h3>
+                            <div className="space-y-4">
+                                {[
+                                    { icon: <IdCard size={20} />, text: "Identity verified" },
+                                    { icon: <User size={20} />, text: "Profile verified" },
+                                    { icon: <CreditCard size={20} />, text: "Payment verified" },
+                                    { icon: <Mail size={20} />, text: "Email verified" },
+                                    { icon: <Phone size={20} />, text: "Phone verified" }
+                                ].map((item, index) => (
+                                    <p key={index} className="flex items-center gap-3 text-gray-600">
+                                        <span className="text-gray-400">{item.icon}</span>
+                                        <span className="capitalize">{item.text}</span>
+                                    </p>
+                                ))}
                             </div>
                         </div>
                     </div>
                 ) : (
-                    <div className="py-10 px-20">
-            <h2 className="text-xl font-bold">Proposals</h2>
-            <p className="mt-2 text-gray-700">
-                Below are the proposals submitted by freelancers:
-            </p>
+                    <div className="max-w-4xl mx-auto">
+                        <h2 className="text-2xl font-bold text-gray-800">Proposals</h2>
+                        <p className="mt-2 text-gray-600">
+                            Below are the proposals submitted by freelancers:
+                        </p>
 
-            {/* Proposals List */}
-            <div className="mt-4 space-y-4">
-                {proposal.map((freelancer) => (
-                    <div key={freelancer.id} className="border rounded-md shadow-md p-4 flex flex-col md:flex-row gap-4 bg-white">
-                        {/* Profile Image */}
-                        <Avatar src={freelancer.image} size={65} alt={freelancer.name} />
-
-                        {/* Freelancer Details */}
-                        <div className="flex-1">
-                            <div className="flex items-center justify-between pr-10">
-                                <h2 className="text-lg font-semibold">{freelancer.name} <span className="text-gray-500">{freelancer.username}</span></h2>
-                                <span className="font-bold text-lg">{freelancer.price}</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-yellow-500 mt-1">
-                                <Star size={16} /> <span className="font-semibold">{freelancer.rating}</span>
-                                <span className="text-gray-500">({freelancer.reviews})</span>
-                                <span className="text-[#2E6F40]">{freelancer.successRate}%</span>
-                                <MapPin size={16} className="text-gray-600" /> <span className="text-gray-600">{freelancer.country}</span>
-                            </div>
-                            <p className="text-sm text-gray-700 font-semibold mt-2">{freelancer.expertise}</p>
-
-                            {/* Description with "More" Toggle */}
-                            <p className="text-sm text-gray-500 mt-2">
-                                {expanded[freelancer.id] ? freelancer.description : `${freelancer.description.slice(0, 50)}...`}
-                                <span
-                                    onClick={() => toggleDescription(freelancer.id)}
-                                    className="text-blue-500 cursor-pointer ml-1"
+                        {/* Proposals List */}
+                        <div className="mt-6 space-y-6">
+                            {proposal.map((freelancer) => (
+                                <div key={freelancer.id} 
+                                    className="bg-white border border-gray-100 rounded-lg shadow-sm hover:shadow-md transition-shadow p-6"
                                 >
-                                    {expanded[freelancer.id] ? "less" : "more"}
-                                </span>
-                            </p>
+                                    <div className="flex gap-6">
+                                        <Avatar 
+                                            src={freelancer.image} 
+                                            size={80} 
+                                            alt={freelancer.name}
+                                            className="rounded-lg"
+                                        />
+                                        <div className="flex-1">
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    <h2 className="text-xl font-bold text-gray-800">
+                                                        {freelancer.name} 
+                                                        <span className="text-gray-400 text-base ml-2">{freelancer.username}</span>
+                                                    </h2>
+                                                    <div className="flex items-center gap-3 mt-2">
+                                                        <div className="flex items-center text-yellow-500">
+                                                            <Star size={16} fill="currentColor" />
+                                                            <span className="ml-1 font-semibold">{freelancer.rating}</span>
+                                                        </div>
+                                                        <span className="text-gray-400">({freelancer.reviews})</span>
+                                                        <span className="text-[#2E6F40] font-medium">{freelancer.successRate}% Success</span>
+                                                    </div>
+                                                </div>
+                                                <div className="text-right">
+                                                    <div className="text-xl font-bold text-gray-800">{freelancer.price}</div>
+                                                    {freelancer.duration && (
+                                                        <div className="text-sm text-gray-500 mt-1">{freelancer.duration}</div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <p className="text-[#2E6F40] font-medium mt-3">{freelancer.expertise}</p>
+                                            <p className="text-gray-600 mt-2">
+                                                {expanded[freelancer.id] 
+                                                    ? freelancer.description 
+                                                    : `${freelancer.description.slice(0, 100)}...`
+                                                }
+                                                <button
+                                                    onClick={() => toggleDescription(freelancer.id)}
+                                                    className="text-blue-500 hover:text-blue-600 font-medium ml-1"
+                                                >
+                                                    {expanded[freelancer.id] ? "Show less" : "Show more"}
+                                                </button>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-
-                        
                     </div>
-                ))}
-            </div>
-        </div>
                 )}
             </div>
         </div>

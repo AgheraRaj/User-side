@@ -11,6 +11,7 @@ import Signup from './pages/Signup'
 import JobList from './pages/JobList';
 import Talent from './pages/Talent';
 import ProjectDetail from './components/Work&Talent-components/ProjectDetail';
+import FreelancerProfile from './components/Work&Talent-components/FreelancerProfile';
 
 
 const App = () => {
@@ -28,6 +29,7 @@ const App = () => {
         <Route path='/job-list' element={<JobList />} />
         <Route path='/talent' element={<Talent />} />
         <Route path='/project-detail' element={<ProjectDetail />} />
+        <Route path='/freelancer-profile' element={<FreelancerProfile />} />
       </Routes>
       {!hideLayout && <Footer />}
     </MantineProvider>

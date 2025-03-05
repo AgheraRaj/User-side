@@ -1,12 +1,62 @@
 import { Eye, EyeOff, Lock, Mail, MessageSquare, User } from "lucide-react";
-import { useState } from 'react';
-import AuthImagePattern from '../components/AuthImagePattern.jsx';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@mantine/core";
 
-const SignUpPage = () => { 
+import AuthImagePattern from '../components/AuthImagePattern.jsx';
 
+
+const SignUpPage = () => { 
+  const initialValues = {
+    username: "",
+    email: "",
+    password: "",
+  };
+
+  const [formValues, setFormValues] = useState(initialValues);
+  const [formErrors, setFormErrors] = useState({});
+  const [isSubmit, setIsSubmit] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const handalSubmit = (e) => {
+    e.preventDefault();
+    const errors = validation(formValues);
+    setFormErrors(errors);
+    setIsSubmit(true);
+  };
+  useEffect(() => {
+    console.log(formErrors);
+    if(Object.keys(formErrors).length === 0 && isSubmit) {
+      // Form is valid, you can proceed with submission
+      console.log("Form is valid:", formValues);
+      // Add your API call or submission logic here
+    }
+  }, [formErrors, isSubmit, formValues]);
+  const validation = (values) => {
+    const errors = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    if (!values.username) {
+      errors.username = "Username is required!";
+    } else if (values.username.length < 3) {
+      errors.username = "Username must be at least 3 characters!";
+    }
+    if (!values.email) {
+      errors.email = "Email is required!";
+    } else if (!emailRegex.test(values.email)) {
+      errors.email = "Please enter a valid email address!";
+    }
+    if (!values.password) {
+      errors.password = "Password is required!";
+    } else if (!passwordRegex.test(values.password)) {
+      errors.password = "Password must be at least 8 characters with letters and numbers!";
+    }
+    return errors;
+  };
+  const handalChange = (e) => {
+    console.log(e.target);
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
+  };
   
    return (
       <div className="min-h-screen grid lg:grid-cols-2">
@@ -27,10 +77,10 @@ const SignUpPage = () => {
               </div>
             </div>
   
-            <form  className="space-y-6">
+            <form onSubmit={handalSubmit}  className="space-y-6">
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text font-medium">Full Name</span>
+                  <span className="label-text font-medium">Username</span>
                 </label>
                 <div className="relative border rounded-sm">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -38,13 +88,19 @@ const SignUpPage = () => {
                   </div>
                   <input
                     type="text"
+                    name="username"
                     className={`input h-10 w-full pl-10`}
-                    placeholder="John Doe"
+                    placeholder="Johndoe"
+                    value={formValues.username}
+                    onChange={handalChange}
                   />
                 </div>
               </div>
+              {formErrors.username && (
+                <p className="text-red-500 text-sm mt-1">{formErrors.username}</p>
+              )}
   
-              <div className="form-control">
+            <div className="form-control">
                 <label className="label">
                   <span className="label-text font-medium">Email</span>
                 </label>
@@ -54,11 +110,18 @@ const SignUpPage = () => {
                   </div>
                   <input
                     type="email"
+                    name="email"
                     className={`input h-10 w-full pl-10`}
                     placeholder="you@example.com"
+                    value={formValues.email}
+                    onChange={handalChange}
                   />
                 </div>
               </div>
+              {formErrors.email && (
+                <p className="text-red-500 text-sm mt-1">{formErrors.email}</p>
+              )}
+  
   
               <div className="form-control">
                 <label className="label">
@@ -70,8 +133,11 @@ const SignUpPage = () => {
                   </div>
                   <input
                     type={showPassword ? "text" : "password"}
+                    name="password"
                     className={`input h-10 w-full pl-10`}
                     placeholder="••••••••"
+                    value={formValues.password}
+                    onChange={handalChange}
                   />
                   <button
                     type="button"
@@ -86,6 +152,10 @@ const SignUpPage = () => {
                   </button>
                 </div>
               </div>
+              {formErrors.password && (
+                <p className="text-red-500 text-sm mt-1">{formErrors.password}</p>
+              )}
+  
   
               <Button color="#2e6f40" type="submit" variant="filled">
                 Create Account
@@ -109,8 +179,9 @@ const SignUpPage = () => {
           title="Join our community"
           subtitle="Join us today! Create an account and unlock a seamless, secure, and powerful experience tailored just for you."
         />
+    
       </div>
-    )
-}
+    );
+  };  
 
-export default SignUpPage
+export default SignUpPage;

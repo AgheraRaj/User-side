@@ -84,7 +84,7 @@ function Home() {
           <img src="https://demoapus1.com/freeio/wp-content/uploads/2023/07/h11.png" alt="image" />
         </div>
       </section>
-      <section className="flex flex-col text-center bg-gray-100">
+      <section className="flex flex-col text-center bg-gray-50">
         <div className="leading-12 my-10">
           <h1 className="text-4xl font-semibold">Browse by Category</h1>
           <p>Explore a wide range of services organized by category</p>
@@ -115,7 +115,7 @@ function Home() {
           <video className="rounded-2xl" src={Video} autoPlay muted loop />
         </div>
       </section>
-      <section className="flex flex-col text-center bg-gray-100">
+      <section className="flex flex-col text-center bg-gray-50">
         <div className="leading-12 my-10">
           <h1 className="text-4xl font-semibold">Expert Freelancers</h1>
           <p>Connect with top-rated professionals across various industries</p>
@@ -164,7 +164,7 @@ function Home() {
 
         </div>
       </section>
-      <section className="flex flex-col text-center bg-gray-100">
+      <section className="flex flex-col text-center bg-gray-50">
         <div className="leading-12 my-10">
           <h1 className="text-4xl font-semibold">Feature Services</h1>
           <p>Discover our featured services designed to elevate your experience</p>
@@ -179,7 +179,7 @@ function Home() {
       <section className="">
         <TestimonialCarousel />
       </section>
-      <section className="flex flex-col text-center bg-gray-100">
+      <section className="flex flex-col text-center bg-gray-50">
         <div className="leading-12 my-10">
           <h1 className="text-4xl font-semibold">Latest Projects</h1>
           <p>Discover our latest project with cutting-edge features. Explore now!</p>

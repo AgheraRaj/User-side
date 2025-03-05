@@ -1,6 +1,7 @@
 import { Avatar, Badge, Button, Card, Divider, Menu, Text } from "@mantine/core"
 import { ArrowDownWideNarrow, ChevronDown, Star } from "lucide-react"
 import { useState } from "react"
+import { Link } from "react-router-dom";
 
 const JobTalent = () => {
 
@@ -111,8 +112,9 @@ const JobTalent = () => {
                                     <Text size="sm">{talent.rate}</Text>
                                 </div>
                             </div>
-                            
+                            <Link to="/freelancer-profile" className="w-full">
                             <Button variant="filled" color="#2E6F40" size="md" fullWidth mt="md">View Profile</Button>
+                            </Link>
                         </div>
                     </Card>
                 ))}
