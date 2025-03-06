@@ -1,7 +1,8 @@
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 import { MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 import { Route, Routes, useLocation } from 'react-router-dom';
-
 
 import Header from "./components/Header";
 import Home from "./pages/Home"
@@ -21,6 +22,7 @@ const App = () => {
 
   return (
     <MantineProvider>
+      <Notifications position="top-center" zIndex={2077} />
       {!hideLayout && <Header />}
       <Routes>
         <Route path='/' element={<Home />} />

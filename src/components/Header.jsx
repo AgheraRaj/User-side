@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Button } from "@mantine/core";
+import { useState, useEffect } from "react";
+import { Avatar, Button } from "@mantine/core";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -7,7 +7,18 @@ function Header() {
   const [showHireDropdown, setShowHireDropdown] = useState(false);
   const [showFindWorkDropdown, setShowFindWorkDropdown] = useState(false);
   const [activeSubMenu, setActiveSubMenu] = useState(null); // Track active submenu
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, []);
 
+  const logout = () => {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+  };
+  
   return (
     <div className="relative z-10 w-full">
       {/* Navbar */}
@@ -38,17 +49,32 @@ function Header() {
           <span className="font-normal hover:text-[#68BA7F]">Blogs</span>
         </div>
 
-        <div className="space-x-5">
-          <Link to="/login">
-            <Button variant="transparent" color="#ffffff">
-              Login
+        <div className="flex items-center space-x-5">
+          {!isLoggedIn ? (
+            <>
+              <Link to="/login">
+                <Button variant="transparent" color="#ffffff">
+                  Login
+                </Button>
+              </Link>
+              <Link to="/signup">
+                <Button variant="filled" color="#2e6f40">
+                  Signup
+                </Button>
+              </Link>
+            </>
+          ) : (
+            <>
+            <Button onClick={logout} variant="transparent" color="#ffffff">
+                  Logout
             </Button>
-          </Link>
-          <Link to="/signup">
-            <Button variant="filled" color="#2e6f40">
-              Signup
-            </Button>
-          </Link>
+            <Avatar 
+              src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-7.png" 
+              size={40} 
+              alt="user avatar" 
+            />
+            </>
+          )}
         </div>
       </nav>
 
