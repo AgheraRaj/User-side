@@ -8,7 +8,7 @@ function Header() {
   const [showFindWorkDropdown, setShowFindWorkDropdown] = useState(false);
   const [activeSubMenu, setActiveSubMenu] = useState(null); // Track active submenu
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsLoggedIn(!!token);
@@ -18,7 +18,7 @@ function Header() {
     localStorage.removeItem('token');
     setIsLoggedIn(false);
   };
-  
+
   return (
     <div className="relative z-10 w-full">
       {/* Navbar */}
@@ -65,14 +65,16 @@ function Header() {
             </>
           ) : (
             <>
-            <Button onClick={logout} variant="transparent" color="#ffffff">
-                  Logout
-            </Button>
-            <Avatar 
-              src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-7.png" 
-              size={40} 
-              alt="user avatar" 
-            />
+              <Button onClick={logout} variant="transparent" color="#ffffff">
+                Logout
+              </Button>
+              <Link to={"/my-profile"}>
+                <Avatar
+                  src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-7.png"
+                  size={40}
+                  alt="user avatar"
+                />
+              </Link>
             </>
           )}
         </div>
@@ -87,17 +89,21 @@ function Header() {
         >
           {/* Left Panel */}
           <div className=" flex flex-col space-y-3 p-5"> {/* remove 40% width */}
-            <div
-              className="border-[#2E6F40] border h-24 rounded-md p-4 flex items-center justify-between cursor-pointer hover:bg-[#2e6f400d]"
-              onMouseEnter={() => setActiveSubMenu("skill")}
-            >
-              <div>
-                <h1 className="font-semibold">By Skill</h1>
-                <p className="text-sm">Looking for a freelancer with specific skills? Start here.</p>
+            <Link to={"/by-skill"}>
+              <div
+                className="border-[#2E6F40] border h-24 rounded-md p-4 flex items-center justify-between cursor-pointer hover:bg-[#2e6f400d]"
+                onMouseEnter={() => setActiveSubMenu("skill")}
+              >
+                <div>
+                  <h1 className="font-semibold">By Skill</h1>
+                  <p className="text-sm">Looking for a freelancer with specific skills? Start here.</p>
+                </div>
+                <ChevronRight />
               </div>
-              <ChevronRight />
-            </div>
+            </Link>
 
+            
+            <Link to={"by-location"}>
             <div
               className="border-[#2E6F40] border h-24 rounded-md p-4 flex items-center justify-between cursor-pointer hover:bg-[#2e6f400d]"
               onMouseEnter={() => setActiveSubMenu("location")}
@@ -108,6 +114,7 @@ function Header() {
               </div>
               <ChevronRight />
             </div>
+            </Link>
 
             <div className="border-[#2E6F40] border h-24 rounded-md p-4 flex items-center justify-between cursor-pointer hover:bg-[#2e6f400d]">
               <div>
