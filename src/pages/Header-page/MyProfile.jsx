@@ -4,7 +4,9 @@ import { Mail, Phone, MapPin, User, DollarSign, GraduationCap, FileText, Landmar
 import axios from 'axios';
 
 const MyProfile = () => {
+  // Update the initial state structure
   const [profileData, setProfileData] = useState({
+    id: 0,
     firstName: '',
     lastName: '',
     email: '',
@@ -12,9 +14,10 @@ const MyProfile = () => {
     location: '',
     description: '',
     hourlyRate: '',
-    status: '',
     imageUrl: '',
     skills: [],
+    companyName: '',
+    status: '',
     bank: {
       bankName: '',
       accountHolderName: '',
@@ -51,7 +54,22 @@ const MyProfile = () => {
 
   const handleSave = async () => {
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL}/profile`, profileData, {
+      // Create payload with only the required fields
+      const payload = {
+        id: profileData.id || 0,
+        firstName: profileData.firstName,
+        lastName: profileData.lastName,
+        description: profileData.description,
+        email: profileData.email,
+        phone: profileData.phone,
+        imageUrl: profileData.imageUrl,
+        skills: profileData.skills,
+        hourlyRate: profileData.hourlyRate,
+        location: profileData.location,
+        companyName: profileData.companyName || ''
+      };
+
+      await axios.put(`${import.meta.env.VITE_API_URL}/profile/edit`, payload, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -80,7 +98,7 @@ const MyProfile = () => {
   return (
     <Container size="xl" py="xl">
       <Paper shadow="md" radius="lg" p={0} className="overflow-hidden">
-        <div className="bg-gradient-to-r from-[#2E6F40] to-[#68BA7F] p-6">
+        <div className="bg-gradient-to-l from-[#2E6F40] to-[#68BA7F] p-6">
           <Title order={1}>My Profile</Title>
           <Text className="text-white/80">Manage your personal information</Text>
         </div>
@@ -311,35 +329,7 @@ const MyProfile = () => {
                 </Accordion.Control>
                 <Accordion.Panel>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {isEditing ? (
-                      <>
-                        <TextInput
-                          variant="unstyled"
-                          label="Bank Name"
-                          value={profileData.bank.bankName}
-                          onChange={(e) => handleInputChange('bank', { ...profileData.bank, bankName: e.target.value })}
-                        />
-                        <TextInput
-                          variant="unstyled"
-                          label="Account Holder"
-                          value={profileData.bank.accountHolderName}
-                          onChange={(e) => handleInputChange('bank', { ...profileData.bank, accountHolderName: e.target.value })}
-                        />
-                        <TextInput
-                          variant="unstyled"
-                          label="Account Number"
-                          value={profileData.bank.accountNumber}
-                          onChange={(e) => handleInputChange('bank', { ...profileData.bank, accountNumber: e.target.value })}
-                        />
-                        <TextInput
-                          variant="unstyled"
-                          label="IFSC Code"
-                          value={profileData.bank.ifscCode}
-                          onChange={(e) => handleInputChange('bank', { ...profileData.bank, ifscCode: e.target.value })}
-                        />
-                      </>
-                    ) : (
-                      <>
+               
                         <div>
                           <Text size="sm" c="dimmed" mb={4}>Bank Name</Text>
                           <Text fw={500}>{profileData.bank.bankName}</Text>
@@ -356,8 +346,8 @@ const MyProfile = () => {
                           <Text size="sm" c="dimmed" mb={4}>IFSC Code</Text>
                           <Text fw={500}>{profileData.bank.ifscCode}</Text>
                         </div>
-                      </>
-                    )}
+                      
+                    
                   </div>
                 </Accordion.Panel>
               </Accordion.Item>
@@ -376,15 +366,23 @@ const MyProfile = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {profileData.portfolio.map((item, index) => (
                       <Card key={index} withBorder>
-                        <Text fw={500}>{item.title}</Text>
-                        <Text size="sm" c="dimmed">{item.description}</Text>
+                        <Text fw={500}>{item.portfolioTitle}</Text>
+                        <img src={item.portfolioImage} alt={item.protfolioTitle} />
+                        <Text size="sm" c="dimmed" mb={2}>{item.description}</Text>
+                        <div className="flex flex-wrap gap-1 mt-2">
+                          {item.skills.map((skill, idx) => (
+                            <Badge key={idx} size="sm" color='#2E6F40'>
+                              {skill}
+                            </Badge>
+                          ))}
+                        </div>
                       </Card>
                     ))}
                   </div>
                 </Accordion.Panel>
               </Accordion.Item>
-
-              {/* Education */}
+              
+              
               <Accordion.Item value="education">
                 <Accordion.Control>
                   <Group gap="xs">
@@ -398,14 +396,16 @@ const MyProfile = () => {
                   <div className="space-y-4">
                     {profileData.education.map((edu, index) => (
                       <Card key={index} withBorder>
-                        <Text>{edu}</Text>
+                        <Text fw={500}>{edu.course}</Text>
+                        <Text size="sm" c="dimmed">{edu.institute}</Text>
+                        <Text size="sm" c="dimmed">Year: {edu.year}</Text>
                       </Card>
                     ))}
                   </div>
                 </Accordion.Panel>
               </Accordion.Item>
-
-              {/* Certifications */}
+              
+              
               <Accordion.Item value="certifications">
                 <Accordion.Control>
                   <Group gap="xs">
@@ -419,9 +419,9 @@ const MyProfile = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {profileData.certification.map((cert, index) => (
                       <Card key={index} withBorder>
-                        <Text fw={500}>{cert.name}</Text>
-                        <Text size="sm" c="dimmed">Issued by: {cert.issuer}</Text>
-                        <Text size="sm" c="dimmed">Date: {cert.date}</Text>
+                        <Text fw={500}>{cert.certificateName}</Text>
+                        <Text size="sm" c="dimmed">Issued by: {cert.certificateIssuer}</Text>
+                        <Text size="sm" c="dimmed">Date: {new Date(cert.issuedDate).toLocaleDateString()}</Text>
                       </Card>
                     ))}
                   </div>

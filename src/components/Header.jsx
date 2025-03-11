@@ -2,17 +2,52 @@ import { useState, useEffect } from "react";
 import { Avatar, Button } from "@mantine/core";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { notifications } from "@mantine/notifications"; 
+
 
 function Header() {
   const [showHireDropdown, setShowHireDropdown] = useState(false);
   const [showFindWorkDropdown, setShowFindWorkDropdown] = useState(false);
-  const [activeSubMenu, setActiveSubMenu] = useState(null); // Track active submenu
+  const [activeSubMenu, setActiveSubMenu] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const checkTokenExpiration = () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decodedToken = JSON.parse(atob(token.split('.')[1]));
+        const expirationTime = decodedToken.exp * 1000;
+        
+        if (Date.now() >= expirationTime) {
+          localStorage.removeItem('token');
+          setIsLoggedIn(false);
+          notifications.show({
+            title: 'Session Expired',
+            message: 'Your session has expired. Please login again.',
+            color: 'yellow',
+            // autoClose: 3000,
+          });
+        }
+      } catch (error) {
+        console.error('Error checking token:', error);
+        localStorage.removeItem('token');
+        setIsLoggedIn(false);
+      }
+    }
+  };
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsLoggedIn(!!token);
+    
+    
+    checkTokenExpiration();
+    const interval = setInterval(checkTokenExpiration, 60000); // Check every minute
+    
+    return () => clearInterval(interval);
   }, []);
+
+
 
   const logout = () => {
     localStorage.removeItem('token');

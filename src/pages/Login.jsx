@@ -93,7 +93,7 @@ const Login = () => {
 
   useEffect(() => {
     if (Object.keys(formErrors).length === 0 && isSubmit) {
-      console.log("Form is valid:", formValues);
+      // console.log("Form is valid:", formValues);
     }
   }, [formErrors, isSubmit, formValues]);
 
