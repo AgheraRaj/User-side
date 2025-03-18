@@ -1,467 +1,615 @@
-import { useEffect, useState } from 'react';
-import { Avatar, Button, TextInput, Textarea, Title, Group, Badge, Accordion, Loader, Center, Container, Card, Text, Paper, ThemeIcon } from '@mantine/core';
-import { Mail, Phone, MapPin, User, DollarSign, GraduationCap, FileText, Landmark, Link } from 'lucide-react';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import { Avatar, Button, Loader } from "@mantine/core";
+import {
+  MapPin,
+  CalendarDays,
+  Briefcase,
+  Award,
+  CreditCard,
+  Star,
+  Mail,
+  Phone,
+  Building2,
+} from "lucide-react";
+import axios from "axios";
 
-const MyProfile = () => {
-  // Update the initial state structure
-  const [profileData, setProfileData] = useState({
-    id: 0,
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    location: '',
-    description: '',
-    hourlyRate: '',
-    imageUrl: '',
-    skills: [],
-    companyName: '',
-    status: '',
-    bank: {
-      bankName: '',
-      accountHolderName: '',
-      accountNumber: '',
-      ifscCode: '',
-      branch: ''
-    },
-    portfolio: [],
-    education: [],
-    certification: [],
-    articles: ''
-  });
-  const [isEditing, setIsEditing] = useState(false);
+const ProfileSection = () => {
+  const [selectedTab, setSelectedTab] = useState("overview");
+  const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [counts, setCounts] = useState(null)
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchProfileData = async () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/profile/getProfile`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
         });
         setProfileData(response.data);
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching profile:', error);
+        console.error('Error fetching profile data:', error);
+        setError('Failed to load profile data');
         setLoading(false);
       }
     };
 
-    fetchProfile();
+    const fetchCounts = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/profile/success-rate`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        setCounts(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching profile data:', error);
+        setError('Failed to load profile data');
+        setLoading(false);
+      }
+    };
+    fetchCounts();
+    fetchProfileData();
   }, []);
+
+
 
   const handleSave = async () => {
     try {
-      // Create payload with only the required fields
-      const payload = {
-        id: profileData.id || 0,
-        firstName: profileData.firstName,
-        lastName: profileData.lastName,
-        description: profileData.description,
-        email: profileData.email,
-        phone: profileData.phone,
-        imageUrl: profileData.imageUrl,
-        skills: profileData.skills,
-        hourlyRate: profileData.hourlyRate,
-        location: profileData.location,
-        companyName: profileData.companyName || ''
-      };
-
-      await axios.put(`${import.meta.env.VITE_API_URL}/profile/edit`, payload, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
+      await axios.put(
+        `${import.meta.env.VITE_API_URL}/profile/edit`,
+        profileData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
         }
-      });
-      setIsEditing(false);
+      );
+      setIsEditMode(false); // Exit edit mode after saving
+      alert("Profile updated successfully!");
     } catch (error) {
-      console.error('Error updating profile:', error);
+      console.error("Error updating profile:", error);
+      alert("Failed to update profile.");
     }
-  };
-
-  const handleInputChange = (field, value) => {
-    setProfileData(prev => ({
-      ...prev,
-      [field]: value
-    }));
   };
 
   if (loading) {
     return (
-      <Center h="100vh">
-        <Loader color="teal" size="xl" />
-      </Center>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <Loader color="#2E6F40" size="xl" type="bars" />
+          <p className="mt-4 text-gray-600">Loading profile...</p>
+        </div>
+      </div>
     );
   }
 
-  return (
-    <Container size="xl" py="xl">
-      <Paper shadow="md" radius="lg" p={0} className="overflow-hidden">
-        <div className="bg-gradient-to-l from-[#2E6F40] to-[#68BA7F] p-6">
-          <Title order={1}>My Profile</Title>
-          <Text className="text-white/80">Manage your personal information</Text>
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 bg-[#2E6F40] text-white px-6 py-2 rounded-lg hover:bg-[#245332] transition-colors"
+          >
+            Retry
+          </button>
         </div>
+      </div>
+    );
+  }
 
-        <div className="flex flex-col md:flex-row gap-10 p-6">
-          {/* Left Column - Profile Image & Status */}
-          <div className="flex flex-col items-center space-y-6 w-full md:w-1/3">
-            <Paper shadow="sm" radius="lg" p={6} className="w-full bg-gray-50">
-              <div className="relative flex justify-center">
-                <Avatar
-                  size={200}
-                  src={profileData.imageUrl}
-                  className="rounded-full border-4 border-white shadow-xl"
-                />
-                <Badge
-                  size="lg"
-                  className="absolute bottom-2 right-20"
-                  color='#2E6F40'
-                >
-                  {profileData.status}
-                </Badge>
-              </div>
+  if (!profileData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-600">No profile data available</p>
+      </div>
+    );
+  }
 
-              <div className="mt-6 flex flex-col items-center space-y-4 pb-4">
-                <Text align="center" size="xl" fw={600}>{`${profileData.firstName} ${profileData.lastName}`}</Text>
-                <Text align="center" c="dimmed" size="sm">{profileData.email}</Text>
-                <Button
-                  color='#2E6F40'
-                  className="w-full mt-6"
-                  onClick={() => setIsEditing(!isEditing)}
-                >
-                  {isEditing ? 'Cancel' : 'Edit Profile'}
-                </Button>
-              </div>
-            </Paper>
-
-            {/* Quick Info */}
-            <Paper shadow="sm" radius="lg" p={6} className="w-full">
-              <Title order={4} mx="md">Quick Info</Title>
-              <div className="space-y-4 p-4">
-                <Group>
-                  <ThemeIcon color='#2E6F40' size="lg" radius="md">
-                    <MapPin size={18} />
-                  </ThemeIcon>
-                  <div>
-                    <Text size="sm" c="dimmed">Location</Text>
-                    <Text>{profileData.location}</Text>
+  const renderContent = () => {
+    switch (selectedTab) {
+      case "portfolio":
+        return (
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h3 className="text-xl font-bold text-gray-800 mb-6">
+              Portfolio Projects
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {profileData.portfolio.map((project) => (
+                <div key={project.portfolioId} className="group cursor-pointer">
+                  <div className="relative overflow-hidden rounded-lg shadow-md">
+                    <img
+                      src={project.portfolioImage || "https://picsum.photos/400/300"}
+                      alt={project.portfolioTitle}
+                      className="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
+                      <h4 className="text-white font-bold text-lg">
+                        {project.portfolioTitle}
+                      </h4>
+                      <p className="text-white/80 text-sm mt-2">
+                        {project.description}
+                      </p>
+                    </div>
                   </div>
-                </Group>
-                <Group>
-                  <ThemeIcon color='#2E6F40' size="lg" radius="md">
-                    <DollarSign size={18} />
-                  </ThemeIcon>
-                  <div>
-                    <Text size="sm" c="dimmed">Hourly Rate</Text>
-                    <Text>{profileData.hourlyRate}</Text>
-                  </div>
-                </Group>
-              </div>
-            </Paper>
+                </div>
+              ))}
+            </div>
           </div>
+        );
 
-          {/* Right Column - Profile Details */}
-          <div className="flex-1">
-            <Paper shadow="sm" radius="lg" p={6} className="mb-6">
-              <Title order={4} mx='md'>Basic Information</Title>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4">
-                {isEditing ? (
-                  <TextInput
-                    variant="unstyled"
-                    leftSection={<User size={16} />}
-                    label="First Name"
-                    value={profileData.firstName}
-                    onChange={(e) => handleInputChange('firstName', e.target.value)}
-                    placeholder="Enter first name"
-                  />
-                ) : (
-                  <div>
-                    <Text size="sm" c="dimmed" mb={4}>First Name</Text>
-                    <Group gap="xs">
-                      <User size={16} />
-                      <Text fw={500}>{profileData.firstName}</Text>
-                    </Group>
-                  </div>
-                )}
-
-                {isEditing ? (
-                  <TextInput
-                    variant="unstyled"
-                    leftSection={<User size={16} />}
-                    label="Last Name"
-                    value={profileData.lastName}
-                    onChange={(e) => handleInputChange('lastName', e.target.value)}
-                    placeholder="Enter last name"
-                  />
-                ) : (
-                  <div>
-                    <Text size="sm" c="dimmed" mb={4}>Last Name</Text>
-                    <Group gap="xs">
-                      <User size={16} />
-                      <Text fw={500}>{profileData.lastName}</Text>
-                    </Group>
-                  </div>
-                )}
-
-                {/* Apply the same pattern to other fields */}
-                {isEditing ? (
-                  <TextInput
-                    variant="unstyled"
-                    leftSection={<Mail size={16} />}
-                    label="Email"
-                    value={profileData.email}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
-                    placeholder="Enter email"
-                  />
-                ) : (
-                  <div>
-                    <Text size="sm" c="dimmed" mb={4}>Email</Text>
-                    <Group gap="xs">
-                      <Mail size={16} />
-                      <Text fw={500}>{profileData.email}</Text>
-                    </Group>
-                  </div>
-                )}
-
-                {isEditing ? (
-                  <TextInput
-                    variant="unstyled"
-                    leftSection={<Phone size={16} />}
-                    label="Phone"
-                    value={profileData.phone}
-                    onChange={(e) => handleInputChange('phone', e.target.value)}
-                    placeholder="Enter phone number"
-                  />
-                ) : (
-                  <div>
-                    <Text size="sm" c="dimmed" mb={4}>Phone</Text>
-                    <Group gap="xs">
-                      <Phone size={16} />
-                      <Text fw={500}>{profileData.phone}</Text>
-                    </Group>
-                  </div>
-                )}
-
-                {isEditing ? (
-                  <TextInput
-                    variant="unstyled"
-                    leftSection={<MapPin size={16} />}
-                    label="Location"
-                    value={profileData.location}
-                    onChange={(e) => handleInputChange('location', e.target.value)}
-                    placeholder="Enter location"
-                  />
-                ) : (
-                  <div>
-                    <Text size="sm" c="dimmed" mb={4}>Location</Text>
-                    <Group gap="xs">
-                      <MapPin size={16} />
-                      <Text fw={500}>{profileData.location}</Text>
-                    </Group>
-                  </div>
-                )}
-
-                {isEditing ? (
-                  <TextInput
-                    variant="unstyled"
-                    leftSection={<DollarSign size={16} />}
-                    label="Hourly Rate"
-                    value={profileData.hourlyRate}
-                    onChange={(e) => handleInputChange('hourlyRate', e.target.value)}
-                    placeholder="Enter hourly rate"
-                  />
-                ) : (
-                  <div>
-                    <Text size="sm" c="dimmed" mb={4}>Hourly Rate</Text>
-                    <Group gap="xs">
-                      <DollarSign size={16} />
-                      <Text fw={500}>{profileData.hourlyRate}</Text>
-                    </Group>
-                  </div>
-                )}
-              </div>
-            </Paper>
-
-            <Paper shadow="sm" radius="lg" p={6} mb="md">
-
-              <Title order={4} mx="md">Bio</Title>
-              <div className='p-4'>
-                {isEditing ? (
-                  <Textarea
-                    variant="unstyled"
-                    value={profileData.description}
-                    onChange={(e) => handleInputChange('description', e.target.value)}
-                    placeholder="Write something about yourself..."
-                    minRows={4}
-                  />
-                ) : (
-                  <Text className="prose max-w-none">{profileData.description}</Text>
-                )}
-              </div>
-            </Paper>
-
-            <Paper shadow="sm" radius="lg" p={6} className="mb-6">
-              <Title order={4} mx="md">Skills & Expertise</Title>
-              <div className="flex flex-wrap gap-2 p-4">
-                {profileData.skills.map((skill, index) => (
-                  <Badge
-                    key={index}
-                    size="lg"
-                    color='#2E6F40'
+      case "education":
+        return (
+          <div className="space-y-8">
+            {/* Education Section */}
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <h3 className="text-xl font-bold text-gray-800 mb-6">Education</h3>
+              <div className="space-y-4">
+                {profileData.education.map((edu) => (
+                  <div
+                    key={edu.id}
+                    className="flex justify-between items-start p-4 border border-gray-100 rounded-lg"
                   >
-                    {skill}
-                  </Badge>
+                    <div>
+                      <h4 className="font-semibold text-gray-800">{edu.course}</h4>
+                      <p className="text-sm text-gray-500">{edu.institute}</p>
+                    </div>
+                    <span className="text-sm text-gray-500">{edu.year}</span>
+                  </div>
                 ))}
               </div>
-            </Paper>
+            </div>
+          </div>
+        );
 
-            <Accordion variant="separated" radius="lg">
-              {/* Bank Details */}
-              <Accordion.Item value="bank">
-                <Accordion.Control>
-                  <Group gap="xs">
-                    <ThemeIcon color='#2E6F40' size="lg" radius="md">
-                      <Landmark size={18} />
-                    </ThemeIcon>
-                    <Text fw={600}>Bank Details</Text>
-                  </Group>
-                </Accordion.Control>
-                <Accordion.Panel>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-               
-                        <div>
-                          <Text size="sm" c="dimmed" mb={4}>Bank Name</Text>
-                          <Text fw={500}>{profileData.bank.bankName}</Text>
-                        </div>
-                        <div>
-                          <Text size="sm" c="dimmed" mb={4}>Account Holder</Text>
-                          <Text fw={500}>{profileData.bank.accountHolderName}</Text>
-                        </div>
-                        <div>
-                          <Text size="sm" c="dimmed" mb={4}>Account Number</Text>
-                          <Text fw={500}>{profileData.bank.accountNumber}</Text>
-                        </div>
-                        <div>
-                          <Text size="sm" c="dimmed" mb={4}>IFSC Code</Text>
-                          <Text fw={500}>{profileData.bank.ifscCode}</Text>
-                        </div>
-                      
-                    
-                  </div>
-                </Accordion.Panel>
-              </Accordion.Item>
+      case "reviews":
+        return (
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h3 className="text-xl font-bold text-gray-800 mb-6">
+              Client Reviews
+            </h3>
+            <p className="text-gray-600">No reviews available yet.</p>
+          </div>
+        );
 
-              {/* Portfolio */}
-              <Accordion.Item value="portfolio">
-                <Accordion.Control>
-                  <Group gap="xs">
-                    <ThemeIcon color='#2E6F40' size="lg" radius="md">
-                      <Link size={18} />
-                    </ThemeIcon>
-                    <Text fw={600}>Portfolio</Text>
-                  </Group>
-                </Accordion.Control>
-                <Accordion.Panel>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {profileData.portfolio.map((item, index) => (
-                      <Card key={index} withBorder>
-                        <Text fw={500}>{item.portfolioTitle}</Text>
-                        <img src={item.portfolioImage} alt={item.protfolioTitle} />
-                        <Text size="sm" c="dimmed" mb={2}>{item.description}</Text>
-                        <div className="flex flex-wrap gap-1 mt-2">
-                          {item.skills.map((skill, idx) => (
-                            <Badge key={idx} size="sm" color='#2E6F40'>
-                              {skill}
-                            </Badge>
-                          ))}
-                        </div>
-                      </Card>
-                    ))}
+      case "certification":
+        return (
+          <div className="space-y-8">
+            {/* Certifications Section */}
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <h3 className="text-xl font-bold text-gray-800 mb-6">
+                Certifications
+              </h3>
+              <div className="space-y-4">
+                {profileData.certification.map((cert) => (
+                  <div
+                    key={cert.id}
+                    className="flex justify-between items-center p-4 border border-gray-100 rounded-lg"
+                  >
+                    <div>
+                      <h4 className="font-semibold text-gray-800">
+                        {cert.certificateName}
+                      </h4>
+                      <p className="text-sm text-gray-500">
+                        Issued by {cert.certificateIssuer}
+                      </p>
+                    </div>
+                    <span className="text-sm text-gray-500">
+                      {new Date(cert.issuedDate).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                      })}
+                    </span>
                   </div>
-                </Accordion.Panel>
-              </Accordion.Item>
-              
-              
-              <Accordion.Item value="education">
-                <Accordion.Control>
-                  <Group gap="xs">
-                    <ThemeIcon color='#2E6F40' size="lg" radius="md">
-                      <GraduationCap size={18} />
-                    </ThemeIcon>
-                    <Text fw={600}>Education</Text>
-                  </Group>
-                </Accordion.Control>
-                <Accordion.Panel>
-                  <div className="space-y-4">
-                    {profileData.education.map((edu, index) => (
-                      <Card key={index} withBorder>
-                        <Text fw={500}>{edu.course}</Text>
-                        <Text size="sm" c="dimmed">{edu.institute}</Text>
-                        <Text size="sm" c="dimmed">Year: {edu.year}</Text>
-                      </Card>
-                    ))}
-                  </div>
-                </Accordion.Panel>
-              </Accordion.Item>
-              
-              
-              <Accordion.Item value="certifications">
-                <Accordion.Control>
-                  <Group gap="xs">
-                    <ThemeIcon color='#2E6F40' size="lg" radius="md">
-                      <FileText size={18} />
-                    </ThemeIcon>
-                    <Text fw={600}>Certifications</Text>
-                  </Group>
-                </Accordion.Control>
-                <Accordion.Panel>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {profileData.certification.map((cert, index) => (
-                      <Card key={index} withBorder>
-                        <Text fw={500}>{cert.certificateName}</Text>
-                        <Text size="sm" c="dimmed">Issued by: {cert.certificateIssuer}</Text>
-                        <Text size="sm" c="dimmed">Date: {new Date(cert.issuedDate).toLocaleDateString()}</Text>
-                      </Card>
-                    ))}
-                  </div>
-                </Accordion.Panel>
-              </Accordion.Item>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
 
-              {/* Articles */}
-              <Accordion.Item value="articles">
-                <Accordion.Control>
-                  <Group gap="xs">
-                    <ThemeIcon color='#2E6F40' size="lg" radius="md">
-                      <FileText size={18} />
-                    </ThemeIcon>
-                    <Text fw={600}>Articles</Text>
-                  </Group>
-                </Accordion.Control>
-                <Accordion.Panel>
-                  <div className="prose max-w-none">
-                    {profileData.articles}
+      case "bankdetails":
+        return (
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h3 className="text-xl font-bold text-gray-800 mb-4">Bank Details</h3>
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <CreditCard size={20} className="text-[#2E6F40]" />
+                <div>
+                  <div className="font-semibold text-gray-800">
+                    {profileData.bank.bankName}
                   </div>
-                </Accordion.Panel>
-              </Accordion.Item>
-            </Accordion>
+                  <div className="text-sm text-gray-500">Bank Name</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <CreditCard size={20} className="text-[#2E6F40]" />
+                <div>
+                  <div className="font-semibold text-gray-800">
+                    {profileData.bank.accountHolderName}
+                  </div>
+                  <div className="text-sm text-gray-500">Account Holder Name</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <CreditCard size={20} className="text-[#2E6F40]" />
+                <div>
+                  <div className="font-semibold text-gray-800">
+                    {profileData.bank.accountNumber}
+                  </div>
+                  <div className="text-sm text-gray-500">Account Number</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <CreditCard size={20} className="text-[#2E6F40]" />
+                <div>
+                  <div className="font-semibold text-gray-800">
+                    {profileData.bank.ifscCode}
+                  </div>
+                  <div className="text-sm text-gray-500">IFSC Code</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <CreditCard size={20} className="text-[#2E6F40]" />
+                <div>
+                  <div className="font-semibold text-gray-800">
+                    {profileData.bank.branch}
+                  </div>
+                  <div className="text-sm text-gray-500">Branch</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
 
-            {isEditing && (
-              <Group justify="flex-end" mt="xl">
+      default:
+        return (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Left Column */}
+            <div className="md:col-span-2 space-y-8">
+              {/* About Section */}
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h3 className="text-xl font-bold text-gray-800 mb-4">
+                  About Me
+                </h3>
+                {isEditMode ? (
+                  <textarea
+                    value={profileData.description}
+                    onChange={(e) =>
+                      setProfileData({ ...profileData, description: e.target.value })
+                    }
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                ) : (
+                  <p className="text-gray-600 leading-relaxed">
+                    {profileData.description}
+                  </p>
+                )}
+              </div>
+              {/* Portfolio Section */}
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h3 className="text-xl font-bold text-gray-800 mb-4">
+                  Portfolio
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {profileData.portfolio.map((item) => (
+                    <div key={item.portfolioId} className="group cursor-pointer">
+                      <div className="relative overflow-hidden rounded-lg">
+                        <img
+                          src={item.portfolioImage || "https://picsum.photos/400/300"}
+                          alt={item.portfolioTitle}
+                          className="w-full h-48 object-cover transform group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                      <h4 className="font-semibold mt-3">
+                        {item.portfolioTitle}
+                      </h4>
+                      <p className="text-gray-600 text-sm mt-1">
+                        {item.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            {/* Right Column */}
+            {/* Right Column */}
+            <div className="space-y-6">
+              {/* Stats Card */}
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                  Stats & Achievements
+                </h3>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <Briefcase className="text-[#2E6F40]" size={20} />
+                    <div>
+                      <div className="font-semibold">{counts.completedProject}</div>
+                      <div className="text-sm text-gray-500">Projects Completed</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Award className="text-[#2E6F40]" size={20} />
+                    <div>
+                      <div className="font-semibold">{counts.successRate}%</div>
+                      <div className="text-sm text-gray-500">Success Rate</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Skills Card */}
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4">Skills</h3>
+                <div className="flex flex-wrap gap-2">
+                  {profileData.skills.map((skill, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      {isEditMode ? (
+                        <>
+                          <input
+                            value={skill}
+                            onChange={(e) => {
+                              const updatedSkills = [...profileData.skills];
+                              updatedSkills[index] = e.target.value;
+                              setProfileData({ ...profileData, skills: updatedSkills });
+                            }}
+                            className="p-2 border border-gray-300 rounded"
+                          />
+                          <Button
+                            onClick={() => {
+                              const updatedSkills = profileData.skills.filter(
+                                (_, i) => i !== index
+                              );
+                              setProfileData({ ...profileData, skills: updatedSkills });
+                            }}
+                            variant="transparent"
+                            color="red"
+                          >
+                            Remove
+                          </Button>
+                        </>
+                      ) : (
+                        <span className="bg-[#E5F3F2] text-[#2E6F40] px-3 py-1 rounded-full text-sm">
+                          {skill}
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                  {isEditMode && (
+                    <Button
+                      onClick={() => {
+                        setProfileData({
+                          ...profileData,
+                          skills: [...profileData.skills, ""],
+                        });
+                      }}
+                      variant="transparent"
+                      color="dark"
+                    >
+                      + Add Skill
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+    }
+  };
+
+  return (
+    <div className="bg-gray-50 min-h-screen">
+      {/* Header Section */}
+      <div className="bg-white shadow-sm">
+        <div className="max-w-6xl mx-auto px-4 py-8">
+          <div className="flex flex-col md:flex-row gap-8 items-start">
+            {/* Profile Picture */}
+            <Avatar
+              src={profileData.imageUrl}
+              size={120}
+              className="rounded-full border-4 border-white shadow-lg"
+            />
+            <div className="flex-1">
+              {/* Name */}
+              <h1 className="text-3xl font-bold text-gray-800">
+                {isEditMode ? (
+                  <input
+                    value={profileData.fullName}
+                    onChange={(e) =>
+                      setProfileData({ ...profileData, fullName: e.target.value })
+                    }
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                ) : (
+                  profileData.fullName
+                )}
+              </h1>
+
+              {/* Field of Work */}
+              {isEditMode ? (
+                <textarea
+                  value={profileData.fieldOfWork}
+                  onChange={(e) =>
+                    setProfileData({ ...profileData, fieldOfWork: e.target.value })
+                  }
+                  className="p-2 h-11 border border-gray-300 rounded mt-2"
+                />
+              ) : (
+                <h2 className="text-gray-600 leading-relaxed mt-2">
+                  {profileData.fieldOfWork}
+                </h2>
+              )}
+
+              {/* Additional Fields: Email, Phone, Company Name */}
+              <div className="flex flex-wrap gap-6 mt-4">
+                {/* Email */}
+                <div className="flex items-center gap-2 text-gray-600">
+                  <Mail size={20} />
+                  {isEditMode ? (
+                    <input
+                      value={profileData.email}
+                      onChange={(e) =>
+                        setProfileData({ ...profileData, email: e.target.value })
+                      }
+                      className="p-2 border border-gray-300 rounded w-64"
+                    />
+                  ) : (
+                    <span>{profileData.email}</span>
+                  )}
+                </div>
+
+                {/* Phone */}
+                <div className="flex items-center gap-2 text-gray-600">
+                  <Phone size={20} />
+                  {isEditMode ? (
+                    <input
+                      value={profileData.phone}
+                      onChange={(e) =>
+                        setProfileData({ ...profileData, phone: e.target.value })
+                      }
+                      className="p-2 border border-gray-300 rounded w-48"
+                    />
+                  ) : (
+                    <span>{profileData.phone}</span>
+                  )}
+                </div>
+
+                {/* Company Name */}
+                <div className="flex items-center gap-2 text-gray-600">
+                  <Building2 size={20} />
+                  {isEditMode ? (
+                    <input
+                      value={profileData.companyName}
+                      onChange={(e) =>
+                        setProfileData({ ...profileData, companyName: e.target.value })
+                      }
+                      className="p-2 border border-gray-300 rounded w-48"
+                    />
+                  ) : (
+                    <span>{profileData.companyName}</span>
+                  )}
+                </div>
+              </div>
+
+              {/* Status, Location, Joining Date */}
+              <div className="flex flex-wrap gap-6 mt-4">
+                <div className="flex items-center gap-2">
+                  {profileData.status === "VERIFIED" && (
+                    <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
+                      Verified
+                    </span>
+                  )}
+                  {profileData.status !== "VERIFIED" && (
+                    <span className="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm font-medium">
+                      Pending Verification
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
+                  <Star className="text-yellow-500" size={20} fill="currentColor" />
+                  <span className="font-semibold">{counts.rating}</span>
+                  <span className="text-gray-500">({counts.reviewCount} reviews)</span>
+                </div>
+                <div className="flex items-center gap-2 text-gray-600">
+                  <MapPin size={20} />
+                  {isEditMode ? (
+                    <input
+                      value={profileData.location}
+                      onChange={(e) =>
+                        setProfileData({ ...profileData, location: e.target.value })
+                      }
+                      className="p-2 border border-gray-300 rounded w-48"
+                    />
+                  ) : (
+                    <span>{profileData.location}</span>
+                  )}
+                </div>
+                <div className="flex items-center gap-2 text-gray-600">
+                  <CalendarDays size={20} />
+                  <span>Member since {profileData.user.joiningDate}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Hourly Rate and Edit Buttons */}
+            <div className="text-right">
+            {isEditMode ? (
+                    <input
+                      value={profileData.hourlyRate}
+                      onChange={(e) =>
+                        setProfileData({ ...profileData, hourlyRate: e.target.value })
+                      }
+                      className="p-2 border border-gray-300 rounded w-full"
+                    />
+                  ) : (
+                    <div className="text-2xl font-bold text-gray-800">
+                {profileData.hourlyRate}
+              </div>
+                  )}
+              <Button
+                variant="filled"
+                color="#2E6F40"
+                className="mt-4 px-6 py-2 rounded-lg transition-colors"
+                onClick={() => setIsEditMode(!isEditMode)}
+              >
+                {isEditMode ? "Cancel" : "Edit Profile"}
+              </Button>
+              {isEditMode && (
                 <Button
-                  size="lg"
-                  color='#2E6F40'
+                  variant="outline"
+                  color="#2E6F40"
+                  className="mt-4 ml-4 px-6 py-2 rounded-lg transition-colors"
                   onClick={handleSave}
                 >
                   Save Changes
                 </Button>
-              </Group>
-            )}
+              )}
+            </div>
           </div>
         </div>
-      </Paper>
-    </Container>
+      </div>
+
+      {/* Navigation Tabs */}
+      <nav className="bg-white border-t">
+        <div className="max-w-6xl mx-auto px-4">
+          <ul className="flex gap-8">
+            {[
+              "Overview",
+              "Portfolio",
+              "Reviews",
+              "Education",
+              "Certification",
+              "Bank Details",
+            ].map((tab) => (
+              <li
+                key={tab}
+                onClick={() =>
+                  setSelectedTab(tab.toLowerCase().replace(/ /g, ""))
+                }
+                className={`px-4 py-4 cursor-pointer border-b-2 transition-colors ${selectedTab === tab.toLowerCase().replace(/ /g, "")
+                  ? "border-[#2E6F40] text-[#2E6F40]"
+                  : "border-transparent text-gray-600 hover:text-[#2E6F40]"
+                  }`}
+              >
+                {tab}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
+
+      {/* Main Content */}
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        {renderContent()}
+      </div>
+    </div>
   );
 };
 
-export default MyProfile;
+export default ProfileSection;

@@ -8,7 +8,6 @@ import Header from "./components/Header";
 import Home from "./pages/Home"
 import Footer from './components/Footer';
 import Login from './pages/Login'
-import Signup from './pages/Signup'
 import JobList from './pages/JobList';
 import Talent from './pages/Talent';
 import ProjectDetail from './components/Work&Talent-components/ProjectDetail';
@@ -16,6 +15,7 @@ import FreelancerProfile from './components/Work&Talent-components/FreelancerPro
 import MyProfile from './pages/Header-page/MyProfile';
 import BySkill from './pages/Header-page/BySkill';
 import ByLocation from './pages/Header-page/ByLocation';
+import SignUpPage from './pages/Signup';
 
 
 const App = () => {
@@ -30,7 +30,7 @@ const App = () => {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
-        <Route path='/signup' element={<Signup />} />
+        <Route path='/signup' element={<SignUpPage />} />
         <Route path='/job-list' element={<JobList />} />
         <Route path='/talent' element={<Talent />} />
         <Route path='/project-detail' element={<ProjectDetail />} />
