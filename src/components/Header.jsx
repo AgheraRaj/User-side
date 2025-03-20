@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Avatar, Button } from "@mantine/core";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { notifications } from "@mantine/notifications"; 
+import { notifications } from "@mantine/notifications";
+import { jwtDecode } from "jwt-decode";
 
 
 function Header() {
@@ -10,6 +11,7 @@ function Header() {
   const [showFindWorkDropdown, setShowFindWorkDropdown] = useState(false);
   const [activeSubMenu, setActiveSubMenu] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showManageWorkDropdown, setShowManageWorkDropdown] = useState(false);
 
   const checkTokenExpiration = () => {
     const token = localStorage.getItem('token');
@@ -17,7 +19,7 @@ function Header() {
       try {
         const decodedToken = JSON.parse(atob(token.split('.')[1]));
         const expirationTime = decodedToken.exp * 1000;
-        
+
         if (Date.now() >= expirationTime) {
           localStorage.removeItem('token');
           setIsLoggedIn(false);
@@ -39,11 +41,11 @@ function Header() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsLoggedIn(!!token);
-    
-    
+
+
     checkTokenExpiration();
     const interval = setInterval(checkTokenExpiration, 60000); // Check every minute
-    
+
     return () => clearInterval(interval);
   }, []);
 
@@ -54,6 +56,23 @@ function Header() {
     setIsLoggedIn(false);
   };
 
+
+  const getRoleFromToken = (authToken) => {
+    try {
+      const decoded = jwtDecode(authToken);
+      return decoded.role; // Assuming role is in the payload
+    } catch (error) {
+      console.error("Invalid token:", error);
+      return null;
+    }
+  };
+
+
+  const authToken = localStorage.getItem('token');
+  const role = getRoleFromToken(authToken);
+  // console.log("User Role:", role);
+
+  
   return (
     <div className="relative z-10 w-full">
       {/* Navbar */}
@@ -80,6 +99,18 @@ function Header() {
           >
             Find work <ChevronDown strokeWidth={2} size={16} />
           </div>
+
+          {/* Manage Work Dropdown */}
+          {authToken && (
+            <div
+              className="relative flex items-center gap-1 font-normal hover:text-[#68BA7F] h-16 cursor-pointer"
+              onMouseEnter={() => setShowManageWorkDropdown(true)}
+              onMouseLeave={() => setShowManageWorkDropdown(false)}
+            >
+              Manage work <ChevronDown strokeWidth={2} size={16} />
+            </div>
+          )}
+
 
           <span className="font-normal hover:text-[#68BA7F]">Blogs</span>
         </div>
@@ -137,18 +168,18 @@ function Header() {
               </div>
             </Link>
 
-            
+
             <Link to={"by-location"}>
-            <div
-              className="border-[#2E6F40] border h-24 rounded-md p-4 flex items-center justify-between cursor-pointer hover:bg-[#2e6f400d]"
-              onMouseEnter={() => setActiveSubMenu("location")}
-            >
-              <div>
-                <h1 className="font-semibold">By Location</h1>
-                <p className="text-sm">Search for freelancers  based on their location and timezone.</p>
+              <div
+                className="border-[#2E6F40] border h-24 rounded-md p-4 flex items-center justify-between cursor-pointer hover:bg-[#2e6f400d]"
+                onMouseEnter={() => setActiveSubMenu("location")}
+              >
+                <div>
+                  <h1 className="font-semibold">By Location</h1>
+                  <p className="text-sm">Search for freelancers  based on their location and timezone.</p>
+                </div>
+                <ChevronRight />
               </div>
-              <ChevronRight />
-            </div>
             </Link>
 
             <div className="border-[#2E6F40] border h-24 rounded-md p-4 flex items-center justify-between cursor-pointer hover:bg-[#2e6f400d]">
@@ -441,6 +472,56 @@ function Header() {
 
             </div>
           )}
+        </div>
+      )}
+
+      {/* Manage Work Dropdown Content */}
+      {showManageWorkDropdown && (
+        <div
+          className="absolute top-16 left-[400px] py-5 px-6 bg-white flex border-t border-gray-300 shadow-md"
+          onMouseEnter={() => setShowManageWorkDropdown(true)}
+          onMouseLeave={() => setShowManageWorkDropdown(false)}
+        >
+          {(role === "FREELANCER") ? (
+            <ul className="space-y-3">
+            <li className="hover:text-[#68BA7F] cursor-pointer">
+              <Link to="/freelancer/dashboard" className="block">Manage work</Link>
+            </li>
+            <li className="hover:text-[#68BA7F] cursor-pointer">
+              <Link to="/freelancer/saved-jobs" className="block">Saved jobs</Link>
+            </li>
+            <li className="hover:text-[#68BA7F] cursor-pointer">
+              <Link to="/freelancer/applied-jobs" className="block">Applied jobs</Link>
+            </li>
+            <li className="hover:text-[#68BA7F] cursor-pointer">
+              <Link to="/freelancer/hired-jobs" className="block">Hired jobs</Link>
+            </li>
+            <li className="hover:text-[#68BA7F] cursor-pointer">
+              <Link to="/freelancer/contracts" className="block">Manage contracts</Link>
+            </li>
+          </ul>
+          ) : (
+            <ul className="space-y-3">
+          <li className="hover:text-[#68BA7F] cursor-pointer">
+            <Link to="/employer/dashboard" className="block">Manage work</Link>
+          </li>
+          <li className="hover:text-[#68BA7F] cursor-pointer">
+            <Link to="/employer/post-job" className="block">Add job</Link>
+          </li>
+          <li className="hover:text-[#68BA7F] cursor-pointer">
+            <Link to="/employer/posted-jobs" className="block">Posted jobs</Link>
+          </li>
+          <li className="hover:text-[#68BA7F] cursor-pointer">
+            <Link to="/employer/contracts" className="block">Manage contracts</Link>
+          </li>
+          <li className="hover:text-[#68BA7F] cursor-pointer">
+            <Link to="/employer/active-jobs" className="block">Active jobs</Link>
+          </li>
+        </ul>
+          )}
+
+
+
         </div>
       )}
     </div>
