@@ -11,7 +11,8 @@ const ProfileSection = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [counts, setCounts] = useState(null)
   const [isPortfolioModalOpen, setIsPortfolioModalOpen] = useState(false);
-
+  const [isEducationModalOpen, setIsEducationModalOpen] = useState(false);
+  const [isCertificationModalOpen, setIsCertificationModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -294,29 +295,158 @@ const ProfileSection = () => {
           </>
         );
 
-      case "education":
-        return (
-          <div className="space-y-8">
-            {/* Education Section */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-xl font-bold text-gray-800 mb-6">Education</h3>
-              <div className="space-y-4">
-                {profileData.education.map((edu) => (
-                  <div
-                    key={edu.id}
-                    className="flex justify-between items-start p-4 border border-gray-100 rounded-lg"
+        case "education":
+          return (
+            <div className="space-y-8">
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-xl font-bold text-gray-800">Education</h3>
+                  <Button
+                    leftIcon={<Plus size={16} />}
+                    color="#2E6F40"
+                    variant="filled"
+                    onClick={() => setIsEducationModalOpen(true)}
                   >
-                    <div>
-                      <h4 className="font-semibold text-gray-800">{edu.course}</h4>
-                      <p className="text-sm text-gray-500">{edu.institute}</p>
+                    Add Education
+                  </Button>
+                </div>
+                <div className="space-y-4">
+                  {profileData.education.map((edu) => (
+                    <div
+                      key={edu.id}
+                      className="flex justify-between items-start p-4 border border-gray-100 rounded-lg group relative"
+                    >
+                      <div>
+                        <h4 className="font-semibold text-gray-800">{edu.course}</h4>
+                        <p className="text-sm text-gray-500">{edu.institute}</p>
+                        <p className="text-sm text-gray-500">{edu.year}</p>
+                      </div>
+                      <Button
+                        onClick={async (e) => {
+                          e.stopPropagation();
+                          if (window.confirm('Are you sure you want to delete this education?')) {
+                            try {
+                              await axios.delete(
+                                `${import.meta.env.VITE_API_URL}/profile/education/${edu.id}`,
+                                {
+                                  headers: {
+                                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                                  },
+                                }
+                              );
+                              setProfileData((prev) => ({
+                                ...prev,
+                                education: prev.education.filter((e) => e.id !== edu.id),
+                              }));
+                              alert('Education deleted successfully');
+                            } catch (error) {
+                              console.error("Error deleting education:", error);
+                              alert('Failed to delete education');
+                            }
+                          }
+                        }}
+                        color="red"
+                        variant="filled"
+                        size="sm"
+                        className="opacity-0 group-hover:opacity-100 transition-opacity"
+                        leftIcon={<Trash size={16} />}
+                      >
+                        Delete
+                      </Button>
                     </div>
-                    <span className="text-sm text-gray-500">{edu.year}</span>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
+        
+              <Modal
+                opened={isEducationModalOpen}
+                onClose={() => setIsEducationModalOpen(false)}
+                title="Add Education"
+                size="lg"
+              >
+                <form
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    const educationData = {
+                      course: e.target.course.value,
+                      institute: e.target.institute.value,
+                      year: e.target.year.value,
+                    };
+        
+                    try {
+                      const response = await axios.post(
+                        `${import.meta.env.VITE_API_URL}/profile/education`,
+                        educationData,
+                        {
+                          headers: {
+                            Authorization: `Bearer ${localStorage.getItem('token')}`,
+                          },
+                        }
+                      );
+                      setProfileData((prev) => ({
+                        ...prev,
+                        education: [...prev.education, response.data],
+                      }));
+                      setIsEducationModalOpen(false);
+                      e.target.reset();
+                      alert('Education added successfully');
+                    } catch (error) {
+                      console.error("Error adding education:", error);
+                      alert("Failed to add education");
+                    }
+                  }}
+                  className="space-y-4"
+                >
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Course/Degree
+                    </label>
+                    <input
+                      name="course"
+                      type="text"
+                      placeholder="Enter course or degree"
+                      required
+                      className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#2E6F40] focus:border-transparent"
+                    />
+                  </div>
+        
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Institute
+                    </label>
+                    <input
+                      name="institute"
+                      type="text"
+                      placeholder="Enter institute name"
+                      required
+                      className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#2E6F40] focus:border-transparent"
+                    />
+                  </div>
+        
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Year
+                    </label>
+                    <input
+                      name="year"
+                      type="text"
+                      placeholder="Enter year of completion"
+                      required
+                      className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#2E6F40] focus:border-transparent"
+                    />
+                  </div>
+        
+                  <Button
+                    type="submit"
+                    color="#2E6F40"
+                    fullWidth
+                  >
+                    Add Education
+                  </Button>
+                </form>
+              </Modal>
             </div>
-          </div>
-        );
+          );
 
       case "reviews":
         return (
@@ -328,94 +458,320 @@ const ProfileSection = () => {
           </div>
         );
 
-      case "certification":
-        return (
-          <div className="space-y-8">
-            {/* Certifications Section */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-xl font-bold text-gray-800 mb-6">
-                Certifications
-              </h3>
-              <div className="space-y-4">
-                {profileData.certification.map((cert) => (
-                  <div
-                    key={cert.id}
-                    className="flex justify-between items-center p-4 border border-gray-100 rounded-lg"
+        case "certification":
+          return (
+            <div className="space-y-8">
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-xl font-bold text-gray-800">Certifications</h3>
+                  <Button
+                    leftIcon={<Plus size={16} />}
+                    color="#2E6F40"
+                    variant="filled"
+                    onClick={() => setIsCertificationModalOpen(true)}
                   >
-                    <div>
-                      <h4 className="font-semibold text-gray-800">
-                        {cert.certificateName}
-                      </h4>
-                      <p className="text-sm text-gray-500">
-                        Issued by {cert.certificateIssuer}
-                      </p>
+                    Add Certification
+                  </Button>
+                </div>
+                <div className="space-y-4">
+                  {profileData.certification.map((cert) => (
+                    <div
+                      key={cert.id}
+                      className="flex justify-between items-center p-4 border border-gray-100 rounded-lg group relative"
+                    >
+                      <div>
+                        <h4 className="font-semibold text-gray-800">{cert.certificateName}</h4>
+                        <p className="text-sm text-gray-500">Issued by {cert.certificateIssuer}</p>
+                        <p className="text-sm text-gray-500">
+                          {new Date(cert.issuedDate).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "long",
+                          })}
+                        </p>
+                      </div>
+                      <Button
+                        onClick={async (e) => {
+                          e.stopPropagation();
+                          if (window.confirm('Are you sure you want to delete this certification?')) {
+                            try {
+                              await axios.delete(
+                                `${import.meta.env.VITE_API_URL}/profile/certification/${cert.id}`,
+                                {
+                                  headers: {
+                                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                                  },
+                                }
+                              );
+                              setProfileData((prev) => ({
+                                ...prev,
+                                certification: prev.certification.filter((c) => c.id !== cert.id),
+                              }));
+                              alert('Certification deleted successfully');
+                            } catch (error) {
+                              console.error("Error deleting certification:", error);
+                              alert('Failed to delete certification');
+                            }
+                          }
+                        }}
+                        color="red"
+                        variant="filled"
+                        size="sm"
+                        className="opacity-0 group-hover:opacity-100 transition-opacity"
+                        leftIcon={<Trash size={16} />}
+                      >
+                        Delete
+                      </Button>
                     </div>
-                    <span className="text-sm text-gray-500">
-                      {new Date(cert.issuedDate).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                      })}
-                    </span>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
+        
+              <Modal
+                opened={isCertificationModalOpen}
+                onClose={() => setIsCertificationModalOpen(false)}
+                title="Add Certification"
+                size="lg"
+              >
+                <form
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    const certificationData = {
+                      certificateName: e.target.certificateName.value,
+                      certificateIssuer: e.target.certificateIssuer.value,
+                      issuedDate: e.target.issuedDate.value,
+                    };
+        
+                    try {
+                      const response = await axios.post(
+                        `${import.meta.env.VITE_API_URL}/profile/certification`,
+                        certificationData,
+                        {
+                          headers: {
+                            Authorization: `Bearer ${localStorage.getItem('token')}`,
+                          },
+                        }
+                      );
+                      setProfileData((prev) => ({
+                        ...prev,
+                        certification: [...prev.certification, response.data],
+                      }));
+                      setIsCertificationModalOpen(false);
+                      e.target.reset();
+                      alert('Certification added successfully');
+                    } catch (error) {
+                      console.error("Error adding certification:", error);
+                      alert("Failed to add certification");
+                    }
+                  }}
+                  className="space-y-4"
+                >
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Certificate Name
+                    </label>
+                    <input
+                      name="certificateName"
+                      type="text"
+                      placeholder="Enter certificate name"
+                      required
+                      className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#2E6F40] focus:border-transparent"
+                    />
+                  </div>
+        
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Issuing Organization
+                    </label>
+                    <input
+                      name="certificateIssuer"
+                      type="text"
+                      placeholder="Enter issuing organization"
+                      required
+                      className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#2E6F40] focus:border-transparent"
+                    />
+                  </div>
+        
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Issue Date
+                    </label>
+                    <input
+                      name="issuedDate"
+                      type="date"
+                      required
+                      className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#2E6F40] focus:border-transparent"
+                    />
+                  </div>
+        
+                  <Button
+                    type="submit"
+                    color="#2E6F40"
+                    fullWidth
+                  >
+                    Add Certification
+                  </Button>
+                </form>
+              </Modal>
             </div>
-          </div>
-        );
+          );
 
-      case "bankdetails":
-        return (
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-xl font-bold text-gray-800 mb-4">Bank Details</h3>
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <CreditCard size={20} className="text-[#2E6F40]" />
-                <div>
-                  <div className="font-semibold text-gray-800">
-                    {profileData.bank.bankName}
+          case "bankdetails":
+            return (
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-xl font-bold text-gray-800">Bank Details</h3>
+                  <Button
+                    variant="filled"
+                    color="#2E6F40"
+                    onClick={async () => {
+                      if (isEditMode) {
+                        try {
+                          await axios.put(
+                            `${import.meta.env.VITE_API_URL}/profile/bank`,
+                            profileData.bank,
+                            {
+                              headers: {
+                                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                              },
+                            }
+                          );
+                          setIsEditMode(false);
+                          alert('Bank details updated successfully');
+                        } catch (error) {
+                          console.error("Error updating bank details:", error);
+                          alert('Failed to update bank details');
+                        }
+                      } else {
+                        setIsEditMode(true);
+                      }
+                    }}
+                  >
+                    {isEditMode ? "Save Changes" : "Edit Details"}
+                  </Button>
+                </div>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <CreditCard size={20} className="text-[#2E6F40]" />
+                    <div className="flex-1">
+                      <div className="font-semibold text-gray-800">
+                        {isEditMode ? (
+                          <input
+                            value={profileData.bank.bankName}
+                            onChange={(e) =>
+                              setProfileData({
+                                ...profileData,
+                                bank: { ...profileData.bank, bankName: e.target.value }
+                              })
+                            }
+                            className="w-full p-2 border border-gray-300 rounded"
+                            placeholder="Enter bank name"
+                          />
+                        ) : (
+                          profileData.bank.bankName
+                        )}
+                      </div>
+                      <div className="text-sm text-gray-500">Bank Name</div>
+                    </div>
                   </div>
-                  <div className="text-sm text-gray-500">Bank Name</div>
+    
+                  <div className="flex items-center gap-3">
+                    <CreditCard size={20} className="text-[#2E6F40]" />
+                    <div className="flex-1">
+                      <div className="font-semibold text-gray-800">
+                        {isEditMode ? (
+                          <input
+                            value={profileData.bank.accountHolderName}
+                            onChange={(e) =>
+                              setProfileData({
+                                ...profileData,
+                                bank: { ...profileData.bank, accountHolderName: e.target.value }
+                              })
+                            }
+                            className="w-full p-2 border border-gray-300 rounded"
+                            placeholder="Enter account holder name"
+                          />
+                        ) : (
+                          profileData.bank.accountHolderName
+                        )}
+                      </div>
+                      <div className="text-sm text-gray-500">Account Holder Name</div>
+                    </div>
+                  </div>
+    
+                  <div className="flex items-center gap-3">
+                    <CreditCard size={20} className="text-[#2E6F40]" />
+                    <div className="flex-1">
+                      <div className="font-semibold text-gray-800">
+                        {isEditMode ? (
+                          <input
+                            value={profileData.bank.accountNumber}
+                            onChange={(e) =>
+                              setProfileData({
+                                ...profileData,
+                                bank: { ...profileData.bank, accountNumber: e.target.value }
+                              })
+                            }
+                            className="w-full p-2 border border-gray-300 rounded"
+                            placeholder="Enter account number"
+                          />
+                        ) : (
+                          profileData.bank.accountNumber
+                        )}
+                      </div>
+                      <div className="text-sm text-gray-500">Account Number</div>
+                    </div>
+                  </div>
+    
+                  <div className="flex items-center gap-3">
+                    <CreditCard size={20} className="text-[#2E6F40]" />
+                    <div className="flex-1">
+                      <div className="font-semibold text-gray-800">
+                        {isEditMode ? (
+                          <input
+                            value={profileData.bank.ifscCode}
+                            onChange={(e) =>
+                              setProfileData({
+                                ...profileData,
+                                bank: { ...profileData.bank, ifscCode: e.target.value }
+                              })
+                            }
+                            className="w-full p-2 border border-gray-300 rounded"
+                            placeholder="Enter IFSC code"
+                          />
+                        ) : (
+                          profileData.bank.ifscCode
+                        )}
+                      </div>
+                      <div className="text-sm text-gray-500">IFSC Code</div>
+                    </div>
+                  </div>
+    
+                  <div className="flex items-center gap-3">
+                    <CreditCard size={20} className="text-[#2E6F40]" />
+                    <div className="flex-1">
+                      <div className="font-semibold text-gray-800">
+                        {isEditMode ? (
+                          <input
+                            value={profileData.bank.branch}
+                            onChange={(e) =>
+                              setProfileData({
+                                ...profileData,
+                                bank: { ...profileData.bank, branch: e.target.value }
+                              })
+                            }
+                            className="w-full p-2 border border-gray-300 rounded"
+                            placeholder="Enter branch name"
+                          />
+                        ) : (
+                          profileData.bank.branch
+                        )}
+                      </div>
+                      <div className="text-sm text-gray-500">Branch</div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <CreditCard size={20} className="text-[#2E6F40]" />
-                <div>
-                  <div className="font-semibold text-gray-800">
-                    {profileData.bank.accountHolderName}
-                  </div>
-                  <div className="text-sm text-gray-500">Account Holder Name</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <CreditCard size={20} className="text-[#2E6F40]" />
-                <div>
-                  <div className="font-semibold text-gray-800">
-                    {profileData.bank.accountNumber}
-                  </div>
-                  <div className="text-sm text-gray-500">Account Number</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <CreditCard size={20} className="text-[#2E6F40]" />
-                <div>
-                  <div className="font-semibold text-gray-800">
-                    {profileData.bank.ifscCode}
-                  </div>
-                  <div className="text-sm text-gray-500">IFSC Code</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <CreditCard size={20} className="text-[#2E6F40]" />
-                <div>
-                  <div className="font-semibold text-gray-800">
-                    {profileData.bank.branch}
-                  </div>
-                  <div className="text-sm text-gray-500">Branch</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
+            );
 
       default:
         return (
