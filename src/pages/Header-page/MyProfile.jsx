@@ -1,16 +1,6 @@
 import { useState, useEffect } from "react";
-import { Avatar, Button, Loader } from "@mantine/core";
-import {
-  MapPin,
-  CalendarDays,
-  Briefcase,
-  Award,
-  CreditCard,
-  Star,
-  Mail,
-  Phone,
-  Building2,
-} from "lucide-react";
+import { Avatar, Button, Loader, Modal, } from "@mantine/core";
+import { Trash, Plus, Upload, CreditCard, Award, Briefcase, Mail, Phone, Building2, Star, MapPin, CalendarDays } from "lucide-react";
 import axios from "axios";
 
 const ProfileSection = () => {
@@ -20,6 +10,8 @@ const ProfileSection = () => {
   const [error, setError] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [counts, setCounts] = useState(null)
+  const [isPortfolioModalOpen, setIsPortfolioModalOpen] = useState(false);
+
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -117,32 +109,189 @@ const ProfileSection = () => {
     switch (selectedTab) {
       case "portfolio":
         return (
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-xl font-bold text-gray-800 mb-6">
-              Portfolio Projects
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {profileData.portfolio.map((project) => (
-                <div key={project.portfolioId} className="group cursor-pointer">
-                  <div className="relative overflow-hidden rounded-lg shadow-md">
-                    <img
-                      src={project.portfolioImage || "https://picsum.photos/400/300"}
-                      alt={project.portfolioTitle}
-                      className="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-                      <h4 className="text-white font-bold text-lg">
-                        {project.portfolioTitle}
-                      </h4>
-                      <p className="text-white/80 text-sm mt-2">
-                        {project.description}
-                      </p>
+          <>
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-bold text-gray-800">Portfolio Projects</h3>
+                <Button
+                  leftIcon={<Plus size={16} />}
+                  color="#2E6F40"
+                  variant="filled"
+                  onClick={() => setIsPortfolioModalOpen(true)}
+                >
+                  Add Project
+                </Button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {profileData.portfolio.map((project) => (
+                  <div key={project.portfolioId} className="group cursor-pointer relative">
+                    <div className="relative overflow-hidden rounded-lg shadow-md">
+                      <img
+                        src={project.portfolioImage || "https://picsum.photos/400/300"}
+                        alt={project.portfolioTitle}
+                        className="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
+                        <h4 className="text-white font-bold text-lg">{project.portfolioTitle}</h4>
+                        <p className="text-white/80 text-sm mt-2">{project.description}</p>
+                        <div className="flex flex-wrap gap-2 mt-3">
+                          {project.skills && project.skills.map((skill, index) => (
+                            <span key={index} className="bg-white/20 text-white px-2 py-1 rounded-full text-xs">
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <Button
+                        onClick={async (e) => {
+                          e.stopPropagation();
+                          if (window.confirm('Are you sure you want to delete this project?')) {
+                            try {
+                              await axios.delete(
+                                `${import.meta.env.VITE_API_URL}/profile/portfolio/${project.portfolioId}`,
+                                {
+                                  headers: {
+                                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                                  },
+                                }
+                              );
+                              setProfileData((prev) => ({
+                                ...prev,
+                                portfolio: prev.portfolio.filter((p) => p.portfolioId !== project.portfolioId),
+                              }));
+                              alert('Project deleted successfully');
+                            } catch (error) {
+                              console.error("Error deleting project:", error);
+                              alert('Failed to delete project');
+                            }
+                          }
+                        }}
+                        color="red"
+                        variant="filled"
+                        size="sm"
+                        className="absolute -top-35 -right-53 opacity-0 group-hover:opacity-100 transition-opacity"
+                        leftIcon={<Trash size={16} />}
+                      >
+                        Delete
+                      </Button>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+
+            <Modal
+              opened={isPortfolioModalOpen}
+              onClose={() => setIsPortfolioModalOpen(false)}
+              title="Add New Portfolio Project"
+              size="lg"
+            >
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  const formData = new FormData();
+
+                  // Create portfolio object
+                  const portfolioData = {
+                    portfolioTitle: e.target.portfolioTitle.value,
+                    description: e.target.description.value,
+                    skills: e.target.skills.value.split(',').map(skill => skill.trim())
+                  };
+
+                  // Append portfolio data as string
+                  formData.append("portfolio", JSON.stringify(portfolioData));
+                  // Append file separately
+                  formData.append("file", e.target.portfolioImage.files[0]);
+
+                  try {
+                    const response = await axios.post(
+                      `${import.meta.env.VITE_API_URL}/profile/portfolio`,
+                      formData,
+                      {
+                        headers: {
+                          Authorization: `Bearer ${localStorage.getItem('token')}`,
+                          'Content-Type': 'multipart/form-data',
+                        },
+                      }
+                    );
+                    setProfileData((prev) => ({
+                      ...prev,
+                      portfolio: [...prev.portfolio, response.data],
+                    }));
+                    setIsPortfolioModalOpen(false);
+                    e.target.reset();
+                    alert('Project added successfully');
+                  } catch (error) {
+                    console.error("Error adding portfolio:", error);
+                    alert("Failed to add portfolio project");
+                  }
+                }}
+                className="space-y-4"
+              >
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Project Title
+                  </label>
+                  <input
+                    name="portfolioTitle"
+                    type="text"
+                    placeholder="Enter project title"
+                    required
+                    className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#2E6F40] focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Project Description
+                  </label>
+                  <textarea
+                    name="description"
+                    placeholder="Describe your project"
+                    required
+                    rows="3"
+                    className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#2E6F40] focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Skills Used (comma-separated)
+                  </label>
+                  <input
+                    name="skills"
+                    type="text"
+                    placeholder="React, Node.js, TypeScript"
+                    required
+                    className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#2E6F40] focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Project Image
+                  </label>
+                  <div className="flex items-center gap-2 w-full p-2 border border-gray-300 rounded focus-within:ring-2 focus-within:ring-[#2E6F40] focus-within:border-transparent">
+                    <Upload size={20} />
+                    <input
+                      type="file"
+                      name="portfolioImage"
+                      accept="image/*"
+                      required
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+                <Button
+                  type="submit"
+                  color="#2E6F40"
+                  fullWidth
+                >
+                  Add Portfolio
+                </Button>
+              </form>
+            </Modal>
+          </>
         );
 
       case "education":
@@ -313,12 +462,18 @@ const ProfileSection = () => {
                       <p className="text-gray-600 text-sm mt-1">
                         {item.description}
                       </p>
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        {profileData.skills && profileData.skills.map((skill, index) => (
+                          <span key={index} className="bg-gray-300 px-2 py-1 rounded-full text-xs">
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
-            {/* Right Column */}
             {/* Right Column */}
             <div className="space-y-6">
               {/* Stats Card */}
@@ -539,19 +694,19 @@ const ProfileSection = () => {
 
             {/* Hourly Rate and Edit Buttons */}
             <div className="text-right">
-            {isEditMode ? (
-                    <input
-                      value={profileData.hourlyRate}
-                      onChange={(e) =>
-                        setProfileData({ ...profileData, hourlyRate: e.target.value })
-                      }
-                      className="p-2 border border-gray-300 rounded w-full"
-                    />
-                  ) : (
-                    <div className="text-2xl font-bold text-gray-800">
-                {profileData.hourlyRate}
-              </div>
-                  )}
+              {isEditMode ? (
+                <input
+                  value={profileData.hourlyRate}
+                  onChange={(e) =>
+                    setProfileData({ ...profileData, hourlyRate: e.target.value })
+                  }
+                  className="p-2 border border-gray-300 rounded w-full"
+                />
+              ) : (
+                <div className="text-2xl font-bold text-gray-800">
+                  {profileData.hourlyRate}
+                </div>
+              )}
               <Button
                 variant="filled"
                 color="#2E6F40"
