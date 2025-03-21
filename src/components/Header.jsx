@@ -4,7 +4,7 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { notifications } from "@mantine/notifications";
 import { jwtDecode } from "jwt-decode";
-
+import axios from 'axios';
 
 function Header() {
   const [showHireDropdown, setShowHireDropdown] = useState(false);
@@ -12,6 +12,7 @@ function Header() {
   const [activeSubMenu, setActiveSubMenu] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showManageWorkDropdown, setShowManageWorkDropdown] = useState(false);
+  const [profilePicture, setProfilePicture] = useState(null);
 
   const checkTokenExpiration = () => {
     const token = localStorage.getItem('token');
@@ -72,6 +73,36 @@ function Header() {
   const role = getRoleFromToken(authToken);
   // console.log("User Role:", role);
 
+  useEffect(() => {
+    const fetchProfilePicture = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const response = await axios.get(`${import.meta.env.VITE_API_URL}/profile/image`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setProfilePicture(response.data.imageUrl);
+        } catch (error) {
+          console.error('Error fetching profile picture:', error);
+        }
+      }
+    };
+
+    // Add event listener for profile picture updates
+    const handleProfilePictureUpdate = (event) => {
+      setProfilePicture(event.detail.imageUrl);
+    };
+
+    window.addEventListener('profilePictureUpdate', handleProfilePictureUpdate);
+    fetchProfilePicture();
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('profilePictureUpdate', handleProfilePictureUpdate);
+    };
+  }, [isLoggedIn]);
   
   return (
     <div className="relative z-10 w-full">
@@ -136,7 +167,7 @@ function Header() {
               </Button>
               <Link to={"/my-profile"}>
                 <Avatar
-                  src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-7.png"
+                  src={profilePicture || "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-7.png"}
                   size={40}
                   alt="user avatar"
                 />

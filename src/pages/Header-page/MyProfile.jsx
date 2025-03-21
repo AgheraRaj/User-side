@@ -13,6 +13,7 @@ const ProfileSection = () => {
   const [isPortfolioModalOpen, setIsPortfolioModalOpen] = useState(false);
   const [isEducationModalOpen, setIsEducationModalOpen] = useState(false);
   const [isCertificationModalOpen, setIsCertificationModalOpen] = useState(false);
+  // const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -105,6 +106,42 @@ const ProfileSection = () => {
       </div>
     );
   }
+
+  const handleImageUpload = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/profile/image`,
+          formData,
+          {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('token')}`,
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        );
+
+        setProfileData(prev => ({
+          ...prev,
+          imageUrl: response.data.url
+        }));
+
+        // Dispatch custom event with new image URL
+        window.dispatchEvent(new CustomEvent('profilePictureUpdate', {
+          detail: { imageUrl: response.data.url }
+        }));
+
+        alert('Profile picture updated successfully');
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        alert('Failed to update profile picture');
+      }
+    }
+  };
 
   const renderContent = () => {
     switch (selectedTab) {
@@ -966,11 +1003,29 @@ const ProfileSection = () => {
         <div className="max-w-6xl mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row gap-8 items-start">
             {/* Profile Picture */}
-            <Avatar
-              src={profileData.imageUrl}
-              size={120}
-              className="rounded-full border-4 border-white shadow-lg"
-            />
+            <div className="relative">
+              <Avatar
+                src={profileData.imageUrl}
+                size={120}
+                className="rounded-full border-4 border-white shadow-lg"
+              />
+              {isEditMode && (
+                <div className="absolute bottom-0 right-0">
+                  <label htmlFor="profile-image" className="cursor-pointer">
+                    <div className="bg-[#2E6F40] text-white p-2 rounded-full hover:bg-[#245332] transition-colors">
+                      <Upload size={16} />
+                    </div>
+                  </label>
+                  <input
+                    type="file"
+                    id="profile-image"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleImageUpload}
+                  />
+                </div>
+              )}
+            </div>
             <div className="flex-1">
               {/* Name */}
               <h1 className="text-3xl font-bold text-gray-800">

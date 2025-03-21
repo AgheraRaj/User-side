@@ -11,11 +11,11 @@ import Login from './pages/Login'
 import JobList from './pages/JobList';
 import Talent from './pages/Talent';
 import ProjectDetail from './components/Work&Talent-components/ProjectDetail';
-import FreelancerProfile from './components/Work&Talent-components/FreelancerProfile';
 import MyProfile from './pages/Header-page/MyProfile';
 import BySkill from './pages/Header-page/BySkill';
 import ByLocation from './pages/Header-page/ByLocation';
 import SignUpPage from './pages/Signup';
+import FreelancerProfile from './components/Work&Talent-components/freelancerprofile';
 
 
 const App = () => {
