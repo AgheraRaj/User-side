@@ -12,10 +12,9 @@ import JobList from './pages/JobList';
 import Talent from './pages/Talent';
 import ProjectDetail from './components/Work&Talent-components/ProjectDetail';
 import MyProfile from './pages/Header-page/MyProfile';
-import BySkill from './pages/Header-page/BySkill';
-import ByLocation from './pages/Header-page/ByLocation';
 import SignUpPage from './pages/Signup';
 import FreelancerProfile from './components/Work&Talent-components/freelancerprofile';
+import BySkill from './pages/Header-page/BySkill';
 
 
 const App = () => {
@@ -34,10 +33,9 @@ const App = () => {
         <Route path='/job-list' element={<JobList />} />
         <Route path='/talent' element={<Talent />} />
         <Route path='/project-detail' element={<ProjectDetail />} />
-        <Route path='/freelancer-profile' element={<FreelancerProfile />} />
+        <Route path="/freelancer-profile/:id" element={<FreelancerProfile />} />
         <Route path='/my-profile' element={<MyProfile />} />
-        <Route path='/by-skill' element={<BySkill />} />
-        <Route path='/by-location' element={<ByLocation />} />
+        <Route path="/by-skill/:skill" element={<BySkill />} />
       </Routes>
       {!hideLayout && <Footer />}
     </MantineProvider>

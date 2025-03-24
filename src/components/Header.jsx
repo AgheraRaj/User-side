@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Avatar, Button } from "@mantine/core";
 import { ChevronDown, ChevronRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { notifications } from "@mantine/notifications";
 import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
@@ -13,6 +13,8 @@ function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showManageWorkDropdown, setShowManageWorkDropdown] = useState(false);
   const [profilePicture, setProfilePicture] = useState(null);
+  const navigate = useNavigate();
+
 
   const checkTokenExpiration = () => {
     const token = localStorage.getItem('token');
@@ -55,6 +57,13 @@ function Header() {
   const logout = () => {
     localStorage.removeItem('token');
     setIsLoggedIn(false);
+    navigate('/'); // Use navigate instead of Navigate
+    notifications.show({
+      title: 'Logout Successful', 
+      message: 'You have been logged out.',
+      color: 'green',
+      // autoClose: 3000,
+    });
   };
 
 
@@ -103,7 +112,7 @@ function Header() {
       window.removeEventListener('profilePictureUpdate', handleProfilePictureUpdate);
     };
   }, [isLoggedIn]);
-  
+
   return (
     <div className="relative z-10 w-full">
       {/* Navbar */}
@@ -186,32 +195,30 @@ function Header() {
         >
           {/* Left Panel */}
           <div className=" flex flex-col space-y-3 p-5"> {/* remove 40% width */}
-            <Link to={"/by-skill"}>
-              <div
-                className="border-[#2E6F40] border h-24 rounded-md p-4 flex items-center justify-between cursor-pointer hover:bg-[#2e6f400d]"
-                onMouseEnter={() => setActiveSubMenu("skill")}
-              >
-                <div>
-                  <h1 className="font-semibold">By Skill</h1>
-                  <p className="text-sm">Looking for a freelancer with specific skills? Start here.</p>
-                </div>
-                <ChevronRight />
+            <div
+              className="border-[#2E6F40] border h-24 rounded-md p-4 flex items-center justify-between cursor-pointer hover:bg-[#2e6f400d]"
+              onMouseEnter={() => setActiveSubMenu("skill")}
+            >
+              <div>
+                <h1 className="font-semibold">By Skill</h1>
+                <p className="text-sm">Looking for a freelancer with specific skills? Start here.</p>
               </div>
-            </Link>
+              <ChevronRight />
+            </div>
 
 
-            <Link to={"by-location"}>
-              <div
-                className="border-[#2E6F40] border h-24 rounded-md p-4 flex items-center justify-between cursor-pointer hover:bg-[#2e6f400d]"
-                onMouseEnter={() => setActiveSubMenu("location")}
-              >
-                <div>
-                  <h1 className="font-semibold">By Location</h1>
-                  <p className="text-sm">Search for freelancers  based on their location and timezone.</p>
-                </div>
-                <ChevronRight />
+
+            <div
+              className="border-[#2E6F40] border h-24 rounded-md p-4 flex items-center justify-between cursor-pointer hover:bg-[#2e6f400d]"
+              onMouseEnter={() => setActiveSubMenu("location")}
+            >
+              <div>
+                <h1 className="font-semibold">By Location</h1>
+                <p className="text-sm">Search for freelancers  based on their location and timezone.</p>
               </div>
-            </Link>
+              <ChevronRight />
+            </div>
+
 
             <div className="border-[#2E6F40] border h-24 rounded-md p-4 flex items-center justify-between cursor-pointer hover:bg-[#2e6f400d]">
               <div>
@@ -229,35 +236,46 @@ function Header() {
                 <div className="flex justify-start gap-10">
                   <div className="grid grid-cols-3 grid-rows-2 gap-5">
 
-                    <div className="flex flex-col border border-black rounded-md ">
-                      <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/graphic-design.png" alt="" className="rounded-t-md" />
-                      <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Graphic designers</div>
-                    </div>
+                    <Link to="/by-skill/graphic designers">
+                      <div className="flex flex-col border border-black rounded-md">
+                        <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/graphic-design.png" alt="" className="rounded-t-md" />
+                        <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Graphic designers</div>
+                      </div>
+                    </Link>
 
+                    <Link to="/by-skill/wbsite designers">
                     <div className="flex flex-col border border-black rounded-md">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/website.png" alt="" className="rounded-t-md" />
                       <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Website designers</div>
                     </div>
-
+                    </Link>
+                    <Link to="/by-skill/mobile app developers">
                     <div className="flex flex-col border border-black rounded-md">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/mobile.png" alt="" className="rounded-t-md" />
                       <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Mobile app developers</div>
                     </div>
+                    </Link>
 
+                    <Link to="/by-skill/software developers">
                     <div className="flex flex-col border border-black rounded-md">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/sd.png" alt="" className="rounded-t-md" />
                       <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Softewar developers</div>
                     </div>
+                    </Link>
 
+                    <Link to="/by-skill/ux designers">
                     <div className="flex flex-col border border-black rounded-md">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/3d.png" alt="" className="rounded-t-md" />
                       <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">3D artists</div>
                     </div>
+                    </Link>
 
+                    <Link to="/by-skill/Illustration">
                     <div className="flex flex-col border border-black rounded-md">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/illustration.png" alt="" className="rounded-t-md" />
                       <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Illustration</div>
                     </div>
+                    </Link>
 
                   </div>
 
@@ -265,8 +283,8 @@ function Header() {
                     <h2 className="text-lg font-semibold mb-4">Other popular skills</h2>
                     <ul className="space-y-2">
                       <li className="cursor-pointer">Web developers</li>
-                      <li className="cursor-pointer">Writers</li>
-                      <li className="cursor-pointer">Marketing specialists</li>
+                      <Link to="/by-skill/java"><li className="cursor-pointer">Java</li></Link>
+                      <Link to="/by-skill/spring boot"><li className="cursor-pointer">Spring boot</li></Link>
                       <li className="cursor-pointer">SEO specialists</li>
                       <li className="cursor-pointer">Data entry clerks</li>
                       <li className="cursor-pointer">Virtual assistants</li>
@@ -515,40 +533,40 @@ function Header() {
         >
           {(role === "FREELANCER") ? (
             <ul className="space-y-3">
-            <li className="hover:text-[#68BA7F] cursor-pointer">
-              <Link to="/freelancer/dashboard" className="block">Manage work</Link>
-            </li>
-            <li className="hover:text-[#68BA7F] cursor-pointer">
-              <Link to="/freelancer/saved-jobs" className="block">Saved jobs</Link>
-            </li>
-            <li className="hover:text-[#68BA7F] cursor-pointer">
-              <Link to="/freelancer/applied-jobs" className="block">Applied jobs</Link>
-            </li>
-            <li className="hover:text-[#68BA7F] cursor-pointer">
-              <Link to="/freelancer/hired-jobs" className="block">Hired jobs</Link>
-            </li>
-            <li className="hover:text-[#68BA7F] cursor-pointer">
-              <Link to="/freelancer/contracts" className="block">Manage contracts</Link>
-            </li>
-          </ul>
+              <li className="hover:text-[#68BA7F] cursor-pointer">
+                <Link to="/freelancer/dashboard" className="block">Manage work</Link>
+              </li>
+              <li className="hover:text-[#68BA7F] cursor-pointer">
+                <Link to="/freelancer/saved-jobs" className="block">Saved jobs</Link>
+              </li>
+              <li className="hover:text-[#68BA7F] cursor-pointer">
+                <Link to="/freelancer/applied-jobs" className="block">Applied jobs</Link>
+              </li>
+              <li className="hover:text-[#68BA7F] cursor-pointer">
+                <Link to="/freelancer/hired-jobs" className="block">Hired jobs</Link>
+              </li>
+              <li className="hover:text-[#68BA7F] cursor-pointer">
+                <Link to="/freelancer/contracts" className="block">Manage contracts</Link>
+              </li>
+            </ul>
           ) : (
             <ul className="space-y-3">
-          <li className="hover:text-[#68BA7F] cursor-pointer">
-            <Link to="/employer/dashboard" className="block">Manage work</Link>
-          </li>
-          <li className="hover:text-[#68BA7F] cursor-pointer">
-            <Link to="/employer/post-job" className="block">Add job</Link>
-          </li>
-          <li className="hover:text-[#68BA7F] cursor-pointer">
-            <Link to="/employer/posted-jobs" className="block">Posted jobs</Link>
-          </li>
-          <li className="hover:text-[#68BA7F] cursor-pointer">
-            <Link to="/employer/contracts" className="block">Manage contracts</Link>
-          </li>
-          <li className="hover:text-[#68BA7F] cursor-pointer">
-            <Link to="/employer/active-jobs" className="block">Active jobs</Link>
-          </li>
-        </ul>
+              <li className="hover:text-[#68BA7F] cursor-pointer">
+                <Link to="/employer/dashboard" className="block">Manage work</Link>
+              </li>
+              <li className="hover:text-[#68BA7F] cursor-pointer">
+                <Link to="/employer/post-job" className="block">Add job</Link>
+              </li>
+              <li className="hover:text-[#68BA7F] cursor-pointer">
+                <Link to="/employer/posted-jobs" className="block">Posted jobs</Link>
+              </li>
+              <li className="hover:text-[#68BA7F] cursor-pointer">
+                <Link to="/employer/contracts" className="block">Manage contracts</Link>
+              </li>
+              <li className="hover:text-[#68BA7F] cursor-pointer">
+                <Link to="/employer/active-jobs" className="block">Active jobs</Link>
+              </li>
+            </ul>
           )}
 
 

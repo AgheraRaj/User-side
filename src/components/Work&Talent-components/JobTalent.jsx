@@ -119,7 +119,7 @@ const JobTalent = () => {
                                     </div>
                                 </div>
 
-                                <Link to={`/freelancer-profile`} className="w-full mt-4">
+                                <Link to={`/freelancer-profile/${talent.profileDtoForCard.id}`} className="w-full mt-4">
                                     <Button
                                         variant="filled"
                                         color="#2E6F40"
