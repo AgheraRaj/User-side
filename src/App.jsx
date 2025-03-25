@@ -4,7 +4,7 @@ import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { Route, Routes, useLocation } from 'react-router-dom';
 
-import Header from "./components/Header";
+
 import Home from "./pages/Home"
 import Footer from './components/Footer';
 import Login from './pages/Login'
@@ -15,6 +15,7 @@ import MyProfile from './pages/Header-page/MyProfile';
 import SignUpPage from './pages/Signup';
 import FreelancerProfile from './components/Work&Talent-components/freelancerprofile';
 import BySkill from './pages/Header-page/BySkill';
+import Header from './components/header';
 
 
 const App = () => {
@@ -32,7 +33,7 @@ const App = () => {
         <Route path='/signup' element={<SignUpPage />} />
         <Route path='/job-list' element={<JobList />} />
         <Route path='/talent' element={<Talent />} />
-        <Route path='/project-detail' element={<ProjectDetail />} />
+        <Route path="/project/:jobId" element={<ProjectDetail />} />
         <Route path="/freelancer-profile/:id" element={<FreelancerProfile />} />
         <Route path='/my-profile' element={<MyProfile />} />
         <Route path="/by-skill/:skill" element={<BySkill />} />

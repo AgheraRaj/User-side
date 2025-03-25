@@ -1,12 +1,19 @@
-import { Avatar } from "@mantine/core";
-import { CalendarDays, CheckCircle, CreditCard, IdCard, Mail, MapPin, Phone, Star, User } from "lucide-react";
-import { useState } from "react";
+import { Avatar, Button } from "@mantine/core";
+import axios from "axios";
+import { CalendarDays, CheckCircle, CreditCard, IdCard, Loader, Mail, MapPin, Phone, Star, User } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useParams } from 'react-router-dom';
 
 const ProjectDetail = () => {
 
     const [selectedTab, setSelectedTab] = useState('details');
-
+    const { jobId } = useParams();
     const [expanded, setExpanded] = useState({});
+    const [projectDetails, setProjectDetails] = useState(null);
+    const [proposal, setProposal] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
 
     const toggleDescription = (id) => {
         setExpanded((prev) => ({
@@ -15,53 +22,103 @@ const ProjectDetail = () => {
         }));
     };
 
-    const proposal = [
-        {
-            id: 1,
-            name: "Rabia H.",
-            username: "@rabbiawebjuggler",
-            rating: 4.9,
-            reviews: 258,
-            successRate: 98,
-            expertise: "MS Excel, Website, WordPress & Scraping Expert",
-            description: "As an experienced data analyst, I understand the significance of accessible, accurate information As an experienced data analyst, I understand the significance of accessible, accurate information",
-            country: "Pakistan",
-            price: "$250.00 CAD",
-            duration: "in 1 day",
-            responseTime: "Replies within a few hours",
-            image: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-7.png"
-        },
-        {
-            id: 2,
-            name: "Shuvankar G.",
-            username: "@Anderson8592",
-            rating: 5.0,
-            reviews: 205,
-            successRate: 98,
-            expertise: "Expert in Data Entry, VA, Scraping, Leads & Listing",
-            description: "I have a strong track record in data entry, virtual assistance, and web scraping...",
-            country: "Bangladesh",
-            price: "Sealed",
-            duration: "",
-            responseTime: "Replies within a few hours",
-            image: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-7.png"
-        },
-        {
-            id: 3,
-            name: "Sandeep C.",
-            username: "@schoudhary1553",
-            rating: 4.9,
-            reviews: 946,
-            successRate: 95,
-            expertise: "PYTHON | R | SAS | POWER-BI | TABLEAU | EXCEL | R | VBA | Coder",
-            description: "As a seasoned full-stack developer with over 7 years of experience...",
-            country: "India",
-            price: "$500.00 CAD",
-            duration: "in 7 days",
-            responseTime: "Replies within a day",
-            image: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-7.png"
+    // const proposal = [
+    //     {
+    //         id: 1,
+    //         name: "Rabia H.",
+    //         username: "@rabbiawebjuggler",
+    //         rating: 4.9,
+    //         reviews: 258,
+    //         successRate: 98,
+    //         expertise: "MS Excel, Website, WordPress & Scraping Expert",
+    //         description: "As an experienced data analyst, I understand the significance of accessible, accurate information As an experienced data analyst, I understand the significance of accessible, accurate information",
+    //         country: "Pakistan",
+    //         price: "$250.00 CAD",
+    //         duration: "in 1 day",
+    //         responseTime: "Replies within a few hours",
+    //         image: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-7.png"
+    //     },
+    //     {
+    //         id: 2,
+    //         name: "Shuvankar G.",
+    //         username: "@Anderson8592",
+    //         rating: 5.0,
+    //         reviews: 205,
+    //         successRate: 98,
+    //         expertise: "Expert in Data Entry, VA, Scraping, Leads & Listing",
+    //         description: "I have a strong track record in data entry, virtual assistance, and web scraping...",
+    //         country: "Bangladesh",
+    //         price: "Sealed",
+    //         duration: "",
+    //         responseTime: "Replies within a few hours",
+    //         image: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-7.png"
+    //     },
+    //     {
+    //         id: 3,
+    //         name: "Sandeep C.",
+    //         username: "@schoudhary1553",
+    //         rating: 4.9,
+    //         reviews: 946,
+    //         successRate: 95,
+    //         expertise: "PYTHON | R | SAS | POWER-BI | TABLEAU | EXCEL | R | VBA | Coder",
+    //         description: "As a seasoned full-stack developer with over 7 years of experience...",    
+    //         country: "India",
+    //         price: "$500.00 CAD",
+    //         duration: "in 7 days",
+    //         responseTime: "Replies within a day",
+    //         image: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-7.png"
+    //     }
+    // ];
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+                setError(null);
+                // Use jobId consistently instead of id
+                const projectResponse = await axios.get(`${import.meta.env.VITE_API_URL}/jobs/${jobId}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+                const proposalsResponse = await axios.get(`${import.meta.env.VITE_API_URL}/proposals/${jobId}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+
+                setProjectDetails(projectResponse.data);
+                setProposal(proposalsResponse.data);
+                console.log('Project Details:', projectResponse.data);
+                console.log('Details:', proposalsResponse.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setError(error.response?.data?.message || 'Failed to fetch data');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (jobId) {
+            fetchData();
         }
-    ];
+    }, [jobId]);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <Loader color="#2E6F40" size={50} />
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <p className="text-red-500">{error}</p>
+            </div>
+        );
+    }
 
     return (
         <div className="w-full bg-gray-50 min-h-screen">
@@ -70,21 +127,19 @@ const ProjectDetail = () => {
                 <ul className="flex gap-8 py-4 font-medium">
                     <li
                         onClick={() => setSelectedTab('details')}
-                        className={`px-2 pb-2 cursor-pointer transition-all hover:text-[#2E6F40] ${
-                            selectedTab === 'details' 
-                            ? 'text-[#2E6F40] border-b-[3px] border-[#2E6F40]' 
+                        className={`px-2 pb-2 cursor-pointer transition-all hover:text-[#2E6F40] ${selectedTab === 'details'
+                            ? 'text-[#2E6F40] border-b-[3px] border-[#2E6F40]'
                             : 'text-gray-600'
-                        }`}
+                            }`}
                     >
                         Details
                     </li>
                     <li
                         onClick={() => setSelectedTab('proposals')}
-                        className={`px-2 pb-2 cursor-pointer transition-all hover:text-[#2E6F40] ${
-                            selectedTab === 'proposals' 
-                            ? 'text-[#2E6F40] border-b-[3px] border-[#2E6F40]' 
+                        className={`px-2 pb-2 cursor-pointer transition-all hover:text-[#2E6F40] ${selectedTab === 'proposals'
+                            ? 'text-[#2E6F40] border-b-[3px] border-[#2E6F40]'
                             : 'text-gray-600'
-                        }`}
+                            }`}
                     >
                         Proposals
                     </li>
@@ -99,21 +154,15 @@ const ProjectDetail = () => {
                         <div className="lg:w-2/3 bg-white shadow-sm hover:shadow-md transition-shadow rounded-lg p-6">
                             <h2 className="text-2xl font-bold text-gray-800">Project Details</h2>
                             <p className="mt-5 text-gray-600 leading-relaxed space-y-4">
-                                Nihil earum quae in, harum aperiam debitis magnam laboriosam ut tenetur iusto soluta labore odio magni illum perferendis qui id nisi repellendus aut reprehenderit incidunt distinctio modi rerum? Dicta, rem.
-                                Eaque nemo aliquid unde magni doloremque, quod dolorem? Saepe fuga enim quasi pariatur assumenda consequuntur iusto corrupti unde repellendus temporibus. Laudantium necessitatibus nam obcaecati neque ipsam veritatis, culpa totam eveniet.
-                                Sunt esse ullam tempore voluptatem, sed doloremque! Voluptates quia maiores libero nihil natus quae harum, tempora minima explicabo, commodi error autem hic ea nobis sapiente incidunt eveniet neque consequatur at.
-                                Numquam enim repudiandae consequuntur cumque cupiditate natus veritatis earum, dolorum tempore dolore quidem laborum! Deserunt, molestias minima odio dicta voluptates voluptas, nostrum voluptatem quae repudiandae aspernatur necessitatibus rem labore esse.
-                                Exercitationem molestiae vero nihil maiores cumque, reprehenderit delectus dolore sequi labore repellat quam voluptatem doloremque ut sunt excepturi ipsa impedit! Ad, nemo cupiditate! Quibusdam, veritatis enim neque libero sequi id.
-                                Illum incidunt ut dolorum est architecto? Reprehenderit tempora accusamus iusto dolorum, quis sunt veritatis ducimus totam sit ullam, atque, enim excepturi distinctio rerum sed illum aliquid molestiae quibusdam! Explicabo, in?
-
+                                {projectDetails?.description}
                             </p>
 
                             {/* Skills Section */}
                             <h3 className="text-xl font-bold text-gray-800 mt-8 mb-4">Required Skills</h3>
                             <div className="flex flex-wrap gap-2">
-                                {["React", "Next.js", "Tailwind CSS", "Node.js"].map((skill, index) => (
-                                    <span 
-                                        key={index} 
+                                {projectDetails.skillsRequired.map((skill, index) => (
+                                    <span
+                                        key={index}
                                         className="bg-[#E5F3F2] font-medium text-[#2E6F40] px-4 py-2 text-sm rounded-full hover:bg-[#d0ebe9] transition-colors"
                                     >
                                         {skill}
@@ -134,11 +183,11 @@ const ProjectDetail = () => {
                             <div className="space-y-4">
                                 <p className="text-gray-600 flex items-center gap-3">
                                     <MapPin size={20} className="text-gray-400" />
-                                    <span>New York, USA</span>
+                                    <span>{projectDetails.client.location}</span>
                                 </p>
                                 <p className="text-gray-600 flex items-center gap-3">
                                     <CalendarDays size={20} className="text-gray-400" />
-                                    <span>Joined: March 2022</span>
+                                    <span>{projectDetails.client.joiningDate}</span>
                                 </p>
                             </div>
 
@@ -162,21 +211,32 @@ const ProjectDetail = () => {
                     </div>
                 ) : (
                     <div className="max-w-4xl mx-auto">
-                        <h2 className="text-2xl font-bold text-gray-800">Proposals</h2>
-                        <p className="mt-2 text-gray-600">
-                            Below are the proposals submitted by freelancers:
-                        </p>
+                        <div className="flex justify-between items-center">
+                            <div>
+                                <h2 className="text-2xl font-bold text-gray-800">Proposals</h2>
+
+                                <p className="mt-2 text-gray-600">
+                                    Below are the proposals submitted by freelancers:
+                                </p>
+                            </div>
+                            <div>
+                                <Button color="#2E6F40">
+                                    Add Proposal
+                                </Button>
+                            </div>
+                        </div>
+
 
                         {/* Proposals List */}
                         <div className="mt-6 space-y-6">
                             {proposal.map((freelancer) => (
-                                <div key={freelancer.id} 
+                                <div key={freelancer.id}
                                     className="bg-white border border-gray-100 rounded-lg shadow-sm hover:shadow-md transition-shadow p-6"
                                 >
                                     <div className="flex gap-6">
-                                        <Avatar 
-                                            src={freelancer.image} 
-                                            size={80} 
+                                        <Avatar
+                                            src={freelancer.image}
+                                            size={80}
                                             alt={freelancer.name}
                                             className="rounded-lg"
                                         />
@@ -184,8 +244,11 @@ const ProjectDetail = () => {
                                             <div className="flex items-center justify-between">
                                                 <div>
                                                     <h2 className="text-xl font-bold text-gray-800">
-                                                        {freelancer.name} 
+                                                        {freelancer.name}
                                                         <span className="text-gray-400 text-base ml-2">{freelancer.username}</span>
+                                                        <span className={`ml-2 px-2 py-1 text-sm rounded-full ${freelancer.status === 'HIRED' ? 'bg-green-100 text-green-600' : ''}`}>
+                                                            {freelancer.status}
+                                                        </span>
                                                     </h2>
                                                     <div className="flex items-center gap-3 mt-2">
                                                         <div className="flex items-center text-yellow-500">
@@ -197,16 +260,31 @@ const ProjectDetail = () => {
                                                     </div>
                                                 </div>
                                                 <div className="text-right">
-                                                    <div className="text-xl font-bold text-gray-800">{freelancer.price}</div>
-                                                    {freelancer.duration && (
-                                                        <div className="text-sm text-gray-500 mt-1">{freelancer.duration}</div>
+                                                    <div className="text-xl font-bold text-gray-800">{freelancer.bid}</div>
+                                                    {freelancer.finishingTime && (
+                                                        <div className="text-sm text-gray-500 mt-1">
+                                                            Finish by {new Date(freelancer.finishingTime).toLocaleDateString('en-US', {
+                                                                year: 'numeric',
+                                                                month: 'short',
+                                                                day: 'numeric'
+                                                            })}
+                                                        </div>
                                                     )}
                                                 </div>
                                             </div>
-                                            <p className="text-[#2E6F40] font-medium mt-3">{freelancer.expertise}</p>
+                                            <div className="flex flex-wrap gap-2 mt-3">
+                                                {freelancer.expertise.map((skill, index) => (
+                                                    <span
+                                                        key={index}
+                                                        className="bg-[#E5F3F2] text-[#2E6F40] font-medium px-3 py-1 rounded-full text-sm"
+                                                    >
+                                                        {skill}
+                                                    </span>
+                                                ))}
+                                            </div>
                                             <p className="text-gray-600 mt-2">
-                                                {expanded[freelancer.id] 
-                                                    ? freelancer.description 
+                                                {expanded[freelancer.id]
+                                                    ? freelancer.description
                                                     : `${freelancer.description.slice(0, 100)}...`
                                                 }
                                                 <button

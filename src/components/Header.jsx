@@ -243,7 +243,7 @@ function Header() {
                       </div>
                     </Link>
 
-                    <Link to="/by-skill/wbsite designers">
+                    <Link to="/by-skill/website designers">
                     <div className="flex flex-col border border-black rounded-md">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/website.png" alt="" className="rounded-t-md" />
                       <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Website designers</div>

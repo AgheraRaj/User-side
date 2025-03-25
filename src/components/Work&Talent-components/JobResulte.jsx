@@ -73,7 +73,7 @@ const JobResults = () => {
               </div>
 
               {/* Title */}
-              <Link to="/project-detail">
+              <Link to={`/project/${project.id}`}>
                 <Text size="lg" weight={500} className="line-clamp-2">
                   {project.title}
                 </Text>

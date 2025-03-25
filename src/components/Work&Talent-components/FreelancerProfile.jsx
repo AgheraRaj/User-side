@@ -48,7 +48,7 @@ const FreelancerProfile = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader color="#2E6F40" size="xl" />
+        <Loader color="#2E6F40" size={50} />
       </div>
     );
   }
