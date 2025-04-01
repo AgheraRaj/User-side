@@ -3,7 +3,7 @@ import axios from "axios";
 import { Badge, Loader, Tabs } from "@mantine/core";
 import { Briefcase, Clock, Search } from "lucide-react";
 
-const ManageWork = () => {
+const MyJobs = () => {
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -155,4 +155,4 @@ const ManageWork = () => {
     );
 };
 
-export default ManageWork;
+export default MyJobs;
