@@ -665,7 +665,7 @@ const ProfileSection = () => {
                     if (isEditMode) {
                       try {
                         await axios.put(
-                          `${import.meta.env.VITE_API_URL}/profile/bank`,
+                          `${import.meta.env.VITE_API_URL}/profile/bank/${profileData.bank.id}`,
                           profileData.bank,
                           {
                             headers: {

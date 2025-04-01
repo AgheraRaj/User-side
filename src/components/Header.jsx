@@ -26,6 +26,7 @@ function Header() {
         if (Date.now() >= expirationTime) {
           localStorage.removeItem('token');
           setIsLoggedIn(false);
+
           notifications.show({
             title: 'Session Expired',
             message: 'Your session has expired. Please login again.',
@@ -143,7 +144,7 @@ function Header() {
           {/* Manage Work Dropdown */}
           {authToken && (
             <div
-              className="relative flex items-center gap-1 font-normal hover:text-[#68BA7F] h-16 cursor-pointer"
+              className={`relative flex items-center gap-1 font-normal hover:text-[#68BA7F] h-16 cursor-pointer ${isLoggedIn === true ? 'block' : 'hidden'}`}
               onMouseEnter={() => setShowManageWorkDropdown(true)}
               onMouseLeave={() => setShowManageWorkDropdown(false)}
             >
@@ -534,16 +535,10 @@ function Header() {
           {(role === "FREELANCER") ? (
             <ul className="space-y-3">
               <li className="hover:text-[#68BA7F] cursor-pointer">
-                <Link to="/freelancer/dashboard" className="block">Manage work</Link>
-              </li>
-              <li className="hover:text-[#68BA7F] cursor-pointer">
                 <Link to="/freelancer/saved-jobs" className="block">Saved jobs</Link>
               </li>
               <li className="hover:text-[#68BA7F] cursor-pointer">
-                <Link to="/freelancer/applied-jobs" className="block">Applied jobs</Link>
-              </li>
-              <li className="hover:text-[#68BA7F] cursor-pointer">
-                <Link to="/freelancer/hired-jobs" className="block">Hired jobs</Link>
+                <Link to="/freelancer/my-jobs" className="block">My jobs</Link>
               </li>
               <li className="hover:text-[#68BA7F] cursor-pointer">
                 <Link to="/freelancer/contracts" className="block">Manage contracts</Link>
@@ -552,19 +547,13 @@ function Header() {
           ) : (
             <ul className="space-y-3">
               <li className="hover:text-[#68BA7F] cursor-pointer">
-                <Link to="/employer/dashboard" className="block">Manage work</Link>
-              </li>
-              <li className="hover:text-[#68BA7F] cursor-pointer">
                 <Link to="/employer/post-job" className="block">Add job</Link>
               </li>
               <li className="hover:text-[#68BA7F] cursor-pointer">
-                <Link to="/employer/posted-jobs" className="block">Posted jobs</Link>
+                <Link to="/employer/manage-jobs" className="block">Manage jobs</Link>
               </li>
               <li className="hover:text-[#68BA7F] cursor-pointer">
                 <Link to="/employer/contracts" className="block">Manage contracts</Link>
-              </li>
-              <li className="hover:text-[#68BA7F] cursor-pointer">
-                <Link to="/employer/active-jobs" className="block">Active jobs</Link>
               </li>
             </ul>
           )}

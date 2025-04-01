@@ -16,6 +16,7 @@ import SignUpPage from './pages/Signup';
 import FreelancerProfile from './components/Work&Talent-components/freelancerprofile';
 import BySkill from './pages/Header-page/BySkill';
 import Header from './components/header';
+import ManageWork from './pages/Header-page/ManageWork';
 
 
 const App = () => {
@@ -37,6 +38,7 @@ const App = () => {
         <Route path="/freelancer-profile/:id" element={<FreelancerProfile />} />
         <Route path='/my-profile' element={<MyProfile />} />
         <Route path="/by-skill/:skill" element={<BySkill />} />
+        <Route path='/freelancer/:jobs' element={<ManageWork/>}/>
       </Routes>
       {!hideLayout && <Footer />}
     </MantineProvider>
