@@ -535,7 +535,7 @@ function Header() {
           {(role === "FREELANCER") ? (
             <ul className="space-y-3">
               <li className="hover:text-[#68BA7F] cursor-pointer">
-                <Link to="/freelancer/saved-jobs" className="block">Saved jobs</Link>
+                <Link to="#" className="block">Saved jobs</Link>
               </li>
               <li className="hover:text-[#68BA7F] cursor-pointer">
                 <Link to="/freelancer/my-jobs" className="block">My jobs</Link>

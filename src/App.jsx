@@ -17,6 +17,10 @@ import FreelancerProfile from './components/Work&Talent-components/freelancerpro
 import BySkill from './pages/Header-page/BySkill';
 import Header from './components/header';
 import MyJobs from './pages/Header-page/Manage-work/MyJobs';
+import Contracts from './pages/Header-page/Manage-work/Contracts';
+import AddJob from './pages/Header-page/Manage-work/AddJob';
+import ManageJob from './pages/Header-page/Manage-work/ManageJob';
+import EditJob from './pages/Header-page/Manage-work/component/EditJob';
 
 
 const App = () => {
@@ -39,6 +43,10 @@ const App = () => {
         <Route path='/my-profile' element={<MyProfile />} />
         <Route path="/by-skill/:skill" element={<BySkill />} />
         <Route path='/freelancer/my-jobs' element={<MyJobs/>}/>
+        <Route path='/freelancer/contracts' element={<Contracts/>}/>
+        <Route path='/employer/post-job' element={<AddJob/>}/>
+        <Route path='/employer/manage-jobs' element={<ManageJob/>}/>
+        <Route path='/employer/edit-job/:id' element={<EditJob/>}/>
       </Routes>
       {!hideLayout && <Footer />}
     </MantineProvider>
