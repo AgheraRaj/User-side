@@ -1,4 +1,4 @@
-import { Avatar, Button } from "@mantine/core";
+import { Avatar, Button, Modal, Textarea, NumberInput, InputLabel } from "@mantine/core";
 import axios from "axios";
 import { CalendarDays, CheckCircle, CreditCard, IdCard, Loader, Mail, MapPin, Phone, Star, User } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -13,7 +13,12 @@ const ProjectDetail = () => {
     const [proposal, setProposal] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    const [isProposalModalOpen, setIsProposalModalOpen] = useState(false);
+    const [newProposal, setNewProposal] = useState({
+        description: "",
+        bid: 0,
+        finishingTime: ""
+    });
 
     const toggleDescription = (id) => {
         setExpanded((prev) => ({
@@ -55,6 +60,27 @@ const ProjectDetail = () => {
             fetchData();
         }
     }, [jobId]);
+
+    const handleSubmitProposal = async () => {
+        try {
+            await axios.post(`${import.meta.env.VITE_API_URL}/proposals/${jobId}`, newProposal, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+            // Refresh proposals list
+            const proposalsResponse = await axios.get(`${import.meta.env.VITE_API_URL}/proposals/${jobId}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+            setProposal(proposalsResponse.data);
+            setIsProposalModalOpen(false);
+            setNewProposal({ description: "", bid: 0, finishingTime: "" });
+        } catch (error) {
+            console.error('Error submitting proposal:', error);
+        }
+    };
 
     if (loading) {
         return (
@@ -173,10 +199,70 @@ const ProjectDetail = () => {
                                 </p>
                             </div>
                             <div>
-                                <Button color="#2E6F40">
+                                <Button
+                                    color="#2E6F40"
+                                    onClick={() => setIsProposalModalOpen(true)}
+                                >
                                     Add Proposal
                                 </Button>
                             </div>
+                            <Modal
+                                opened={isProposalModalOpen}
+                                onClose={() => setIsProposalModalOpen(false)}
+                                title="Submit Proposal"
+                                size="lg"
+                            >
+                                <div className="space-y-4">
+                                    <div className="flex flex-col space-y-2">
+                                        <InputLabel required>Proposal Description</InputLabel>
+                                        <Textarea
+                                        variant="unstyled"
+                                        placeholder="Enter your proposal details"
+                                        value={newProposal.description}
+                                        onChange={(e) => setNewProposal({ ...newProposal, description: e.target.value })}
+                                        minRows={3}
+                                        className="w-full px-3 py-1 border border-gray-300 rounded-md"
+                                    />
+                                    </div>
+                                    
+                                    <div className="flex flex-col space-y-2">
+                                        <InputLabel required>Bid Amount</InputLabel>
+                                        <NumberInput
+                                        variant="unstyled"
+                                        placeholder="Enter your bid"
+                                        value={newProposal.bid}
+                                        onChange={(value) => setNewProposal({ ...newProposal, bid: value })}
+                                        className="w-full px-3 py-1 border border-gray-300 rounded-md"
+                                        min={0}
+                                    />
+                                    </div>
+                                    
+
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-sm font-medium text-gray-700">Expected Completion Date</label>
+                                        <input
+                                            type="date"
+                                            value={newProposal.finishingTime}
+                                            onChange={(e) => setNewProposal({
+                                                ...newProposal,
+                                                finishingTime: e.target.value
+                                            })}
+                                            min={new Date().toISOString().split('T')[0]}
+                                            required
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#2E6F40] focus:border-[#2E6F40] text-gray-700"
+                                        />
+                                    </div>
+
+                                    <div className="flex justify-end gap-4 mt-6">
+                                        <Button variant="outline" color="#2E6F40" onClick={() => setIsProposalModalOpen(false)}>
+                                            Cancel
+                                        </Button>
+                                        <Button color="#2E6F40" onClick={handleSubmitProposal}>
+                                            Submit Proposal
+                                        </Button>
+                                    </div>
+                                </div>
+                            </Modal>
                         </div>
 
 
