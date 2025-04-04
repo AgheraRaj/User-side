@@ -44,6 +44,7 @@ const App = () => {
         <Route path="/by-skill/:skill" element={<BySkill />} />
         <Route path='/freelancer/my-jobs' element={<MyJobs/>}/>
         <Route path='/freelancer/contracts' element={<Contracts/>}/>
+        <Route path='/employer/contracts' element={<Contracts/>}/>
         <Route path='/employer/post-job' element={<AddJob/>}/>
         <Route path='/employer/manage-jobs' element={<ManageJob/>}/>
         <Route path='/employer/edit-job/:id' element={<EditJob/>}/>

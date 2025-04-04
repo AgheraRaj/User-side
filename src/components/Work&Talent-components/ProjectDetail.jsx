@@ -22,54 +22,6 @@ const ProjectDetail = () => {
         }));
     };
 
-    // const proposal = [
-    //     {
-    //         id: 1,
-    //         name: "Rabia H.",
-    //         username: "@rabbiawebjuggler",
-    //         rating: 4.9,
-    //         reviews: 258,
-    //         successRate: 98,
-    //         expertise: "MS Excel, Website, WordPress & Scraping Expert",
-    //         description: "As an experienced data analyst, I understand the significance of accessible, accurate information As an experienced data analyst, I understand the significance of accessible, accurate information",
-    //         country: "Pakistan",
-    //         price: "$250.00 CAD",
-    //         duration: "in 1 day",
-    //         responseTime: "Replies within a few hours",
-    //         image: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-7.png"
-    //     },
-    //     {
-    //         id: 2,
-    //         name: "Shuvankar G.",
-    //         username: "@Anderson8592",
-    //         rating: 5.0,
-    //         reviews: 205,
-    //         successRate: 98,
-    //         expertise: "Expert in Data Entry, VA, Scraping, Leads & Listing",
-    //         description: "I have a strong track record in data entry, virtual assistance, and web scraping...",
-    //         country: "Bangladesh",
-    //         price: "Sealed",
-    //         duration: "",
-    //         responseTime: "Replies within a few hours",
-    //         image: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-7.png"
-    //     },
-    //     {
-    //         id: 3,
-    //         name: "Sandeep C.",
-    //         username: "@schoudhary1553",
-    //         rating: 4.9,
-    //         reviews: 946,
-    //         successRate: 95,
-    //         expertise: "PYTHON | R | SAS | POWER-BI | TABLEAU | EXCEL | R | VBA | Coder",
-    //         description: "As a seasoned full-stack developer with over 7 years of experience...",    
-    //         country: "India",
-    //         price: "$500.00 CAD",
-    //         duration: "in 7 days",
-    //         responseTime: "Replies within a day",
-    //         image: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-7.png"
-    //     }
-    // ];
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -90,7 +42,7 @@ const ProjectDetail = () => {
                 setProjectDetails(projectResponse.data);
                 setProposal(proposalsResponse.data);
                 console.log('Project Details:', projectResponse.data);
-                console.log('Details:', proposalsResponse.data);
+                console.log('Proposals Details:', proposalsResponse.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
                 setError(error.response?.data?.message || 'Failed to fetch data');
@@ -160,7 +112,7 @@ const ProjectDetail = () => {
                             {/* Skills Section */}
                             <h3 className="text-xl font-bold text-gray-800 mt-8 mb-4">Required Skills</h3>
                             <div className="flex flex-wrap gap-2">
-                                {projectDetails.skillsRequired.map((skill, index) => (
+                                {projectDetails?.skillsRequired?.map((skill, index) => (
                                     <span
                                         key={index}
                                         className="bg-[#E5F3F2] font-medium text-[#2E6F40] px-4 py-2 text-sm rounded-full hover:bg-[#d0ebe9] transition-colors"
@@ -183,13 +135,14 @@ const ProjectDetail = () => {
                             <div className="space-y-4">
                                 <p className="text-gray-600 flex items-center gap-3">
                                     <MapPin size={20} className="text-gray-400" />
-                                    <span>{projectDetails.client.location}</span>
+                                    <span>{projectDetails?.client?.location || 'Location not specified'}</span>
                                 </p>
                                 <p className="text-gray-600 flex items-center gap-3">
                                     <CalendarDays size={20} className="text-gray-400" />
-                                    <span>{projectDetails.client.joiningDate}</span>
+                                    <span>{projectDetails?.client?.joiningDate || 'Join date not available'}</span>
                                 </p>
                             </div>
+
 
                             {/* Verification Section */}
                             <h3 className="text-xl font-bold text-gray-800 mt-8 mb-4">Client Verification</h3>
