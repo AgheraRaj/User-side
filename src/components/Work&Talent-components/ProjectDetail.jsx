@@ -1,5 +1,6 @@
 import { Avatar, Button, Modal, Textarea, NumberInput, InputLabel } from "@mantine/core";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 import { CalendarDays, CheckCircle, CreditCard, IdCard, Loader, Mail, MapPin, Phone, Star, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
@@ -8,6 +9,7 @@ const ProjectDetail = () => {
 
     const [selectedTab, setSelectedTab] = useState('details');
     const { jobId } = useParams();
+    
     const [expanded, setExpanded] = useState({});
     const [projectDetails, setProjectDetails] = useState(null);
     const [proposal, setProposal] = useState([]);
@@ -19,6 +21,47 @@ const ProjectDetail = () => {
         bid: 0,
         finishingTime: ""
     });
+    const [isHiring, setIsHiring] = useState(false);
+
+    const handleHire = async (proposalId) => {
+        try {
+            setIsHiring(true);
+            await axios.put(`${import.meta.env.VITE_API_URL}/proposals/${proposalId}`, {
+                status: 'HIRED'
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+
+            // Refresh proposals list after hiring
+            const proposalsResponse = await axios.get(`${import.meta.env.VITE_API_URL}/proposals/${jobId}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+            setProposal(proposalsResponse.data);
+        } catch (error) {
+            console.error('Error hiring freelancer:', error);
+        } finally {
+            setIsHiring(false);
+        }
+    };
+
+    const getRoleFromToken = (authToken) => {
+        try {
+            const decoded = jwtDecode(authToken);
+            return decoded.role; // Assuming role is in the payload
+        } catch (error) {
+            console.error("Invalid token:", error);
+            return null;
+        }
+    };
+
+
+    const authToken = localStorage.getItem('token');
+    const role = getRoleFromToken(authToken);
+    //   console.log(role);
 
     const toggleDescription = (id) => {
         setExpanded((prev) => ({
@@ -199,12 +242,15 @@ const ProjectDetail = () => {
                                 </p>
                             </div>
                             <div>
-                                <Button
-                                    color="#2E6F40"
-                                    onClick={() => setIsProposalModalOpen(true)}
-                                >
-                                    Add Proposal
-                                </Button>
+                                {(role === 'FREELANCER') && (
+                                    <Button
+                                        color="#2E6F40"
+                                        onClick={() => setIsProposalModalOpen(true)}
+                                    >
+                                        Add Proposal
+                                    </Button>
+                                )}
+
                             </div>
                             <Modal
                                 opened={isProposalModalOpen}
@@ -216,27 +262,27 @@ const ProjectDetail = () => {
                                     <div className="flex flex-col space-y-2">
                                         <InputLabel required>Proposal Description</InputLabel>
                                         <Textarea
-                                        variant="unstyled"
-                                        placeholder="Enter your proposal details"
-                                        value={newProposal.description}
-                                        onChange={(e) => setNewProposal({ ...newProposal, description: e.target.value })}
-                                        minRows={3}
-                                        className="w-full px-3 py-1 border border-gray-300 rounded-md"
-                                    />
+                                            variant="unstyled"
+                                            placeholder="Enter your proposal details"
+                                            value={newProposal.description}
+                                            onChange={(e) => setNewProposal({ ...newProposal, description: e.target.value })}
+                                            minRows={3}
+                                            className="w-full px-3 py-1 border border-gray-300 rounded-md"
+                                        />
                                     </div>
-                                    
+
                                     <div className="flex flex-col space-y-2">
                                         <InputLabel required>Bid Amount</InputLabel>
                                         <NumberInput
-                                        variant="unstyled"
-                                        placeholder="Enter your bid"
-                                        value={newProposal.bid}
-                                        onChange={(value) => setNewProposal({ ...newProposal, bid: value })}
-                                        className="w-full px-3 py-1 border border-gray-300 rounded-md"
-                                        min={0}
-                                    />
+                                            variant="unstyled"
+                                            placeholder="Enter your bid"
+                                            value={newProposal.bid}
+                                            onChange={(value) => setNewProposal({ ...newProposal, bid: value })}
+                                            className="w-full px-3 py-1 border border-gray-300 rounded-md"
+                                            min={0}
+                                        />
                                     </div>
-                                    
+
 
                                     <div className="flex flex-col gap-2">
                                         <label className="text-sm font-medium text-gray-700">Expected Completion Date</label>
@@ -285,6 +331,7 @@ const ProjectDetail = () => {
                                                     <h2 className="text-xl font-bold text-gray-800">
                                                         {freelancer.name}
                                                         <span className="text-gray-400 text-base ml-2">{freelancer.username}</span>
+
                                                         <span className={`ml-2 px-2 py-1 text-sm rounded-full ${freelancer.status === 'HIRED' ? 'bg-green-100 text-green-600' : ''}`}>
                                                             {freelancer.status}
                                                         </span>
@@ -321,18 +368,31 @@ const ProjectDetail = () => {
                                                     </span>
                                                 ))}
                                             </div>
-                                            <p className="text-gray-600 mt-2">
-                                                {expanded[freelancer.id]
-                                                    ? freelancer.description
-                                                    : `${freelancer.description.slice(0, 100)}...`
-                                                }
-                                                <button
-                                                    onClick={() => toggleDescription(freelancer.id)}
-                                                    className="text-blue-500 hover:text-blue-600 font-medium ml-1"
-                                                >
-                                                    {expanded[freelancer.id] ? "Show less" : "Show more"}
-                                                </button>
-                                            </p>
+                                            <div className="flex justify-between items-center">
+                                                <p className="text-gray-600 mt-2 w-xl">
+                                                    {expanded[freelancer.id]
+                                                        ? freelancer.description
+                                                        : `${freelancer.description.slice(0, 100)}...`
+                                                    }
+                                                    <button
+                                                        onClick={() => toggleDescription(freelancer.id)}
+                                                        className="text-blue-500 hover:text-blue-600 font-medium ml-1"
+                                                    >
+                                                        {expanded[freelancer.id] ? "Show less" : "Show more"}
+                                                    </button>
+                                                </p>
+                                                {(role === 'CLIENT' && freelancer.status !== 'HIRED') && (
+                                                    <Button
+                                                        color="#2E6F40"
+                                                        onClick={() => handleHire(freelancer.id)}
+                                                        loading={isHiring}
+                                                    >
+                                                        {isHiring ? 'Hiring...' : 'Hire'}
+                                                    </Button>
+                                                )}
+
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>

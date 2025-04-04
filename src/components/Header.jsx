@@ -115,7 +115,7 @@ function Header() {
   }, [isLoggedIn]);
 
   return (
-    <div className="relative z-10 w-full">
+    <div className="relative z-20 w-full">
       {/* Navbar */}
       <nav className="flex justify-between items-center px-10 h-16 border-b border-gray-300 bg-[#253d2c] text-white w-full">
         <div className="flex items-center space-x-5 text-[15px]">
