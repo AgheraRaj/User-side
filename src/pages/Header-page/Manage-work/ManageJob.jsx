@@ -107,7 +107,7 @@ const ManageJob = () => {
                             <div className="flex justify-between items-start">
                                 <div className="space-y-2">
                                     <div className="flex items-center gap-2">
-                                        <h2 className="text-xl font-semibold">{job.title}</h2>
+                                        <h2 onClick={() => window.location.href = `/project/${job.id}`} className="text-xl font-semibold cursor-pointer">{job.title}</h2>
                                         <Badge 
                                             color={job.status === 'ACTIVE' ? 'green' : 'gray'}
                                             variant="dot"

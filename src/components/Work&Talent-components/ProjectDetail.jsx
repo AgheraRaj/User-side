@@ -9,7 +9,7 @@ const ProjectDetail = () => {
 
     const [selectedTab, setSelectedTab] = useState('details');
     const { jobId } = useParams();
-    
+
     const [expanded, setExpanded] = useState({});
     const [projectDetails, setProjectDetails] = useState(null);
     const [proposal, setProposal] = useState([]);
@@ -22,12 +22,27 @@ const ProjectDetail = () => {
         finishingTime: ""
     });
     const [isHiring, setIsHiring] = useState(false);
+    const isAnyFreelancerHired = proposal.some(freelancer => freelancer.status === 'HIRED');
+    const [isHireModalOpen, setIsHireModalOpen] = useState(false);
+    const [selectedProposal, setSelectedProposal] = useState(null);
+    const [contractDetails, setContractDetails] = useState({
+        startDate: '',
+        endDate: '',
+        amount: 0
+    });
 
     const handleHire = async (proposalId) => {
+        setSelectedProposal(proposalId);
+        setIsHireModalOpen(true);
+    };
+
+    const handleContractSubmit = async () => {
         try {
             setIsHiring(true);
-            await axios.put(`${import.meta.env.VITE_API_URL}/proposals/${proposalId}`, {
-                status: 'HIRED'
+            await axios.post(`${import.meta.env.VITE_API_URL}/contract/${selectedProposal}`, {
+                startDate: contractDetails.startDate,
+                endDate: contractDetails.endDate,
+                amount: contractDetails.amount
             }, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -41,12 +56,14 @@ const ProjectDetail = () => {
                 },
             });
             setProposal(proposalsResponse.data);
+            setIsHireModalOpen(false);
         } catch (error) {
             console.error('Error hiring freelancer:', error);
         } finally {
             setIsHiring(false);
         }
     };
+
 
     const getRoleFromToken = (authToken) => {
         try {
@@ -381,7 +398,7 @@ const ProjectDetail = () => {
                                                         {expanded[freelancer.id] ? "Show less" : "Show more"}
                                                     </button>
                                                 </p>
-                                                {(role === 'CLIENT' && freelancer.status !== 'HIRED') && (
+                                                {(role === 'CLIENT' && !isAnyFreelancerHired && freelancer.status !== 'HIRED') && (
                                                     <Button
                                                         color="#2E6F40"
                                                         onClick={() => handleHire(freelancer.id)}
@@ -391,6 +408,71 @@ const ProjectDetail = () => {
                                                     </Button>
                                                 )}
 
+                                                <Modal
+                                                    opened={isHireModalOpen}
+                                                    onClose={() => setIsHireModalOpen(false)}
+                                                    title="Create Contract"
+                                                    size="lg"
+                                                >
+                                                    <div className="space-y-4">
+                                                        <div className="flex flex-col gap-2">
+                                                            <label className="text-sm font-medium text-gray-700">Start Date</label>
+                                                            <input
+                                                                type="date"
+                                                                value={contractDetails.startDate}
+                                                                onChange={(e) => setContractDetails({
+                                                                    ...contractDetails,
+                                                                    startDate: e.target.value
+                                                                })}
+                                                                min={new Date().toISOString().split('T')[0]}
+                                                                required
+                                                                className="w-full px-3 py-1 border rounded-md "
+                                                            />
+                                                        </div>
+
+                                                        <div className="flex flex-col gap-2">
+                                                            <label className="text-sm font-medium text-gray-700">End Date</label>
+                                                            <input
+                                                                type="date"
+                                                                value={contractDetails.endDate}
+                                                                onChange={(e) => setContractDetails({
+                                                                    ...contractDetails,
+                                                                    endDate: e.target.value
+                                                                })}
+                                                                min={contractDetails.startDate || new Date().toISOString().split('T')[0]}
+                                                                required
+                                                                className="w-full px-3 py-1 border rounded-md"
+                                                            />
+                                                        </div>
+
+                                                        <div className="flex flex-col gap-2">
+                                                            <label className="text-sm font-medium text-gray-700">Amount</label>
+                                                            <NumberInput
+                                                            variant="unstyled"
+                                                                value={contractDetails.amount}
+                                                                onChange={(value) => setContractDetails({
+                                                                    ...contractDetails,
+                                                                    amount: value
+                                                                })}
+                                                                min={0}
+                                                                className="w-full px-3 py-1 border rounded-md"
+                                                            />
+                                                        </div>
+
+                                                        <div className="flex justify-end gap-4 mt-6">
+                                                            <Button variant="outline" color="#2E6F40" onClick={() => setIsHireModalOpen(false)}>
+                                                                Cancel
+                                                            </Button>
+                                                            <Button
+                                                                color="#2E6F40"
+                                                                onClick={handleContractSubmit}
+                                                                loading={isHiring}
+                                                            >
+                                                                Create Contract
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                </Modal>
                                             </div>
 
                                         </div>
