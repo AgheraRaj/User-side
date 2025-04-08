@@ -13,6 +13,7 @@ const BySkill = () => {
     useEffect(()=>{
         const fetchTalents = async () => {
             try {
+                console.log('Fetching jobs for skill:', skill);
                 const response = await axios.get(`${import.meta.env.VITE_API_URL}/user/bySkill/${skill}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -36,49 +37,6 @@ const BySkill = () => {
           </div>
         );
       }
-
-    // const talents = [
-    //     {
-    //         name: "Agent Pakulla",
-    //         role: "Nursing Assistant",
-    //         rating: 4.0,
-    //         reviews: 1,
-    //         skills: ["Design Writing", "HTML5"],
-    //         location: "New York",
-    //         rate: "$60 - $65 / hr",
-    //         image: "https://demoapus1.com/freeio/wp-content/uploads/2022/10/12-300x300.jpg"
-    //     },
-    //     {
-    //         name: "John Powell",
-    //         role: "Product Manager",
-    //         rating: 3.0,
-    //         reviews: 1,
-    //         skills: ["Animation", "Creative"],
-    //         location: "Los Angeles",
-    //         rate: "$55 - $60 / hr",
-    //         image: "https://demoapus1.com/freeio/wp-content/uploads/2022/10/5-300x300.jpg"
-    //     },
-    //     {
-    //         name: "Thomas Powell",
-    //         role: "Design & Creative",
-    //         rating: 4.0,
-    //         reviews: 1,
-    //         skills: ["Creative", "Figma"],
-    //         location: "Los Angeles",
-    //         rate: "$25 - $30 / hr",
-    //         image: "https://demoapus1.com/freeio/wp-content/uploads/2022/10/8-300x300.jpg"
-    //     },
-    //     {
-    //         name: "Tom Wilson",
-    //         role: "Marketing Manager",
-    //         rating: 4.5,
-    //         reviews: 2,
-    //         skills: ["Creative", "Design Writing"],
-    //         location: "New York",
-    //         rate: "$45 - $50 / hr",
-    //         image: "https://demoapus1.com/freeio/wp-content/uploads/2022/10/9-300x300.jpg"
-    //     }
-    // ];
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 py-10 px-16">

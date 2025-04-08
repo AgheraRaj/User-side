@@ -138,7 +138,9 @@ function Home() {
             <p className="flex items-center gap-3"><CircleCheck color="#2e6f40" />Receive personalized job suggestions based on your preferences.</p>
             <p className="flex items-center gap-3"><CircleCheck color="#2e6f40" />Access resources to improve your resume, ace interviews, and advance your career.</p>
           </div>
+          <Link to="/job-list">
           <Button variant="filled" color="#2e6f40" size="lg">Browse Jobs</Button>
+          </Link>
         </div>
 
         <div className="w-4xl flex justify-center relative">

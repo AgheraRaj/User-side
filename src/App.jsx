@@ -14,13 +14,14 @@ import ProjectDetail from './components/Work&Talent-components/ProjectDetail';
 import MyProfile from './pages/Header-page/MyProfile';
 import SignUpPage from './pages/Signup';
 import FreelancerProfile from './components/Work&Talent-components/freelancerprofile';
-import BySkill from './pages/Header-page/BySkill';
 import Header from './components/header';
 import MyJobs from './pages/Header-page/Manage-work/MyJobs';
 import Contracts from './pages/Header-page/Manage-work/Contracts';
 import AddJob from './pages/Header-page/Manage-work/AddJob';
 import ManageJob from './pages/Header-page/Manage-work/ManageJob';
 import EditJob from './pages/Header-page/Manage-work/component/EditJob';
+import ByJob from './pages/Header-page/find-work/Byjob';
+import BySkill from './pages/Header-page/freelancer/BySkill';
 
 
 const App = () => {
@@ -42,6 +43,7 @@ const App = () => {
         <Route path="/freelancer-profile/:id" element={<FreelancerProfile />} />
         <Route path='/my-profile' element={<MyProfile />} />
         <Route path="/by-skill/:skill" element={<BySkill />} />
+        <Route path="/by-job/:job" element={<ByJob />} />
         <Route path='/freelancer/my-jobs' element={<MyJobs/>}/>
         <Route path='/freelancer/contracts' element={<Contracts/>}/>
         <Route path='/employer/contracts' element={<Contracts/>}/>

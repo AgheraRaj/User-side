@@ -410,11 +410,13 @@ function Header() {
               {activeSubMenu === "skill" && (
                 <div className="flex gap-10">
                   <div className="grid grid-cols-3 gap-5 ">
-
+                    <Link to="/by-job/Web Devlopment">
                     <div className="flex flex-col border border-black rounded-md">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/find-job/website.png" alt="" className="rounded-t-md" />
                       <div className="font-semibold px-3 h-20 rounded-b-md flex justify-center items-center">Website jobs</div>
                     </div>
+                    </Link>
+                    
 
                     <div className="flex flex-col border border-black rounded-md">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/find-job/graphic-design.png" alt="" className="rounded-t-md" />
