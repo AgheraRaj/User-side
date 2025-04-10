@@ -22,6 +22,7 @@ import ManageJob from './pages/Header-page/Manage-work/ManageJob';
 import EditJob from './pages/Header-page/Manage-work/component/EditJob';
 import ByJob from './pages/Header-page/find-work/Byjob';
 import BySkill from './pages/Header-page/freelancer/BySkill';
+import Message from './pages/Header-page/message';
 
 
 const App = () => {
@@ -50,6 +51,7 @@ const App = () => {
         <Route path='/employer/post-job' element={<AddJob/>}/>
         <Route path='/employer/manage-jobs' element={<ManageJob/>}/>
         <Route path='/employer/edit-job/:id' element={<EditJob/>}/>
+        <Route path='/messages' element={<Message />} />
       </Routes>
       {!hideLayout && <Footer />}
     </MantineProvider>

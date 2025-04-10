@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Avatar, Button } from "@mantine/core";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight, Bell } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { notifications } from "@mantine/notifications";
 import { jwtDecode } from "jwt-decode";
@@ -60,7 +60,7 @@ function Header() {
     setIsLoggedIn(false);
     navigate('/'); // Use navigate instead of Navigate
     notifications.show({
-      title: 'Logout Successful', 
+      title: 'Logout Successful',
       message: 'You have been logged out.',
       color: 'green',
       // autoClose: 3000,
@@ -171,10 +171,15 @@ function Header() {
               </Link>
             </>
           ) : (
-            <>
+            <div className="flex items-center gap-6">
               <Button onClick={logout} variant="transparent" color="#ffffff">
                 Logout
               </Button>
+
+              <Link to="/messages">
+                <Bell />
+              </Link>
+
               <Link to={"/my-profile"}>
                 <Avatar
                   src={profilePicture || "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-7.png"}
@@ -182,7 +187,7 @@ function Header() {
                   alt="user avatar"
                 />
               </Link>
-            </>
+            </div>
           )}
         </div>
       </nav>
@@ -245,37 +250,37 @@ function Header() {
                     </Link>
 
                     <Link to="/by-skill/website designers">
-                    <div className="flex flex-col border border-black rounded-md">
-                      <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/website.png" alt="" className="rounded-t-md" />
-                      <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Website designers</div>
-                    </div>
+                      <div className="flex flex-col border border-black rounded-md">
+                        <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/website.png" alt="" className="rounded-t-md" />
+                        <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Website designers</div>
+                      </div>
                     </Link>
                     <Link to="/by-skill/mobile app developers">
-                    <div className="flex flex-col border border-black rounded-md">
-                      <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/mobile.png" alt="" className="rounded-t-md" />
-                      <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Mobile app developers</div>
-                    </div>
+                      <div className="flex flex-col border border-black rounded-md">
+                        <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/mobile.png" alt="" className="rounded-t-md" />
+                        <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Mobile app developers</div>
+                      </div>
                     </Link>
 
                     <Link to="/by-skill/software developers">
-                    <div className="flex flex-col border border-black rounded-md">
-                      <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/sd.png" alt="" className="rounded-t-md" />
-                      <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Softewar developers</div>
-                    </div>
+                      <div className="flex flex-col border border-black rounded-md">
+                        <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/sd.png" alt="" className="rounded-t-md" />
+                        <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Softewar developers</div>
+                      </div>
                     </Link>
 
                     <Link to="/by-skill/ux designers">
-                    <div className="flex flex-col border border-black rounded-md">
-                      <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/3d.png" alt="" className="rounded-t-md" />
-                      <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">3D artists</div>
-                    </div>
+                      <div className="flex flex-col border border-black rounded-md">
+                        <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/3d.png" alt="" className="rounded-t-md" />
+                        <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">3D artists</div>
+                      </div>
                     </Link>
 
                     <Link to="/by-skill/Illustration">
-                    <div className="flex flex-col border border-black rounded-md">
-                      <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/illustration.png" alt="" className="rounded-t-md" />
-                      <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Illustration</div>
-                    </div>
+                      <div className="flex flex-col border border-black rounded-md">
+                        <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/illustration.png" alt="" className="rounded-t-md" />
+                        <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Illustration</div>
+                      </div>
                     </Link>
 
                   </div>
@@ -411,12 +416,12 @@ function Header() {
                 <div className="flex gap-10">
                   <div className="grid grid-cols-3 gap-5 ">
                     <Link to="/by-job/Web Devlopment">
-                    <div className="flex flex-col border border-black rounded-md">
-                      <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/find-job/website.png" alt="" className="rounded-t-md" />
-                      <div className="font-semibold px-3 h-20 rounded-b-md flex justify-center items-center">Website jobs</div>
-                    </div>
+                      <div className="flex flex-col border border-black rounded-md">
+                        <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/find-job/website.png" alt="" className="rounded-t-md" />
+                        <div className="font-semibold px-3 h-20 rounded-b-md flex justify-center items-center">Website jobs</div>
+                      </div>
                     </Link>
-                    
+
 
                     <div className="flex flex-col border border-black rounded-md">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/find-job/graphic-design.png" alt="" className="rounded-t-md" />

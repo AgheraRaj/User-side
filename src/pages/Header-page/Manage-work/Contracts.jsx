@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import { Badge, Loader, Paper, Text, Group } from "@mantine/core";
+import { Badge, Loader, Paper, Text, Group, Modal, Rating, Textarea } from "@mantine/core";
 import { Calendar, DollarSign } from "lucide-react";
 
 const Contracts = () => {
@@ -9,45 +9,30 @@ const Contracts = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [closingContractId, setClosingContractId] = useState(null);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [selectedContract, setSelectedContract] = useState(null);
+  const [review, setReview] = useState('');
+  const [rating, setRating] = useState(0);
+
+  const handleCloseContract = async (contractId) => {
+    setSelectedContract(contractId);
+    setIsReviewModalOpen(true);
+  };
 
   const getRoleFromToken = (authToken) => {
     try {
-        const decoded = jwtDecode(authToken);
-        return decoded.role; // Assuming role is in the payload
+      const decoded = jwtDecode(authToken);
+      return decoded.role; // Assuming role is in the payload
     } catch (error) {
-        console.error("Invalid token:", error);
-        return null;
-    }
-};
-
-
-const authToken = localStorage.getItem('token');
-const role = getRoleFromToken(authToken);
-  // console.log(role);
-
-  const handleCloseContract = async (contractId) => {
-    try {
-      setClosingContractId(contractId);
-      await axios.put(`${import.meta.env.VITE_API_URL}/contract/status/${contractId}`, {
-        status: 'CLOSED'
-      }, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-
-      // Update the local state to reflect the change
-      setContracts(contracts.map(contract =>
-        contract.id === contractId
-          ? { ...contract, status: 'CLOSED' }
-          : contract
-      ));
-    } catch (error) {
-      console.error('Error closing contract:', error);
-    } finally {
-      setClosingContractId(null);
+      console.error("Invalid token:", error);
+      return null;
     }
   };
+
+
+  const authToken = localStorage.getItem('token');
+  const role = getRoleFromToken(authToken);
+  // console.log(role);
 
   useEffect(() => {
     const fetchContracts = async () => {
@@ -57,6 +42,7 @@ const role = getRoleFromToken(authToken);
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
+
         setContracts(response.data);
       } catch (error) {
         console.error('Error fetching contracts:', error);
@@ -68,6 +54,60 @@ const role = getRoleFromToken(authToken);
 
     fetchContracts();
   }, []);
+
+  const handleSubmitReview = async () => {
+    try {
+      setClosingContractId(selectedContract);
+
+      // First verify if contract exists and then close it
+      const closeResponse = await axios.put(`${import.meta.env.VITE_API_URL}/contract/close/${selectedContract}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      
+      if (closeResponse.status === 200) {
+        await axios.post(`${import.meta.env.VITE_API_URL}/review`,
+          {
+            contractId: selectedContract,
+            review: review,
+            rating: rating
+          },
+        
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              'Content-Type': 'application/json'
+            },
+          }
+        );
+
+        setContracts(prevContracts =>
+          prevContracts.map(contract =>
+            contract.id === selectedContract
+              ? { ...contract, status: 'CLOSED' }
+              : contract
+          )
+        );
+
+        // Reset modal states
+        setIsReviewModalOpen(false);
+        setReview('');
+        setRating(0);
+        setSelectedContract(null);
+      }
+    } catch (error) {
+      console.error('Error closing contract:', error);
+      setError(error.response?.data?.message || 'Contract not found or already closed');
+      setIsReviewModalOpen(false); // Close modal on error
+    } finally {
+      setClosingContractId(null);
+    }
+  };
 
   if (loading) {
     return (
@@ -168,13 +208,64 @@ const role = getRoleFromToken(authToken);
                   </div>
 
                   {contract.status === 'ACTIVE' && role === "CLIENT" && (
-                    <button
-                      onClick={() => handleCloseContract(contract.id)}
-                      disabled={closingContractId === contract.id}
-                      className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50"
-                    >
-                      {closingContractId === contract.id ? 'Closing...' : 'Close Contract'}
-                    </button>
+                    <>
+                      <Modal
+                        opened={isReviewModalOpen}
+                        onClose={() => setIsReviewModalOpen(false)}
+                        title="Review and Close Contract"
+                        size="md"
+                      >
+                        <div className="space-y-6 p-4">
+                          <div>
+                            <Text size="sm" fw={500} mb={2}>Rate the Freelancer</Text>
+                            <Rating
+                              value={rating}
+                              onChange={setRating}
+                              size="lg"
+                              count={5}
+                              color="#2E6F40"
+                            />
+                          </div>
+
+                          <div>
+                            <Text size="sm" fw={500} mb={2}>Write a Review</Text>
+                            <Textarea
+                            variant="unstyle"
+                              placeholder="Share your experience working with this freelancer..."
+                              value={review}
+                              onChange={(e) => setReview(e.target.value)}
+                              minRows={4}
+                              required
+                              className="border border-gray-300 rounded-lg px-2 py-1 w-full resize-none"
+                            />
+                          </div>
+
+                          <div className="flex justify-end gap-3 mt-4">
+                            <button
+                              onClick={() => setIsReviewModalOpen(false)}
+                              className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              onClick={handleSubmitReview}
+                              disabled={!rating || !review.trim()}
+                              className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50"
+                            >
+                              Submit & Close Contract
+                            </button>
+                          </div>
+                        </div>
+                      </Modal>
+                      <button
+                        onClick={() => handleCloseContract(contract.id, contract.freelancerId)}
+                        disabled={closingContractId === contract.id}
+                        className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50"
+                      >
+                        {closingContractId === contract.id ? 'Closing...' : 'Close Contract'}
+                      </button>
+                    </>
+
                   )}
                 </div>
               </div>
