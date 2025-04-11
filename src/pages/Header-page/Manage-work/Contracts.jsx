@@ -1,284 +1,173 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import { Badge, Loader, Paper, Text, Group, Modal, Rating, Textarea } from "@mantine/core";
-import { Calendar, DollarSign } from "lucide-react";
+import { Badge, Loader, Paper, Text, Modal, Rating, Textarea } from "@mantine/core";
+import { DollarSign } from "lucide-react";
 
 const Contracts = () => {
-  const [contracts, setContracts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [closingContractId, setClosingContractId] = useState(null);
-  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
-  const [selectedContract, setSelectedContract] = useState(null);
-  const [review, setReview] = useState('');
-  const [rating, setRating] = useState(0);
+  const [state, setState] = useState({
+    contracts: [],
+    loading: true,
+    error: null,
+    modalOpen: false,
+    selectedContract: null,
+    review: '',
+    rating: 0,
+    role: null,
+    userId: null
+  });
 
-  const handleCloseContract = async (contractId) => {
-    setSelectedContract(contractId);
-    setIsReviewModalOpen(true);
+  const updateState = (updates) => {
+    setState((prev) => ({ ...prev, ...updates }));
   };
-
-  const getRoleFromToken = (authToken) => {
-    try {
-      const decoded = jwtDecode(authToken);
-      return decoded.role; // Assuming role is in the payload
-    } catch (error) {
-      console.error("Invalid token:", error);
-      return null;
-    }
-  };
-
-
-  const authToken = localStorage.getItem('token');
-  const role = getRoleFromToken(authToken);
-  // console.log(role);
 
   useEffect(() => {
-    const fetchContracts = async () => {
-      try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/contract/myContract`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-
-        setContracts(response.data);
-      } catch (error) {
-        console.error('Error fetching contracts:', error);
-        setError(error.response?.data?.message || 'Failed to fetch contracts');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchContracts();
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decoded = jwtDecode(token);
+      updateState({ role: decoded.role, userId: decoded.id });
+    }
   }, []);
 
-  const handleSubmitReview = async () => {
+  const fetchContracts = useCallback(async () => {
     try {
-      setClosingContractId(selectedContract);
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/contract/myContract`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        }
+      );
+      updateState({ contracts: res.data, loading: false });
+    } catch (e) {
+      updateState({ error: "Error fetching contracts", loading: false });
+      console.error(e);
+    }
+  }, []);
 
-      // First verify if contract exists and then close it
-      const closeResponse = await axios.put(`${import.meta.env.VITE_API_URL}/contract/close/${selectedContract}`,
-        {},
+  useEffect(() => {
+    fetchContracts();
+  }, [fetchContracts]);
+
+  const handleModalActions = {
+    open: (contract) => updateState({ selectedContract: contract, modalOpen: true }),
+    close: () => updateState({ modalOpen: false, selectedContract: null, review: '', rating: 0 })
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const { selectedContract, role, review, rating } = state;
+
+      if (role === "CLIENT" && selectedContract.status === "ACTIVE") {
+        await axios.put(
+          `${import.meta.env.VITE_API_URL}/contract/close/${selectedContract.id}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
+          }
+        );
+      }
+
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/review`,
+        {
+          reviewId: 0,
+          freelancerId: selectedContract.freelancerId,
+          contractId: selectedContract.id,
+          review,
+          rating
+        },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+            "Content-Type": "application/json"
+          }
         }
       );
 
-      
-      if (closeResponse.status === 200) {
-        await axios.post(`${import.meta.env.VITE_API_URL}/review`,
-          {
-            contractId: selectedContract,
-            review: review,
-            rating: rating
-          },
-        
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              'Content-Type': 'application/json'
-            },
-          }
-        );
-
-        setContracts(prevContracts =>
-          prevContracts.map(contract =>
-            contract.id === selectedContract
-              ? { ...contract, status: 'CLOSED' }
-              : contract
-          )
-        );
-
-        // Reset modal states
-        setIsReviewModalOpen(false);
-        setReview('');
-        setRating(0);
-        setSelectedContract(null);
-      }
-    } catch (error) {
-      console.error('Error closing contract:', error);
-      setError(error.response?.data?.message || 'Contract not found or already closed');
-      setIsReviewModalOpen(false); // Close modal on error
-    } finally {
-      setClosingContractId(null);
+      handleModalActions.close();
+      fetchContracts();
+    } catch (e) {
+      console.error("Review error:", e);
+      updateState({ error: "Failed to submit review. Please try again." });
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader color="#2E6F40" size={50} />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-red-500">{error}</p>
-      </div>
-    );
-  }
+  if (state.loading) return <div className="flex justify-center p-8"><Loader /></div>;
+  if (state.error) return <div className="p-8"><Text color="red">{state.error}</Text></div>;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header Section */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-6 py-8">
-          <h1 className="text-3xl font-bold text-gray-800">Contracts</h1>
-          <p className="text-gray-600 mt-2">Manage your active and past contracts</p>
-        </div>
-      </div>
+    <div className="max-w-5xl mx-auto px-4 py-6">
+      <h1 className="text-2xl font-bold mb-4">Contracts</h1>
+      {state.contracts.length === 0 && <Text>No contracts found.</Text>}
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="grid gap-6">
-          {contracts.map((contract) => (
-            <Paper
-              key={contract.id}
-              shadow="sm"
-              p="lg"
-              radius="md"
-              className="hover:shadow-md transition-all duration-200 border border-gray-100"
-            >
-              <div className="flex flex-col md:flex-row justify-between gap-6">
-                <div className="space-y-4">
-                  <div>
-                    <Text size="xl" fw={600} className="text-gray-800">
-                      {contract.jobsTitle}
-                    </Text>
-                    <Text size="sm" c="dimmed" className="mt-1 line-clamp-2">
-                      {contract.jobsDescription}
-                    </Text>
-                  </div>
+      <div className="space-y-4">
+        {state.contracts.map((contract) => {
+          const showClientButton = state.role === "CLIENT" && contract.status === "ACTIVE";
+          const showFreelancerButton = state.role === "FREELANCER" && contract.status === "CLOSED" && !contract.hasFreelancerReview;
 
-                  <Group>
-                    <Badge
-                      color={contract.status === 'ACTIVE' ? 'green' : 'gray'}
-                      size="lg"
-                      variant="light"
-                    >
-                      {contract.status}
-                    </Badge>
-                  </Group>
-
-                  <div className="space-y-2">
-                    <Group>
-                      <Calendar size={18} className="text-gray-400" />
-                      <Text size="sm" c="dimmed">
-                        Start Date: {new Date(contract.startDate).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric'
-                        })}
-                      </Text>
-                    </Group>
-                    <Group>
-                      <Calendar size={18} className="text-gray-400" />
-                      <Text size="sm" c="dimmed">
-                        End Date: {new Date(contract.endDate).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric'
-                        })}
-                      </Text>
-                    </Group>
-                  </div>
-
-                  <div className="space-y-1">
-                    <Text size="sm" fw={500}>
-                      Client: <span className="text-gray-600">{contract.clientName}</span>
-                    </Text>
-                    <Text size="sm" fw={500}>
-                      Freelancer: <span className="text-gray-600">{contract.freelancerName}</span>
-                    </Text>
-                  </div>
+          return (
+            <Paper key={contract.id} className="p-4 shadow-md hover:shadow-lg transition-shadow">
+              <div className="flex justify-between">
+                <div className="space-y-2">
+                  <Text size="lg" fw={600}>{contract.jobsTitle}</Text>
+                  <Text c="dimmed" size="sm">{contract.jobsDescription}</Text>
+                  <Badge color={contract.status === "ACTIVE" ? "green" : "gray"}>
+                    {contract.status}
+                  </Badge>
                 </div>
-
-                <div className="flex flex-col items-end gap-4">
-                  <div className="flex items-center">
-                    <DollarSign size={24} className="text-[#2E6F40]" />
-                    <Text size="xl" fw={700} className="text-[#2E6F40]">
-                      {contract.amount}
-                    </Text>
-                  </div>
-
-                  {contract.status === 'ACTIVE' && role === "CLIENT" && (
-                    <>
-                      <Modal
-                        opened={isReviewModalOpen}
-                        onClose={() => setIsReviewModalOpen(false)}
-                        title="Review and Close Contract"
-                        size="md"
-                      >
-                        <div className="space-y-6 p-4">
-                          <div>
-                            <Text size="sm" fw={500} mb={2}>Rate the Freelancer</Text>
-                            <Rating
-                              value={rating}
-                              onChange={setRating}
-                              size="lg"
-                              count={5}
-                              color="#2E6F40"
-                            />
-                          </div>
-
-                          <div>
-                            <Text size="sm" fw={500} mb={2}>Write a Review</Text>
-                            <Textarea
-                            variant="unstyle"
-                              placeholder="Share your experience working with this freelancer..."
-                              value={review}
-                              onChange={(e) => setReview(e.target.value)}
-                              minRows={4}
-                              required
-                              className="border border-gray-300 rounded-lg px-2 py-1 w-full resize-none"
-                            />
-                          </div>
-
-                          <div className="flex justify-end gap-3 mt-4">
-                            <button
-                              onClick={() => setIsReviewModalOpen(false)}
-                              className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
-                            >
-                              Cancel
-                            </button>
-                            <button
-                              onClick={handleSubmitReview}
-                              disabled={!rating || !review.trim()}
-                              className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50"
-                            >
-                              Submit & Close Contract
-                            </button>
-                          </div>
-                        </div>
-                      </Modal>
-                      <button
-                        onClick={() => handleCloseContract(contract.id, contract.freelancerId)}
-                        disabled={closingContractId === contract.id}
-                        className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50"
-                      >
-                        {closingContractId === contract.id ? 'Closing...' : 'Close Contract'}
-                      </button>
-                    </>
-
+                <div className="text-right space-y-2">
+                  <Text className="flex items-center justify-end">
+                    <DollarSign size={16} className="mr-1" />{contract.amount}
+                  </Text>
+                  {(showClientButton || showFreelancerButton) && (
+                    <button
+                      onClick={() => handleModalActions.open(contract)}
+                      className={`px-3 py-1 rounded text-white ${showClientButton ? "bg-red-500 hover:bg-red-600" : "bg-green-600 hover:bg-green-700"}`}
+                    >
+                      {showClientButton ? "Close & Review" : "Submit Review"}
+                    </button>
                   )}
                 </div>
               </div>
             </Paper>
-          ))}
-        </div>
-
-        {contracts.length === 0 && (
-          <div className="text-center py-12">
-            <Text c="dimmed">No contracts found.</Text>
-          </div>
-        )}
+          );
+        })}
       </div>
+
+      <Modal opened={state.modalOpen} onClose={handleModalActions.close} title="Submit Review">
+        <div className="space-y-4">
+          <div>
+            <Text fw={500}>Your Rating</Text>
+            <Rating
+              value={state.rating}
+              onChange={(value) => updateState({ rating: value })}
+            />
+          </div>
+          <div>
+            <Text fw={500}>Your Review</Text>
+            <Textarea
+              value={state.review}
+              onChange={(e) => updateState({ review: e.target.value })}
+              placeholder="Write your review here..."
+              minRows={4}
+              required
+            />
+          </div>
+          <div className="text-right">
+            <button
+              onClick={handleSubmit}
+              disabled={!state.rating || !state.review.trim()}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Avatar, Button } from "@mantine/core";
+import { Avatar, Button, Indicator } from "@mantine/core";
 import { ChevronDown, ChevronRight, Bell } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { notifications } from "@mantine/notifications";
@@ -175,10 +175,11 @@ function Header() {
               <Button onClick={logout} variant="transparent" color="#ffffff">
                 Logout
               </Button>
-
+              <Indicator inline processing color="red" size={10}>
               <Link to="/messages">
                 <Bell />
               </Link>
+              </Indicator>
 
               <Link to={"/my-profile"}>
                 <Avatar
