@@ -124,19 +124,26 @@ function Header() {
           </div>
 
           {/* Hire Freelancer Dropdown */}
+          
           <div
-            className="relative flex items-center gap-1 font-normal hover:text-[#68BA7F] h-16 cursor-pointer"
-            onMouseEnter={() => setShowHireDropdown(true)}
-            onMouseLeave={() => setShowHireDropdown(false)}
+            className={`relative flex items-center gap-1 font-normal ${
+              role === 'FREELANCER' ? 'text-gray-500 cursor-not-allowed' : 'hover:text-[#68BA7F] cursor-pointer'
+            } h-16`}
+            onMouseEnter={() => role !== 'FREELANCER' && setShowHireDropdown(true)}
+            onMouseLeave={() => role !== 'FREELANCER' && setShowHireDropdown(false)}
+            title={role === 'FREELANCER' ? 'Only available for clients' : ''}
           >
             Hire freelancer <ChevronDown strokeWidth={2} size={16} />
           </div>
 
           {/* Find Work Dropdown */}
           <div
-            className="relative flex items-center gap-1 font-normal hover:text-[#68BA7F] h-16 cursor-pointer"
-            onMouseEnter={() => setShowFindWorkDropdown(true)}
-            onMouseLeave={() => setShowFindWorkDropdown(false)}
+            className={`relative flex items-center gap-1 font-normal ${
+              role === 'CLIENT' ? 'text-gray-500 cursor-not-allowed' : 'hover:text-[#68BA7F] cursor-pointer'
+            } h-16`}
+            onMouseEnter={() => role !== 'CLIENT' && setShowFindWorkDropdown(true)}
+            onMouseLeave={() => role !== 'CLIENT' && setShowFindWorkDropdown(false)}
+            title={role === 'CLIENT' ? 'Only available for freelancers' : ''}
           >
             Find work <ChevronDown strokeWidth={2} size={16} />
           </div>

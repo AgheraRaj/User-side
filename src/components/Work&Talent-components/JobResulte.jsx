@@ -11,7 +11,7 @@ const JobResults = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/jobs`, {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/jobs/alljobs`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },

@@ -49,7 +49,7 @@ const AddJob = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            await axios.post(`${import.meta.env.VITE_API_URL}/jobs`, jobData, {
+            await axios.post(`${import.meta.env.VITE_API_URL}/jobs/addjob`, jobData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                 }

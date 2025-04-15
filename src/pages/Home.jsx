@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Avatar, Button } from "@mantine/core";
 import { ArrowUp, CircleCheck, ShieldCheck, Star } from "lucide-react";
 import { Link } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 import PopularServices from "../components/Home-components/PopularServices";
 import Category from "../components/Home-components/Category";
@@ -10,9 +11,23 @@ import Video from "../assets/Videos/4426378-uhd_3840_2160_25fps.mp4";
 import TestimonialCarousel from "../components/Home-components/TestimonialCarousel";
 import Projects from "../components/Home-components/Projects";
 
+
 function Home() {
 
   const [isVisible, setIsVisible] = useState(false);
+  const [userRole, setUserRole] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setUserRole(decoded.role);
+      } catch (error) {
+        console.error('Token decode error:', error);
+      }
+    }
+  }, []);
 
   // Function to toggle button visibility based on scroll position
   const toggleVisibility = () => {
@@ -48,11 +63,27 @@ function Home() {
           <h1 className="text-5xl font-semibold leading-15">Find the perfect freelancer services for your business</h1>
           <p>Work with talented people at the most affordable price to get the most out of your time and cost</p>
           <div className="flex space-x-5">
-            <Link to="/job-list">
-              <Button variant="filled" color="#2e6f40" size="lg">Find Work</Button>
+           
+          <Link to="/job-list">
+              <Button 
+                variant="filled" 
+                color="#2e6f40" 
+                size="lg"
+                disabled={userRole === 'CLIENT'}
+              >
+                Find Work
+              </Button>
             </Link>
+            
             <Link to="/talent">
-              <Button variant="outline" color="#2e6f40" size="lg">Find Talent</Button>
+              <Button 
+                variant="outline" 
+                color="#2e6f40" 
+                size="lg"
+                disabled={userRole === 'FREELANCER'}
+              >
+                Find Talent
+              </Button>
             </Link>
           </div>
           <div className="mt-10">
