@@ -15,6 +15,13 @@ function Header() {
   const [profilePicture, setProfilePicture] = useState(null);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (showHireDropdown || showFindWorkDropdown) {
+      setActiveSubMenu("skill");
+    } else {
+      setActiveSubMenu(null);
+    }
+  }, [showHireDropdown, showFindWorkDropdown]);
 
   const checkTokenExpiration = () => {
     const token = localStorage.getItem('token');
@@ -124,26 +131,22 @@ function Header() {
           </div>
 
           {/* Hire Freelancer Dropdown */}
-          
+
           <div
-            className={`relative flex items-center gap-1 font-normal ${
-              role === 'FREELANCER' ? 'text-gray-500 cursor-not-allowed' : 'hover:text-[#68BA7F] cursor-pointer'
-            } h-16`}
-            onMouseEnter={() => role !== 'FREELANCER' && setShowHireDropdown(true)}
-            onMouseLeave={() => role !== 'FREELANCER' && setShowHireDropdown(false)}
-            title={role === 'FREELANCER' ? 'Only available for clients' : ''}
+            className={`relative flex items-center gap-1 font-normal ${role === 'FREELANCER' ? 'hidden' : ''
+              } h-16 cursor-pointer`}
+            onMouseEnter={() => setShowHireDropdown(true)}
+            onMouseLeave={() => setShowHireDropdown(false)}
           >
             Hire freelancer <ChevronDown strokeWidth={2} size={16} />
           </div>
 
           {/* Find Work Dropdown */}
           <div
-            className={`relative flex items-center gap-1 font-normal ${
-              role === 'CLIENT' ? 'text-gray-500 cursor-not-allowed' : 'hover:text-[#68BA7F] cursor-pointer'
-            } h-16`}
-            onMouseEnter={() => role !== 'CLIENT' && setShowFindWorkDropdown(true)}
-            onMouseLeave={() => role !== 'CLIENT' && setShowFindWorkDropdown(false)}
-            title={role === 'CLIENT' ? 'Only available for freelancers' : ''}
+            className={`relative flex items-center gap-1 font-normal ${role === 'CLIENT' ? 'hidden' : ''
+              } h-16 cursor-pointer`}
+            onMouseEnter={() => setShowFindWorkDropdown(true)}
+            onMouseLeave={() => setShowFindWorkDropdown(false)}
           >
             Find work <ChevronDown strokeWidth={2} size={16} />
           </div>
@@ -160,7 +163,7 @@ function Header() {
           )}
 
 
-          <span className="font-normal hover:text-[#68BA7F]">Blogs</span>
+          <span className="font-normal hover:text-[#68BA7F] cursor-pointer">Blogs</span>
         </div>
 
         <div className="flex items-center space-x-5">
@@ -183,9 +186,9 @@ function Header() {
                 Logout
               </Button>
               <Indicator inline processing color="red" size={10}>
-              <Link to="/messages">
-                <Bell />
-              </Link>
+                <Link to="/messages">
+                  <Bell />
+                </Link>
               </Indicator>
 
               <Link to={"/my-profile"}>
@@ -219,8 +222,6 @@ function Header() {
               </div>
               <ChevronRight />
             </div>
-
-
 
             <div
               className="border-[#2E6F40] border h-24 rounded-md p-4 flex items-center justify-between cursor-pointer hover:bg-[#2e6f400d]"
@@ -543,7 +544,7 @@ function Header() {
       {/* Manage Work Dropdown Content */}
       {showManageWorkDropdown && (
         <div
-          className="absolute top-16 left-[400px] py-5 px-6 bg-white flex border-t border-gray-300 shadow-md"
+          className="absolute top-16 left-[300px] py-5 px-6 bg-white flex border-t border-gray-300 shadow-md"
           onMouseEnter={() => setShowManageWorkDropdown(true)}
           onMouseLeave={() => setShowManageWorkDropdown(false)}
         >
@@ -572,9 +573,6 @@ function Header() {
               </li>
             </ul>
           )}
-
-
-
         </div>
       )}
     </div>

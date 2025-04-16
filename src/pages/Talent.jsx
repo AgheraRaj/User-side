@@ -58,7 +58,7 @@ const Talent = () => {
                     <img
                         src="https://demoapus2.com/freelanhub/wp-content/uploads/2024/07/slider5.png"
                         alt=""
-                        className="w-md"
+                        className="w-md relative top-5"
                     />
                 </div>
             </section>

@@ -16,6 +16,13 @@ function Home() {
 
   const [isVisible, setIsVisible] = useState(false);
   const [userRole, setUserRole] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, []);
+
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -62,25 +69,26 @@ function Home() {
         <div className="flex flex-col space-y-10 w-[40%]">
           <h1 className="text-5xl font-semibold leading-15">Find the perfect freelancer services for your business</h1>
           <p>Work with talented people at the most affordable price to get the most out of your time and cost</p>
-          <div className="flex space-x-5">
+          <div className="flex">
            
-          <Link to="/job-list">
+          <Link to={`${isLoggedIn ? "/job-list" : "/login" }`}>
               <Button 
                 variant="filled" 
                 color="#2e6f40" 
                 size="lg"
-                disabled={userRole === 'CLIENT'}
+                hidden={isLoggedIn && userRole === 'CLIENT'}
+                className="mr-5"
               >
                 Find Work
               </Button>
             </Link>
             
-            <Link to="/talent">
+            <Link to={`${isLoggedIn ? "/talent" : "/login" }`}>
               <Button 
                 variant="outline" 
                 color="#2e6f40" 
                 size="lg"
-                disabled={userRole === 'FREELANCER'}
+                hidden={isLoggedIn && userRole === 'FREELANCER'}
               >
                 Find Talent
               </Button>
@@ -98,18 +106,18 @@ function Home() {
           </div>
         </div>
         <div>
-          <div className="flex space-x-3 justify-center items-center bg-white w-xs h-20 rounded-2xl shadow absolute -bottom-10 right-[350px]">
+          <div className="flex space-x-3 justify-center items-center bg-white w-[325px] h-20 rounded-2xl shadow absolute -bottom-10 right-[350px]">
             <div className="bg-[#cfffdc] h-13 w-13 flex justify-center items-center rounded-full"><Star color="#2e6f40" size={35} strokeWidth={1} /></div>
             <div className="flex flex-col text-[15px]">
               <p className="font-semibold">Proof of quality</p>
-              <p className="text-gray-600">Lorem ipsum dolor sit amet</p>
+              <p className="text-gray-600">Work with pre-vetted top talent</p>
             </div>
           </div>
           <div className="flex space-x-3 justify-center items-center bg-white w-xs h-20 rounded-2xl shadow absolute top-[450px] right-[10px]">
             <div className="bg-[#cfffdc] h-13 w-13 flex justify-center items-center rounded-full"><ShieldCheck color="#2e6f40" size={35} strokeWidth={1} /></div>
             <div className="flex flex-col text-[15px]">
               <p className="font-semibold">safe and secure</p>
-              <p className="text-gray-600">Lorem ipsum dolor sit amet</p>
+              <p className="text-gray-600">Secure hiring for smart clients</p>
             </div>
           </div>
           <img src="https://demoapus1.com/freeio/wp-content/uploads/2023/07/h11.png" alt="image" />
@@ -160,8 +168,8 @@ function Home() {
       </section>
       <section className="flex justify-between items-center px-16 py-16 ">
         <div>
-          <div className="leading-12">
-            <h1 className="text-4xl font-semibold">Experience a quicker, simpler, and more effective job search</h1>
+          <div className="flex flex-col space-y-5">
+            <h1 className="text-4xl font-semibold leading-12">Experience a quicker, simpler, and more effective job search</h1>
             <p>Our platform offers intuitive tools, personalized job recommendations, and valuable resources to streamline your job search process.</p>
           </div>
           <div className="leading-12 my-5">
@@ -169,8 +177,8 @@ function Home() {
             <p className="flex items-center gap-3"><CircleCheck color="#2e6f40" />Receive personalized job suggestions based on your preferences.</p>
             <p className="flex items-center gap-3"><CircleCheck color="#2e6f40" />Access resources to improve your resume, ace interviews, and advance your career.</p>
           </div>
-          <Link to="/job-list">
-          <Button variant="filled" color="#2e6f40" size="lg">Browse Jobs</Button>
+          <Link to={`${isLoggedIn ? "/job-list" : "/login" }`}>
+          <Button hidden={isLoggedIn && userRole === 'CLIENT'} variant="filled" color="#2e6f40" size="lg">Browse Jobs</Button>
           </Link>
         </div>
 

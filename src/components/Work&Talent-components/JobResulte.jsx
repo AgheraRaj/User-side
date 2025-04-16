@@ -66,7 +66,7 @@ const JobResults = () => {
 
               {/* Logo & Name */}
               <div className="flex items-center gap-3">
-                <img src="https://demoapus1.com/freeio/wp-content/uploads/2022/10/employer6.jpg" alt={project.clientName} className="w-12 h-12 rounded-full object-cover" />
+                <img src="https://demoapus1.com/freeio/wp-content/uploads/2022/10/employer2.jpg" alt={project.clientName} className="w-12 h-12 rounded-full object-cover" />
                 <Text weight={700} size="md" color="#2e6f40" className="line-clamp-2">
                   {project.clientName}
                 </Text>
