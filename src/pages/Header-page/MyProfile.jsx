@@ -868,6 +868,7 @@ const ProfileSection = () => {
                 {isEditMode ? (
                   <textarea
                     value={profileData.description}
+                    placeholder="Enter your description"
                     onChange={(e) =>
                       setProfileData({ ...profileData, description: e.target.value })
                     }
@@ -947,6 +948,8 @@ const ProfileSection = () => {
                         <>
                           <input
                             value={skill}
+                            type="text"
+                            placeholder="Enter skill"
                             onChange={(e) => {
                               const updatedSkills = [...profileData.skills];
                               updatedSkills[index] = e.target.value;
@@ -1030,15 +1033,27 @@ const ProfileSection = () => {
               {/* Name */}
               <h1 className="text-3xl font-bold text-gray-800">
                 {isEditMode ? (
+                  <div className="flex gap-2">
                   <input
-                    value={profileData.fullName}
+                    value={profileData.firstName}
+                    placeholder="First Name"
                     onChange={(e) =>
-                      setProfileData({ ...profileData, fullName: e.target.value })
+                      setProfileData({ ...profileData, firstName: e.target.value })
                     }
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-1/2 p-2 border border-gray-300 rounded"
                   />
+                  <input
+                    value={profileData.lastName}
+                    placeholder="Last Name"
+                    onChange={(e) =>
+                      setProfileData({ ...profileData, lastName: e.target.value })
+                    }
+                    className="w-1/2 p-2 border border-gray-300 rounded"
+                  />
+                </div>
                 ) : (
-                  profileData.fullName
+                  // profileData.fullName
+                  `${profileData.firstName || ''} ${profileData.lastName || ''}`
                 )}
               </h1>
 
@@ -1046,6 +1061,7 @@ const ProfileSection = () => {
               {isEditMode ? (
                 <textarea
                   value={profileData.fieldOfWork}
+                  placeholder="Field of Work"
                   onChange={(e) =>
                     setProfileData({ ...profileData, fieldOfWork: e.target.value })
                   }
@@ -1065,6 +1081,7 @@ const ProfileSection = () => {
                   {isEditMode ? (
                     <input
                       value={profileData.email}
+                      placeholder="Email"
                       onChange={(e) =>
                         setProfileData({ ...profileData, email: e.target.value })
                       }
@@ -1081,6 +1098,7 @@ const ProfileSection = () => {
                   {isEditMode ? (
                     <input
                       value={profileData.phone}
+                      placeholder="Phone Number"
                       onChange={(e) =>
                         setProfileData({ ...profileData, phone: e.target.value })
                       }
@@ -1097,6 +1115,7 @@ const ProfileSection = () => {
                   {isEditMode ? (
                     <input
                       value={profileData.companyName}
+                      placeholder="Company Name"
                       onChange={(e) =>
                         setProfileData({ ...profileData, companyName: e.target.value })
                       }
@@ -1132,6 +1151,7 @@ const ProfileSection = () => {
                   {isEditMode ? (
                     <input
                       value={profileData.location}
+                      placeholder="Enter location"
                       onChange={(e) =>
                         setProfileData({ ...profileData, location: e.target.value })
                       }
@@ -1153,6 +1173,7 @@ const ProfileSection = () => {
               {isEditMode ? (
                 <input
                   value={profileData.hourlyRate}
+                  placeholder="Enter hourly rate"
                   onChange={(e) =>
                     setProfileData({ ...profileData, hourlyRate: e.target.value })
                   }
