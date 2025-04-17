@@ -4,72 +4,73 @@ import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react"
 
 const Footer = () => {
     return (
-        <footer className="bg-[#253d2c] text-white">
-            <div className="flex justify-between items-center px-15 h-20">
-                <div className="flex space-x-8">
-                    <span>Terms of Service</span>
-                    <span>Privacy Policy</span>
-                    <span>Site Map</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                    <span>Follow Us</span>
-                    <span className="h-10 w-10 hover:bg-[#2e6f40] hover:rounded-full flex justify-center items-center"><Facebook /></span>
-                    <span className="h-10 w-10 hover:bg-[#2e6f40] hover:rounded-full flex justify-center items-center"><Twitter /></span>
-                    <span className="h-10 w-10 hover:bg-[#2e6f40] hover:rounded-full flex justify-center items-center"><Instagram /></span>
-                    <span className="h-10 w-10 hover:bg-[#2e6f40] hover:rounded-full flex justify-center items-center"><Linkedin /></span>
-                </div>
-            </div>
-            <div className="flex justify-evenly border-y mx-15 py-10">
-                <div className="flex flex-col space-y-3">
-                    <span className="font-semibold text-[20px] my-3">About</span>
-                    <a href="">About Us</a>
-                    <a href="">Become Seller</a>
-                    <a href="">Jobs on Freeio</a>
-                    <a href="">Pricing</a>
-                    <a href="">Services Freeio</a>
-                    <a href="">Terms of Service</a>
-                </div>
-                <div className="flex flex-col space-y-3">
-                    <span className="font-semibold text-[20px] my-3">Categories</span>
-                    <a href="">Design & Creative</a>
-                    <a href="">Development & IT</a>
-                    <a href="">Music & Audio</a>
-                    <a href="">Programming & Tech</a>
-                    <a href="">Digital Marketing</a>
-                    <a href="">Finance & Accounting</a>
-                    <a href="">Writing & Translation</a>
-                    <a href="">Trending</a>
-                    <a href="">Lifestyle</a>
-                </div>
-                <div className="flex flex-col space-y-3">
-                    <span className="font-semibold text-[20px] my-3">Support</span>
-                    <a href="">Help & Support</a>
-                    <a href="">FAQ Freeio</a>
-                    <a href="">Contact Us</a>
-                    <a href="">Services</a>
-                    <a href="">Terms of Service</a>
-                </div>
-                <div className="flex flex-col space-y-3">
-                    <span className="font-semibold text-[20px] my-3">Subscribe</span>
-                    <div className="flex bg-white shadow rounded-2xl pl-4 py-2 w-2xs justify-between">
-                        <Input variant="unstyled" placeholder="Your emaul address" />
-                        <Button variant="transparent" color="#2e6f40">Send</Button>
+        <footer className="bg-[#253d2c] text-white/90">
+            <div className="max-w-7xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-6 lg:px-8 py-12 border-b border-white/10">
+                    <div className="flex flex-col space-y-4">
+                        <span className="font-semibold text-xl text-white mb-2">About</span>
+                        <div className="flex flex-col space-y-3">
+                            {['About Us', 'Become Seller', 'Jobs on Freeio', 'Pricing', 'Services Freeio', 'Terms of Service'].map((item) => (
+                                <a key={item} href="#" className="hover:text-[#68BA7F] transition-colors duration-200 text-sm">{item}</a>
+                            ))}
+                        </div>
                     </div>
-                    <span className="font-semibold text-[20px] my-3">Apps</span>
-                    <a href="">IOS App</a>
-                    <a href="">Android App</a>
-                </div>
-            </div>
-            <div className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-15">
-                <p className="text-muted-foreground">
-                    &copy; 2025 Raj Aghera. All rights reserved.
-                </p>
-                <nav className="sm:ml-auto flex gap-4 sm:gap-6">
-                    <div className="hover:underline underline-offset-4">
-                        Privacy
+
+                    <div className="flex flex-col space-y-4">
+                        <span className="font-semibold text-xl text-white mb-2">Categories</span>
+                        <div className="flex flex-col space-y-3">
+                            {['Design & Creative', 'Development & IT', 'Music & Audio', 'Programming & Tech', 'Digital Marketing', 'Finance & Accounting', 'Writing & Translation', 'Trending', 'Lifestyle'].map((item) => (
+                                <a key={item} href="#" className="hover:text-[#68BA7F] transition-colors duration-200 text-sm">{item}</a>
+                            ))}
+                        </div>
                     </div>
-                    <div className="hover:underline underline-offset-4">Terms</div>
-                </nav>
+
+                    <div className="flex flex-col space-y-4">
+                        <span className="font-semibold text-xl text-white mb-2">Support</span>
+                        <div className="flex flex-col space-y-3">
+                            {['Help & Support', 'FAQ Freeio', 'Contact Us', 'Services', 'Terms of Service'].map((item) => (
+                                <a key={item} href="#" className="hover:text-[#68BA7F] transition-colors duration-200 text-sm">{item}</a>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col space-y-6">
+                        <span className="font-semibold text-xl text-white">Subscribe</span>
+                        <div className="flex bg-white/10 backdrop-blur-sm rounded-xl pl-4 py-2 w-full">
+                            <Input 
+                                variant="unstyled" 
+                                placeholder="Your email address" 
+                                className="flex-1 text-white placeholder:text-white/50"
+                            />
+                            <Button 
+                                variant="transparent" 
+                                color="white"
+                            >
+                                Send
+                            </Button>
+                        </div>
+                        <div className="space-y-4">
+                            <span className="text-white text-md font-semibold">Follow Us</span>
+                            <div className="flex items-center gap-3 mt-1.5">
+                                {[Facebook, Twitter, Instagram, Linkedin].map((Icon, index) => (
+                                    <span key={index} className="h-10 w-10 hover:bg-[#29643a] rounded-full flex justify-center items-center transition-all duration-300 cursor-pointer hover:scale-110">
+                                        <Icon size={20} />
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row justify-between items-center px-6 lg:px-8 py-8">
+                    <p className="text-white/60 text-sm">
+                        &copy; {new Date().getFullYear()} Raj Aghera. All rights reserved.
+                    </p>
+                    <nav className="flex gap-6 mt-4 sm:mt-0">
+                        <a href="#" className="text-white/60 hover:text-white text-sm transition-colors duration-200">Privacy</a>
+                        <a href="#" className="text-white/60 hover:text-white text-sm transition-colors duration-200">Terms</a>
+                    </nav>
+                </div>
             </div>
         </footer>
     )

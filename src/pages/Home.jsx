@@ -232,7 +232,7 @@ function Home() {
           </div>
         </Link>
       </section>
-      <section className="flex flex-col text-center py-14 ">
+      <section className="flex flex-col text-center py-14 bg-amber-100 m-10 rounded-3xl">
         <div className="leading-12 pb-10">
           <h1 className="text-4xl font-semibold">4 Steps to become a Seller</h1>
           <p>Recruitment Made Easy in 100 seconds</p>
