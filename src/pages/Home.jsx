@@ -147,7 +147,7 @@ function Home() {
             <p className="flex items-center gap-3"><CircleCheck color="#2e6f40" />Post unlimited jobs for free—all from one place</p>
             <p className="flex items-center gap-3"><CircleCheck color="#2e6f40" />Hiring solutions & pricing that works with seasonal hiring changes</p>
           </div>
-          <Link to={`${isLoggedIn ? "/talent" : "/login" }`}>
+          <Link to={`${isLoggedIn  ? "/talent" : "/login" }`}>
           <Button variant="filled" color="#2e6f40" size="lg" hidden={isLoggedIn && userRole === 'FREELANCER'}>Browse Candidates</Button>
           </Link>
         </div>

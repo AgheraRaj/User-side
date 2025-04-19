@@ -66,6 +66,7 @@ function Header() {
     localStorage.removeItem('token');
     setIsLoggedIn(false);
     navigate('/'); // Use navigate instead of Navigate
+    window.location.reload();
     notifications.show({
       title: 'Logout Successful',
       message: 'You have been logged out.',
@@ -469,8 +470,6 @@ function Header() {
                       <li className="cursor-pointer">Writing jobs</li>
                       <li className="cursor-pointer">Legal jobs</li>
                       <li className="cursor-pointer">Finance jobs</li>
-                      <li className="cursor-pointer">Manufacturing jobs</li>
-                      <li className="cursor-pointer">Logistics jobs</li>
                       <div className="font-semibold">
                         <button className="flex items-center gap-1 text-[#2E6F40]">Find out more <ChevronRight /></button>
                       </div>
