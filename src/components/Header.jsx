@@ -66,15 +66,16 @@ function Header() {
     localStorage.removeItem('token');
     setIsLoggedIn(false);
     navigate('/'); // Use navigate instead of Navigate
-    window.location.reload();
     notifications.show({
       title: 'Logout Successful',
       message: 'You have been logged out.',
       color: 'green',
       // autoClose: 3000,
     });
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
   };
-
 
   const getRoleFromToken = (authToken) => {
     try {
@@ -194,9 +195,10 @@ function Header() {
 
               <Link to={"/my-profile"}>
                 <Avatar
-                  src={profilePicture || "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-7.png"}
-                  size={40}
+                  src={profilePicture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
+                  size={45}
                   alt="user avatar"
+                  className="border-3"
                 />
               </Link>
             </div>

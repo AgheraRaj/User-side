@@ -1059,7 +1059,7 @@ const ProfileSection = () => {
 
               {/* Field of Work */}
               {isEditMode ? (
-                <textarea
+                <input
                   value={profileData.fieldOfWork}
                   placeholder="Field of Work"
                   onChange={(e) =>
