@@ -254,7 +254,7 @@ function Header() {
                 <div className="flex justify-start gap-10">
                   <div className="grid grid-cols-3 grid-rows-2 gap-5">
 
-                    <Link to="/by-skill/Graphic Design">
+                    <Link to="/by-skill/Graphic Designers">
                       <div className="flex flex-col border border-black rounded-md">
                         <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/graphic-design.png" alt="" className="rounded-t-md" />
                         <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Graphic designers</div>
@@ -299,21 +299,18 @@ function Header() {
 
                   <div className="flex flex-col">
                     <h2 className="text-lg font-semibold mb-4">Other popular skills</h2>
-                    <ul className="space-y-2">
-                      <li className="cursor-pointer">Web developers</li>
+                    <ul className="leading-8">
+                      <Link to="by-skill/Web developers"><li className="cursor-pointer">Web developers</li></Link>
                       <Link to="/by-skill/java"><li className="cursor-pointer">Java</li></Link>
                       <Link to="/by-skill/spring boot"><li className="cursor-pointer">Spring boot</li></Link>
-                      <li className="cursor-pointer">SEO specialists</li>
-                      <li className="cursor-pointer">Data entry clerks</li>
-                      <li className="cursor-pointer">Virtual assistants</li>
-                      <li className="cursor-pointer">Translators</li>
-                      <li className="cursor-pointer">Financial exports</li>
-                      <li className="cursor-pointer">Manufacturers</li>
-                      <li className="cursor-pointer">Logistics experts</li>
-                      <li className="cursor-pointer">Fashion designers</li>
-                      <div className="font-semibold">
-                        <button className="flex items-center gap-1 text-[#2E6F40]">Find out more <ChevronRight /></button>
-                      </div>
+                      <Link to="/by-skill/SEO specialists"><li className="cursor-pointer">SEO specialists</li></Link>
+                      <Link to="/by-skill/Data entry clerks"><li className="cursor-pointer">Data entry clerks</li></Link>
+                      <Link to="/by-skill/Virtual assistants"><li className="cursor-pointer">Virtual assistants</li></Link>
+                      <Link to="/by-skill/Translators"><li className="cursor-pointer">Translators</li></Link>
+                      <Link to="/by-skill/Financial exports"><li className="cursor-pointer">Financial exports</li></Link>
+                      <Link to="/by-skill/Manufacturers"><li className="cursor-pointer">Manufacturers</li></Link>
+                      <Link to="/by-skill/Logistics experts"><li className="cursor-pointer">Logistics experts</li></Link>
+                      <Link to="/by-skill/Fashion designers"><li className="cursor-pointer">Fashion designers</li></Link>
                     </ul>
                   </div>
                 </div>

@@ -1181,7 +1181,7 @@ const ProfileSection = () => {
                 />
               ) : (
                 <div className="text-2xl font-bold text-gray-800">
-                  {profileData.hourlyRate}
+                  ${profileData.hourlyRate}
                 </div>
               )}
               <Button
