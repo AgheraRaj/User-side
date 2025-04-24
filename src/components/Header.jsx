@@ -254,7 +254,7 @@ function Header() {
                 <div className="flex justify-start gap-10">
                   <div className="grid grid-cols-3 grid-rows-2 gap-5">
 
-                    <Link to="/by-skill/graphic designers">
+                    <Link to="/by-skill/Graphic Design">
                       <div className="flex flex-col border border-black rounded-md">
                         <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/graphic-design.png" alt="" className="rounded-t-md" />
                         <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Graphic designers</div>

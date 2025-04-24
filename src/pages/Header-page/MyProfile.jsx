@@ -13,7 +13,7 @@ const ProfileSection = () => {
   const [isPortfolioModalOpen, setIsPortfolioModalOpen] = useState(false);
   const [isEducationModalOpen, setIsEducationModalOpen] = useState(false);
   const [isCertificationModalOpen, setIsCertificationModalOpen] = useState(false);
-  // const [selectedImage, setSelectedImage] = useState(null);
+
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -1034,23 +1034,23 @@ const ProfileSection = () => {
               <h1 className="text-3xl font-bold text-gray-800">
                 {isEditMode ? (
                   <div className="flex gap-2">
-                  <input
-                    value={profileData.firstName}
-                    placeholder="First Name"
-                    onChange={(e) =>
-                      setProfileData({ ...profileData, firstName: e.target.value })
-                    }
-                    className="w-1/2 p-2 border border-gray-300 rounded"
-                  />
-                  <input
-                    value={profileData.lastName}
-                    placeholder="Last Name"
-                    onChange={(e) =>
-                      setProfileData({ ...profileData, lastName: e.target.value })
-                    }
-                    className="w-1/2 p-2 border border-gray-300 rounded"
-                  />
-                </div>
+                    <input
+                      value={profileData.firstName}
+                      placeholder="First Name"
+                      onChange={(e) =>
+                        setProfileData({ ...profileData, firstName: e.target.value })
+                      }
+                      className="w-1/2 p-2 border border-gray-300 rounded"
+                    />
+                    <input
+                      value={profileData.lastName}
+                      placeholder="Last Name"
+                      onChange={(e) =>
+                        setProfileData({ ...profileData, lastName: e.target.value })
+                      }
+                      className="w-1/2 p-2 border border-gray-300 rounded"
+                    />
+                  </div>
                 ) : (
                   // profileData.fullName
                   `${profileData.firstName || ''} ${profileData.lastName || ''}`
