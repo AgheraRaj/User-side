@@ -23,6 +23,7 @@ import EditJob from './pages/Header-page/Manage-work/component/EditJob';
 import ByJob from './pages/Header-page/find-work/Byjob';
 import BySkill from './pages/Header-page/freelancer/BySkill';
 import Message from './pages/Header-page/message';
+import ByLocation from './pages/Header-page/freelancer/ByLocation';
 
 
 const App = () => {
@@ -44,6 +45,7 @@ const App = () => {
         <Route path="/freelancer-profile/:id" element={<FreelancerProfile />} />
         <Route path='/my-profile' element={<MyProfile />} />
         <Route path="/by-skill/:skill" element={<BySkill />} />
+        <Route path='/by-location/:location' element={<ByLocation />} />
         <Route path="/by-job/:job" element={<ByJob />} />
         <Route path='/freelancer/my-jobs' element={<MyJobs/>}/>
         <Route path='/freelancer/contracts' element={<Contracts/>}/>

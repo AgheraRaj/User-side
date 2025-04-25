@@ -1,15 +1,16 @@
-import { Card, Image, Text, Button, Group } from '@mantine/core';
+import { Card, Image, Text, Button, Group, Skeleton } from '@mantine/core';
+import axios from 'axios';
 import { ChevronLeft, ChevronRight, Heart, Star } from 'lucide-react';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-const freelancers = [
-  { name: "John Doe", thumbnail: "https://demoapus2.com/freelanhub/wp-content/themes/freelanhub/images/placeholder.png", rating: 0, reviews: 0, services: 0 },
-  { name: "Alex Carter", thumbnail: "https://demoapus2.com/freelanhub/wp-content/themes/freelanhub/images/placeholder.png", rating: 0, reviews: 0, services: 0 },
-  { name: "Sophia Lee", thumbnail: "https://demoapus2.com/freelanhub/wp-content/themes/freelanhub/images/placeholder.png", rating: 0, reviews: 0, services: 0 },
-  { name: "Michael Johnson", thumbnail: "https://demoapus2.com/freelanhub/wp-content/themes/freelanhub/images/placeholder.png", rating: 0, reviews: 0, services: 0 },
-  { name: "Olivia Brown", thumbnail: "https://demoapus2.com/freelanhub/wp-content/themes/freelanhub/images/placeholder.png", rating: 0, reviews: 0, services: 0 },
-  { name: "Ava Martinez", thumbnail: "https://demoapus2.com/freelanhub/wp-content/themes/freelanhub/images/placeholder.png", rating: 0, reviews: 0, services: 0 }
-];
+// const freelancers = [
+//   { name: "John Doe", thumbnail: "https://demoapus2.com/freelanhub/wp-content/themes/freelanhub/images/placeholder.png", rating: 0, reviews: 0, services: 0 },
+//   { name: "Alex Carter", thumbnail: "https://demoapus2.com/freelanhub/wp-content/themes/freelanhub/images/placeholder.png", rating: 0, reviews: 0, services: 0 },
+//   { name: "Sophia Lee", thumbnail: "https://demoapus2.com/freelanhub/wp-content/themes/freelanhub/images/placeholder.png", rating: 0, reviews: 0, services: 0 },
+//   { name: "Michael Johnson", thumbnail: "https://demoapus2.com/freelanhub/wp-content/themes/freelanhub/images/placeholder.png", rating: 0, reviews: 0, services: 0 },
+//   { name: "Olivia Brown", thumbnail: "https://demoapus2.com/freelanhub/wp-content/themes/freelanhub/images/placeholder.png", rating: 0, reviews: 0, services: 0 },
+//   { name: "Ava Martinez", thumbnail: "https://demoapus2.com/freelanhub/wp-content/themes/freelanhub/images/placeholder.png", rating: 0, reviews: 0, services: 0 }
+// ];
 
 function ExpertFreelancers() {
   const scrollRef = useRef(null);
@@ -25,6 +26,56 @@ function ExpertFreelancers() {
       });
     }
   };
+
+  const [freelancers, setFreelancers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(()=>{
+    const expertFreelancer = async ()=> {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/freelancer`);
+        setFreelancers(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    expertFreelancer();
+  }, []) 
+
+  if (loading) {
+    return (
+      <div className="relative w-full flex items-center justify-center px-20">
+        <button className="absolute left-5 p-3 bg-white rounded-full shadow-md">
+          <ChevronLeft size={30} />
+        </button>
+        <div className="flex overflow-x-scroll no-scrollbar scroll-smooth">
+          {[1, 2, 3, 4, 5].map((_, index) => (
+            <div className='p-3' key={index}>
+              <Card className='w-[248px] text-center' shadow="sm" padding="sm" radius="md" withBorder>
+                <div className="relative flex justify-center p-5">
+                  <Skeleton circle height={80} width={80} />
+                  <Skeleton className="absolute top-0 right-0" circle height={40} />
+                </div>
+                <Skeleton height={20} width="70%" mx="auto" mb={8} />
+                <Group justify="center" mt="xs">
+                  <Skeleton height={14} width={14} />
+                  <Skeleton height={14} width={30} />
+                  <Skeleton height={14} width={60} />
+                </Group>
+                <Skeleton height={16} mt="xs" width="40%" mx="auto" />
+                <Skeleton height={36} mt="md" radius="md" />
+              </Card>
+            </div>
+          ))}
+        </div>
+        <button className="absolute right-5 bg-white p-3 rounded-full shadow-md">
+          <ChevronRight size={30} />
+        </button>
+      </div>
+    );
+  }
+
 
   return (
     <div className="relative w-full flex items-center justify-center px-20">
@@ -47,7 +98,7 @@ function ExpertFreelancers() {
                 <Text size="sm" fw={500}>{freelancer.rating.toFixed(1)}</Text>
                 <Text size="xs" c="dimmed">({freelancer.reviews} Reviews)</Text>
               </Group>
-              <Text size="sm" mt="xs" c="dimmed">{freelancer.services} Services</Text>
+              <Text size="sm" mt="xs" c="dimmed">{freelancer.services} Success Rate</Text>
               <Button variant="filled" color='#2e6f40' fullWidth mt="md" radius="md">View Profile</Button>
             </Card>
           </div>

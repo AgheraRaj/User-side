@@ -154,6 +154,7 @@ function Header() {
           </div>
 
           {/* Manage Work Dropdown */}
+        
           {authToken && (
             <div
               className={`relative flex items-center gap-1 font-normal hover:text-[#68BA7F] h-16 cursor-pointer ${isLoggedIn === true ? 'block' : 'hidden'}`}
@@ -253,42 +254,42 @@ function Header() {
               {activeSubMenu === "skill" && (
                 <div className="flex justify-start gap-10">
                   <div className="grid grid-cols-3 grid-rows-2 gap-5">
-
-                    <Link to="/by-skill/Graphic Designers">
+                    
+                    <Link to={`${!authToken ? "/login" : "/by-skill/Graphic Designers" }`}>
                       <div className="flex flex-col border border-black rounded-md">
                         <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/graphic-design.png" alt="" className="rounded-t-md" />
                         <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Graphic designers</div>
                       </div>
                     </Link>
 
-                    <Link to="/by-skill/website designers">
+                    <Link to={`${!authToken ? "/login" : "/by-skill/website designers"}`}>
                       <div className="flex flex-col border border-black rounded-md">
                         <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/website.png" alt="" className="rounded-t-md" />
                         <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Website designers</div>
                       </div>
                     </Link>
-                    <Link to="/by-skill/mobile app developers">
+                    <Link to={`${!authToken ? "/login" : "/by-skill/mobile app developers"}`}>
                       <div className="flex flex-col border border-black rounded-md">
                         <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/mobile.png" alt="" className="rounded-t-md" />
                         <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Mobile app developers</div>
                       </div>
                     </Link>
 
-                    <Link to="/by-skill/software developers">
+                    <Link to={`${!authToken ? "/login" : "/by-skill/software developers"}`}>
                       <div className="flex flex-col border border-black rounded-md">
                         <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/sd.png" alt="" className="rounded-t-md" />
                         <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Softewar developers</div>
                       </div>
                     </Link>
 
-                    <Link to="/by-skill/ux designers">
+                    <Link to={`${!authToken ? "/login" : "/by-skill/ux designers"}`}>
                       <div className="flex flex-col border border-black rounded-md">
                         <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/3d.png" alt="" className="rounded-t-md" />
                         <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">3D artists</div>
                       </div>
                     </Link>
 
-                    <Link to="/by-skill/Illustration">
+                    <Link to={`${!authToken ? "/login" : "/by-skill/Illustration"}`}>
                       <div className="flex flex-col border border-black rounded-md">
                         <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/illustration.png" alt="" className="rounded-t-md" />
                         <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Illustration</div>
@@ -300,17 +301,17 @@ function Header() {
                   <div className="flex flex-col">
                     <h2 className="text-lg font-semibold mb-4">Other popular skills</h2>
                     <ul className="leading-8">
-                      <Link to="by-skill/Web developers"><li className="cursor-pointer">Web developers</li></Link>
-                      <Link to="/by-skill/java"><li className="cursor-pointer">Java</li></Link>
-                      <Link to="/by-skill/spring boot"><li className="cursor-pointer">Spring boot</li></Link>
-                      <Link to="/by-skill/SEO specialists"><li className="cursor-pointer">SEO specialists</li></Link>
-                      <Link to="/by-skill/Data entry clerks"><li className="cursor-pointer">Data entry clerks</li></Link>
-                      <Link to="/by-skill/Virtual assistants"><li className="cursor-pointer">Virtual assistants</li></Link>
-                      <Link to="/by-skill/Translators"><li className="cursor-pointer">Translators</li></Link>
-                      <Link to="/by-skill/Financial exports"><li className="cursor-pointer">Financial exports</li></Link>
-                      <Link to="/by-skill/Manufacturers"><li className="cursor-pointer">Manufacturers</li></Link>
-                      <Link to="/by-skill/Logistics experts"><li className="cursor-pointer">Logistics experts</li></Link>
-                      <Link to="/by-skill/Fashion designers"><li className="cursor-pointer">Fashion designers</li></Link>
+                      <Link to={`${!authToken ? "/login" : "by-skill/Web developers"}`}><li className="cursor-pointer">Web developers</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-skill/java"}`}><li className="cursor-pointer">Java</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-skill/spring boot"}`}><li className="cursor-pointer">Spring boot</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-skill/SEO specialists"}`}><li className="cursor-pointer">SEO specialists</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-skill/Data entry clerks"}`}><li className="cursor-pointer">Data entry clerks</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-skill/Virtual assistants"}`}><li className="cursor-pointer">Virtual assistants</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-skill/Translators"}`}><li className="cursor-pointer">Translators</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-skill/Financial exports"}`}><li className="cursor-pointer">Financial exports</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-skill/Manufacturers"}`}><li className="cursor-pointer">Manufacturers</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-skill/Logistics experts"}`}><li className="cursor-pointer">Logistics experts</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-skill/Fashion designers"}`}><li className="cursor-pointer">Fashion designers</li></Link>
                     </ul>
                   </div>
                 </div>
@@ -321,22 +322,19 @@ function Header() {
 
                   <div className="flex flex-col">
                     <h2 className="text-lg font-semibold w-xs mb-4">Choose from millions of freelancers worldwide.</h2>
-                    <ul className="space-y-2">
-                      <li className="cursor-pointer">United States</li>
-                      <li className="cursor-pointer">United Kingdom</li>
-                      <li className="cursor-pointer">Canada</li>
-                      <li className="cursor-pointer">India</li>
-                      <li className="cursor-pointer">Australia</li>
-                      <li className="cursor-pointer">Paris</li>
-                      <li className="cursor-pointer">Bangladesh</li>
-                      <li className="cursor-pointer">Indonesia</li>
-                      <li className="cursor-pointer">Brazil</li>
-                      <li className="cursor-pointer">China</li>
-                      <li className="cursor-pointer">Turkey</li>
-                      <li className="cursor-pointer">Philippines</li>
-                      <div className="font-semibold">
-                        <button className="flex items-center gap-1 text-[#2E6F40]">Find out more <ChevronRight /></button>
-                      </div>
+                    <ul className="leading-8">
+                      <Link to={`${!authToken ? "/login" : "/by-location/USA"}`}><li className="cursor-pointer">United States</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-location/United Kingdom"}`}><li className="cursor-pointer">United Kingdom</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-location/Canada"}`}><li className="cursor-pointer">Canada</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-location/India"}`}><li className="cursor-pointer">India</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-location/Australia"}`}><li className="cursor-pointer">Australia</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-location/Paris"}`}><li className="cursor-pointer">Paris</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-location/Bangladesh"}`}><li className="cursor-pointer">Bangladesh</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-location/Indonesia"}`}><li className="cursor-pointer">Indonesia</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-location/Brazil"}`}><li className="cursor-pointer">Brazil</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-location/China"}`}><li className="cursor-pointer">China</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-location/Turkey"}`}><li className="cursor-pointer">Turkey</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-location/Philippines"}`}><li className="cursor-pointer">Philippines</li></Link>
                     </ul>
                   </div>
 
@@ -552,22 +550,22 @@ function Header() {
                 <Link to="#" className="block">Saved jobs</Link>
               </li>
               <li className="hover:text-[#68BA7F] cursor-pointer">
-                <Link to="/freelancer/my-jobs" className="block">My jobs</Link>
+                <Link to={`${!authToken ? "/login" : "/freelancer/my-jobs"}`} className="block">My jobs</Link>
               </li>
               <li className="hover:text-[#68BA7F] cursor-pointer">
-                <Link to="/freelancer/contracts" className="block">Manage contracts</Link>
+                <Link to={`${!authToken ? "/login" : "/freelancer/contracts"}`} className="block">Manage contracts</Link>
               </li>
             </ul>
           ) : (
             <ul className="space-y-3">
               <li className="hover:text-[#68BA7F] cursor-pointer">
-                <Link to="/employer/post-job" className="block">Add job</Link>
+                <Link to={`${!authToken ? "/login" : "/employer/post-job"}`} className="block">Add job</Link>
               </li>
               <li className="hover:text-[#68BA7F] cursor-pointer">
-                <Link to="/employer/manage-jobs" className="block">Manage jobs</Link>
+                <Link to={`${!authToken ? "/login" : "/employer/manage-jobs"}`} className="block">Manage jobs</Link>
               </li>
               <li className="hover:text-[#68BA7F] cursor-pointer">
-                <Link to="/employer/contracts" className="block">Manage contracts</Link>
+                <Link to={`${!authToken ? "/login" : "/employer/contracts"}`} className="block">Manage contracts</Link>
               </li>
             </ul>
           )}

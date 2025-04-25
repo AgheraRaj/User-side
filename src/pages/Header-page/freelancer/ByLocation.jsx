@@ -1,94 +1,141 @@
-import { Avatar, Badge, Button, Card, Divider, Text } from "@mantine/core";
-import { Star } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Avatar, Badge, Button, Card, Divider, Loader, Text } from "@mantine/core";
+import { Link, useParams } from "react-router-dom";
+import axios from "axios";
 const ByLocation = () => {
 
-    const talents = [
-        {
-            name: "Agent Pakulla",
-            role: "Nursing Assistant",
-            rating: 4.0,
-            reviews: 1,
-            skills: ["Design Writing", "HTML5"],
-            location: "New York",
-            rate: "$60 - $65 / hr",
-            image: "https://demoapus1.com/freeio/wp-content/uploads/2022/10/12-300x300.jpg"
-        },
-        {
-            name: "John Powell",
-            role: "Product Manager",
-            rating: 3.0,
-            reviews: 1,
-            skills: ["Animation", "Creative"],
-            location: "Los Angeles",
-            rate: "$55 - $60 / hr",
-            image: "https://demoapus1.com/freeio/wp-content/uploads/2022/10/5-300x300.jpg"
-        },
-        {
-            name: "Thomas Powell",
-            role: "Design & Creative",
-            rating: 4.0,
-            reviews: 1,
-            skills: ["Creative", "Figma"],
-            location: "Los Angeles",
-            rate: "$25 - $30 / hr",
-            image: "https://demoapus1.com/freeio/wp-content/uploads/2022/10/8-300x300.jpg"
-        },
-        {
-            name: "Tom Wilson",
-            role: "Marketing Manager",
-            rating: 4.5,
-            reviews: 2,
-            skills: ["Creative", "Design Writing"],
-            location: "New York",
-            rate: "$45 - $50 / hr",
-            image: "https://demoapus1.com/freeio/wp-content/uploads/2022/10/9-300x300.jpg"
-        }
-    ];
+    const { location } = useParams();
+    const [talents, setTalents] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchTalents = async () => {
+            try {
+                console.log('Fetching jobs for location:', location);
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/user/byCountry/${location}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                });
+                setTalents(response.data);
+                console.log(response.data);
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching talents:', error);
+                setLoading(false);
+            }
+        };
+        fetchTalents();
+    }, [location])
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <Loader color="#2E6F40" size="xl" />
+            </div>
+        );
+    }
+
+    if (talents.length === 0) {
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center text-center px-4">
+                <Text size="xl" fw={600} color="dimmed">No Freelancers Found</Text>
+                <Text size="md" color="gray" mt={2}>
+                    We couldn't find any freelancers with the location {location}
+                </Text>
+                <Link to="/talent" className="mt-6">
+                    <Button variant="light" color="#2E6F40">
+                        Back to All Freelancers
+                    </Button>
+                </Link>
+            </div>
+        );
+    }
 
   return (
-    <div className="grid grid-cols-4 gap-6 px-16 py-10">
-                {talents.map((talent, index) => (
-                    <Card key={index} padding="lg" radius="md" withBorder>
-                        <div className="flex flex-col items-center text-center space-y-3">
-                            <Avatar src={talent.image} size={90} className="rounded-full" />
-                            <Text fw={400} size="lg" mt="sm">{talent.name}</Text>
-                            <Text size="sm" mt={2} color="gray">{talent.role}</Text>
-                            <div className="flex items-center mt-2">
-                                <Star size={16} color="#FACC15" fill="#FACC15" />
-                                <Text size="sm" ml={4}>{talent.rating} ({talent.reviews} Review{talent.reviews > 1 ? 's' : ''})</Text>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-6 lg:gap-8 px-4 md:px-8 lg:px-16 py-14">
+            {talents.map((talent, index) => (
+                <Card
+                    key={index}
+                    padding="xl"
+                    radius="md"
+                    withBorder
+                    className="hover:shadow-xl transition-all duration-300 hover:border-[#2E6F40] flex flex-col min-h-[450px] sm:min-h-[480px] lg:min-h-[500px]"
+                >
+                    <div className="flex flex-col items-center text-center h-full">
+                        <div className="flex-grow space-y-6 w-full">
+                            <Avatar
+                                src={talent.profileDtoForCard.imageUrl}
+                                size={90}
+                                className="rounded-full border-4 border-[#2E6F40]/10 hover:border-[#2E6F40]/30 transition-colors mx-auto"
+                            />
+                            <div className="space-y-2 w-full">
+                                <Text fw={600} size="xl" className="line-clamp-1">
+                                    {talent.profileDtoForCard.fullName}
+                                </Text>
+                                <Text size="sm" color="dimmed" className="line-clamp-1">
+                                    @{talent.username}
+                                </Text>
+                                <Text size="md" color="gray" className="font-medium line-clamp-2 px-2">
+                                    {talent.profileDtoForCard.fieldOfWork}
+                                </Text>
                             </div>
-                            <div className="flex gap-2 mt-2">
-                                {talent.skills.map((skill, i) => (
-                                    <Badge key={i} size="xl" color="orange" variant="light">
-                                        <Text size="xs">
+
+                            <div className="flex flex-wrap gap-2 justify-center min-h-[60px] max-h-28 overflow-y-auto px-2">
+                                {talent.profileDtoForCard.skills &&
+                                    Array.isArray(talent.profileDtoForCard.skills) &&
+                                    talent.profileDtoForCard.skills.slice(0, 4).map((skill, i) => (
+                                        <Badge
+                                            key={i}
+                                            size="md"
+                                            color="#2E6F40"
+                                            variant="light"
+                                        >
                                             {skill}
-                                        </Text>
+                                        </Badge>
+                                    ))}
+                                {talent.profileDtoForCard.skills?.length > 4 && (
+                                    <Badge size="md" color="gray" variant="light" className="hover:bg-gray-700 hover:text-white transition-colors">
+                                        +{talent.profileDtoForCard.skills.length - 4} more
                                     </Badge>
-                                ))}
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="w-full mt-auto pt-6">
+                            <Divider className="w-full mb-4" />
+
+                            <div className="grid grid-cols-2 gap-4 text-start mb-4">
+                                <div className="space-y-1">
+                                    <Text size="sm" fw={500} color="dimmed">Location</Text>
+                                    <Text size="sm" className="line-clamp-1">
+                                        {talent.profileDtoForCard.location}
+                                    </Text>
+                                </div>
+                                <div className="space-y-1 text-right">
+                                    <Text size="sm" fw={500} color="dimmed">Rate</Text>
+                                    <Text size="sm" className="text-[#2E6F40] font-medium">
+                                        ${talent.profileDtoForCard.hourlyRate}/hr
+                                    </Text>
+                                </div>
                             </div>
 
-                            <div className="w-full px-4">
-                                <Divider my="md" />
-                            </div>
-
-                            <div className="flex justify-between w-full items-center text-start px-4">
-                                <div>
-                                    <Text size="sm"><strong>Location:</strong></Text>
-                                    <Text size="sm">{talent.location}</Text>
-                                </div>
-                                <div>
-                                    <Text size="sm"><strong>Rate:</strong></Text>
-                                    <Text size="sm">{talent.rate}</Text>
-                                </div>
-                            </div>
-                            <Link to="/freelancer-profile" className="w-full">
-                            <Button variant="filled" color="#2E6F40" size="md" fullWidth mt="md">View Profile</Button>
+                            <Link to={`/freelancer-profile/${talent.profileDtoForCard.id}`} className="w-full block">
+                                <Button
+                                    variant="filled"
+                                    color="#2E6F40"
+                                    size="md"
+                                    fullWidth
+                                    className="hover:bg-[#245332] transition-colors"
+                                >
+                                    View Profile
+                                </Button>
                             </Link>
                         </div>
-                    </Card>
-                ))}
-            </div>
+                    </div>
+                </Card>
+            ))}
+        </div>
   )
 }
 
