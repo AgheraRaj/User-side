@@ -98,6 +98,11 @@ const JobResults = () => {
                       {tag}
                     </Badge>
                   ))}
+                {project.skillsRequired?.length > 4 && (
+                  <Badge size="md" color="gray" variant="light" className="hover:bg-gray-700 hover:text-white transition-colors">
+                    +{project.skillsRequired.length - 4} more
+                  </Badge>
+                )}
               </Group>
             </div>
 
@@ -114,9 +119,12 @@ const JobResults = () => {
             </div>
 
             {/* Apply Now Button */}
+            <Link to={`/project/${project.id}`}>
             <Button variant="filled" color="#2e6f40" fullWidth radius="md" className="mt-4">
               Apply Now
             </Button>
+            </Link>
+            
           </Card>
         ))}
       </div>

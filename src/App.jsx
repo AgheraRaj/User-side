@@ -24,6 +24,7 @@ import ByJob from './pages/Header-page/find-work/Byjob';
 import BySkill from './pages/Header-page/freelancer/BySkill';
 import Message from './pages/Header-page/message';
 import ByLocation from './pages/Header-page/freelancer/ByLocation';
+import ByCountry from './pages/Header-page/find-work/ByCountry';
 
 
 const App = () => {
@@ -47,6 +48,7 @@ const App = () => {
         <Route path="/by-skill/:skill" element={<BySkill />} />
         <Route path='/by-location/:location' element={<ByLocation />} />
         <Route path="/by-job/:job" element={<ByJob />} />
+        <Route path='/by-country/:location' element={<ByCountry />} />
         <Route path='/freelancer/my-jobs' element={<MyJobs/>}/>
         <Route path='/freelancer/contracts' element={<Contracts/>}/>
         <Route path='/employer/contracts' element={<Contracts/>}/>

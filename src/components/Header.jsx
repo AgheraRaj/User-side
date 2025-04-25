@@ -154,7 +154,7 @@ function Header() {
           </div>
 
           {/* Manage Work Dropdown */}
-        
+
           {authToken && (
             <div
               className={`relative flex items-center gap-1 font-normal hover:text-[#68BA7F] h-16 cursor-pointer ${isLoggedIn === true ? 'block' : 'hidden'}`}
@@ -254,8 +254,8 @@ function Header() {
               {activeSubMenu === "skill" && (
                 <div className="flex justify-start gap-10">
                   <div className="grid grid-cols-3 grid-rows-2 gap-5">
-                    
-                    <Link to={`${!authToken ? "/login" : "/by-skill/Graphic Designers" }`}>
+
+                    <Link to={`${!authToken ? "/login" : "/by-skill/Graphic Designers"}`}>
                       <div className="flex flex-col border border-black rounded-md">
                         <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-skills/graphic-design.png" alt="" className="rounded-t-md" />
                         <div className="font-semibold h-20 rounded-b-md flex justify-center items-center">Graphic designers</div>
@@ -422,54 +422,60 @@ function Header() {
               {activeSubMenu === "skill" && (
                 <div className="flex gap-10">
                   <div className="grid grid-cols-3 gap-5 ">
-                    <Link to="/by-job/Web Devlopment">
+                    <Link to={`${!authToken ? "/login" : "/by-job/Website jobs"}`}>
                       <div className="flex flex-col border border-black rounded-md">
                         <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/find-job/website.png" alt="" className="rounded-t-md" />
                         <div className="font-semibold px-3 h-20 rounded-b-md flex justify-center items-center">Website jobs</div>
                       </div>
                     </Link>
 
+                    <Link to={`${!authToken ? "/login" : "/by-job/Graphic design jobs"}`}>
+                      <div className="flex flex-col border border-black rounded-md">
+                        <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/find-job/graphic-design.png" alt="" className="rounded-t-md" />
+                        <div className="font-semibold px-3 h-20 rounded-b-md flex justify-center items-center">Graphic design jobs</div>
+                      </div>
+                    </Link>
 
-                    <div className="flex flex-col border border-black rounded-md">
-                      <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/find-job/graphic-design.png" alt="" className="rounded-t-md" />
-                      <div className="font-semibold px-3 h-20 rounded-b-md flex justify-center items-center">Graphic design jobs</div>
-                    </div>
 
-                    <div className="flex flex-col border border-black rounded-md">
+                    <Link to={`${!authToken ? "/login" : "/by-job/Data entry jobs"}`}><div className="flex flex-col border border-black rounded-md">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/find-job/data-entry.png" alt="" className="rounded-t-md" />
                       <div className="font-semibold px-3 h-20 rounded-b-md flex justify-center items-center">Data entry jobs</div>
                     </div>
+                    </Link>
 
-                    <div className="flex flex-col border border-black rounded-md">
-                      <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/find-job/mobile.png" alt="" className="rounded-t-md" />
-                      <div className="font-semibold px-3 h-20 rounded-b-md flex justify-center items-center text-center">Mobile app development</div>
-                    </div>
 
-                    <div className="flex flex-col border border-black rounded-md">
+                    <Link to={`${!authToken ? "/login" : "/by-job/Mobile app development"}`}>
+                      <div className="flex flex-col border border-black rounded-md">
+                        <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/find-job/mobile.png" alt="" className="rounded-t-md" />
+                        <div className="font-semibold px-3 h-20 rounded-b-md flex justify-center items-center text-center">Mobile app development</div>
+                      </div>
+                    </Link>
+
+
+                    <Link to={`${!authToken ? "/login" : "/by-job/Internet marketing jobs"}`}><div className="flex flex-col border border-black rounded-md">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/find-job/internet-marketing.png" alt="" className="rounded-t-md" />
                       <div className="font-semibold px-3 h-20 rounded-b-md flex justify-center items-center text-center">Internet marketing jobs</div>
-                    </div>
+                    </div></Link>
 
-                    <div className="flex flex-col border border-black rounded-md">
+
+                    <Link to={`${!authToken ? "/login" : "/by-job/Local jobs"}`}><div className="flex flex-col border border-black rounded-md">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/find-job/local.png" alt="" className="rounded-t-md" />
                       <div className="font-semibold px-3 h-20 rounded-b-md flex justify-center items-center">Local jobs</div>
-                    </div>
+                    </div></Link>
+
 
                   </div>
 
                   <div className="flex flex-col">
                     <h2 className="text-lg font-semibold mb-3">Other popular jobs</h2>
-                    <ul className="space-y-2">
-                      <li className="cursor-pointer">Software development jobs</li>
-                      <li className="cursor-pointer">Internet marketing jobs</li>
-                      <li className="cursor-pointer">Data entry jobs</li>
-                      <li className="cursor-pointer">SEO jobs</li>
-                      <li className="cursor-pointer">Writing jobs</li>
-                      <li className="cursor-pointer">Legal jobs</li>
-                      <li className="cursor-pointer">Finance jobs</li>
-                      <div className="font-semibold">
-                        <button className="flex items-center gap-1 text-[#2E6F40]">Find out more <ChevronRight /></button>
-                      </div>
+                    <ul className="leading-8">
+                      <Link to={`${!authToken ? "/login" : "/by-job/Software development jobs"}`}><li className="cursor-pointer">Software development jobs</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-job/Internet marketing jobs"}`}><li className="cursor-pointer">Internet marketing jobs</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-job/Data entry jobs"}`}><li className="cursor-pointer">Data entry jobs</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-job/SEO jobs"}`}><li className="cursor-pointer">SEO jobs</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-job/Writing jobs"}`}><li className="cursor-pointer">Writing jobs</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-job/Legal jobs"}`}><li className="cursor-pointer">Legal jobs</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-job/Finance jobs"}`}><li className="cursor-pointer">Finance jobs</li></Link>
                     </ul>
                   </div>
                 </div>
@@ -480,22 +486,19 @@ function Header() {
 
                   <div className="flex flex-col">
                     <h2 className="text-lg font-semibold w-xs mb-4">Choose from millions of freelancers worldwide.</h2>
-                    <ul className="space-y-2">
-                      <li className="cursor-pointer">United States</li>
-                      <li className="cursor-pointer">United Kingdom</li>
-                      <li className="cursor-pointer">Canada</li>
-                      <li className="cursor-pointer">India</li>
-                      <li className="cursor-pointer">Australia</li>
-                      <li className="cursor-pointer">Paris</li>
-                      <li className="cursor-pointer">Bangladesh</li>
-                      <li className="cursor-pointer">Indonesia</li>
-                      <li className="cursor-pointer">Brazil</li>
-                      <li className="cursor-pointer">China</li>
-                      <li className="cursor-pointer">Turkey</li>
-                      <li className="cursor-pointer">Philippines</li>
-                      <div className="font-semibold">
-                        <button className="flex items-center gap-1 text-[#2E6F40]">Find out more <ChevronRight /></button>
-                      </div>
+                    <ul className="leading-8">
+                      <Link to={`${!authToken ? "/login" : "/by-country/USA"}`}><li className="cursor-pointer">United States</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-country/UK"}`}><li className="cursor-pointer">United Kingdom</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-country/Canada"}`}><li className="cursor-pointer">Canada</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-country/India"}`}><li className="cursor-pointer">India</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-country/Australia"}`}><li className="cursor-pointer">Australia</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-country/Paris"}`}><li className="cursor-pointer">Paris</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-country/Bangladesh"}`}><li className="cursor-pointer">Bangladesh</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-country/Indonesia"}`}><li className="cursor-pointer">Indonesia</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-country/Brazil"}`}><li className="cursor-pointer">Brazil</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-country/China"}`}><li className="cursor-pointer">China</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-country/Turkey"}`}><li className="cursor-pointer">Turkey</li></Link>
+                      <Link to={`${!authToken ? "/login" : "/by-country/Philippines"}`}><li className="cursor-pointer">Philippines</li></Link>
                     </ul>
                   </div>
 

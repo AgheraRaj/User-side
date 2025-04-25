@@ -228,11 +228,6 @@ function Home() {
           <p>Discover our latest project with cutting-edge features. Explore now!</p>
         </div>
         <Projects />
-        <Link to="">
-          <div className="border-b-2 w-[120px] text-center mx-auto  border-[#2e6f40] my-10">
-            <p className="text-[16px] font-medium">All Categories</p>
-          </div>
-        </Link>
       </section>
       <section className="flex flex-col text-center py-14 bg-amber-100 m-10 rounded-3xl">
         <div className="leading-12 pb-10">
