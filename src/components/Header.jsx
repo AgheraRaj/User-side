@@ -123,6 +123,13 @@ function Header() {
     };
   }, [isLoggedIn]);
 
+  const handleCategory = () => {
+    window.scrollTo({
+      top: 800,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <div className="relative z-20 w-full">
       {/* Navbar */}
@@ -239,12 +246,11 @@ function Header() {
             </div>
 
 
-            <div className="border-[#2E6F40] border h-24 rounded-md p-4 flex items-center justify-between cursor-pointer hover:bg-[#2e6f400d]">
+            <div className="border-[#2E6F40] border h-24 rounded-md p-4 flex items-center justify-between cursor-pointer hover:bg-[#2e6f400d]" onClick={handleCategory}>
               <div>
                 <h1 className="font-semibold">By Category</h1>
                 <p className="text-sm">Find freelancers that suit a certain project category.</p>
               </div>
-
             </div>
           </div>
 
@@ -407,12 +413,11 @@ function Header() {
               <ChevronRight />
             </div>
 
-            <div className="border-[#2E6F40] border h-24 rounded-md p-4 flex items-center justify-between cursor-pointer hover:bg-[#2e6f400d]">
+            <div className="border-[#2E6F40] border h-24 rounded-md p-4 flex items-center justify-between cursor-pointer hover:bg-[#2e6f400d]" onClick={handleCategory}>
               <div>
-                <h1 className="font-semibold">Featured jobs</h1>
-                <p className="text-sm">Explore our current list of excited top featured projects.</p>
+                <h1 className="font-semibold">By Category</h1>
+                <p className="text-sm">Find freelancers that suit a certain project category.</p>
               </div>
-
             </div>
           </div>
 

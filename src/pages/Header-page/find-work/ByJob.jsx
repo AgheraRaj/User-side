@@ -40,7 +40,7 @@ const ByJob = () => {
             <div className="min-h-screen flex flex-col items-center justify-center text-center px-4">
                 <Text size="xl" fw={600} color="dimmed">No Freelancers Found</Text>
                 <Text size="md" color="gray" mt={2}>
-                    We couldn't find any freelancers with the job {job}
+                    We couldn't find any client with the job {job}
                 </Text>
                 <Link to="/job" className="mt-6">
                     <Button variant="light" color="#2E6F40">

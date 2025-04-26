@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import { Avatar, Button } from "@mantine/core";
 import { ArrowUp, CircleCheck, ShieldCheck, Star } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
-import PopularServices from "../components/Home-components/PopularServices";
+
 import Category from "../components/Home-components/Category";
 import ExpertFreelancers from "../components/Home-components/ExpertFreelancers";
 import Video from "../assets/Videos/4426378-uhd_3840_2160_25fps.mp4";
 import TestimonialCarousel from "../components/Home-components/TestimonialCarousel";
 import Projects from "../components/Home-components/Projects";
+import { notifications } from "@mantine/notifications";
 
 
 function Home() {
@@ -17,10 +18,11 @@ function Home() {
   const [isVisible, setIsVisible] = useState(false);
   const [userRole, setUserRole] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    setIsLoggedIn(!!token);
+    setIsLoggedIn(token);
   }, []);
 
 
@@ -62,6 +64,22 @@ function Home() {
       window.removeEventListener("scroll", toggleVisibility);
     };
   }, []);
+
+  const handelUser = () =>{
+    if(!isLoggedIn){
+      navigate("/login")
+    }
+    else if(userRole === "FREELANCER"){
+      notifications.show({
+        title: "You are already a freelancer",
+        message: "You can't browse freelancer",
+        color: "red",
+        autoClose: 3000,
+      });
+    } else {
+      navigate("/talent")
+    }
+  }
 
   return (
     <div>
@@ -129,11 +147,6 @@ function Home() {
           <p>Explore a wide range of services organized by category</p>
         </div>
         <Category />
-        <Link to="">
-          <div className="border-b-2 w-[120px] text-center mx-auto  border-[#2e6f40] my-10">
-            <p className="text-[16px] font-medium">All Categories</p>
-          </div>
-        </Link>
       </section>
       <section className="flex justify-between items-center px-16 py-16 ">
         <div>
@@ -162,11 +175,9 @@ function Home() {
           <p>Connect with top-rated professionals across various industries</p>
         </div>
         <ExpertFreelancers />
-        <Link to="">
-          <div className="border-b-2 w-[120px] text-center mx-auto  border-[#2e6f40] my-10">
+          <div onClick={handelUser} className="border-b-2 w-[120px] text-center mx-auto cursor-pointer border-[#2e6f40] my-10">
             <p className="text-[16px] font-medium">All Freelancers</p>
           </div>
-        </Link>
       </section>
       <section className="flex justify-between items-center px-16 py-16 ">
         <div>
@@ -207,22 +218,10 @@ function Home() {
 
         </div>
       </section>
-      <section className="flex flex-col text-center bg-gray-50">
-        <div className="leading-12 my-10">
-          <h1 className="text-4xl font-semibold">Feature Services</h1>
-          <p>Discover our featured services designed to elevate your experience</p>
-        </div>
-        <PopularServices />
-        <Link to="">
-          <div className="border-b-2 w-24 mx-auto  border-[#2e6f40] my-10">
-            <p className="text-[16px] font-medium">All Services</p>
-          </div>
-        </Link>
-      </section>
-      <section className="">
+      <section className="bg-gray-50">
         <TestimonialCarousel />
       </section>
-      <section className="flex flex-col text-center bg-gray-50">
+      <section className="flex flex-col text-center">
         <div className="leading-12 my-10">
           <h1 className="text-4xl font-semibold">Latest Projects</h1>
           <p>Discover our latest project with cutting-edge features. Explore now!</p>
