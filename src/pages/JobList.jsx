@@ -1,11 +1,38 @@
-import { Button, Menu, Text } from "@mantine/core";
-import { ChevronDown, Search } from "lucide-react";
+import { useEffect, useState } from "react";
+
+
+import { Button } from "@mantine/core";
+import { ArrowUp, Search } from "lucide-react";
 import JobResulte from "../components/Work&Talent-components/JobResulte";
-import { useState } from "react";
 
 const JobList = () => {
+    const [isVisible, setIsVisible] = useState(false);
 
-    const [selected, setSelected] = useState("City, state, or zip");
+    const toggleVisibility = () => {
+        if (window.scrollY > 200) {
+            setIsVisible(true);
+        } else {
+            setIsVisible(false);
+        }
+    };
+
+    // Function to scroll to the top of the page
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
+    };
+
+    // Add scroll event listener when the component mounts
+    useEffect(() => {
+        window.addEventListener("scroll", toggleVisibility);
+
+        // Clean up the event listener when the component unmounts
+        return () => {
+            window.removeEventListener("scroll", toggleVisibility);
+        };
+    }, []);
 
     return (
         <>
@@ -19,7 +46,7 @@ const JobList = () => {
                     {/* Input Section */}
                     <div className="p-2.5 flex items-center justify-between rounded-sm bg-white shadow-md">
                         {/* Job Search Input */}
-                        <div className="flex items-center w-sm border-r px-4">
+                        <div className="flex items-center w-xl px-4">
                             <Search className="text-black mr-2" size={20} />
                             <input
                                 type="text"
@@ -28,23 +55,6 @@ const JobList = () => {
                             />
                         </div>
 
-                        {/* Location Dropdown */}
-                        <div className="px-4 w-xs">
-                            <Menu>
-                                <Menu.Target>
-                                    <Button size="lg" variant="transparent" color="dark">
-                                        <Text className="flex items-center gap-2" size="sm" fw={500}>
-                                            {selected} <ChevronDown size={20} />
-                                        </Text>
-                                    </Button>
-                                </Menu.Target>
-                                <Menu.Dropdown>
-                                    <Menu.Item onClick={() => setSelected("Location 1")}>Location 1</Menu.Item>
-                                    <Menu.Item onClick={() => setSelected("Location 2")}>Location 2</Menu.Item>
-                                    <Menu.Item onClick={() => setSelected("Location 3")}>Location 3</Menu.Item>
-                                </Menu.Dropdown>
-                            </Menu>
-                        </div>
 
                         {/* Search Button */}
                         <Button className="flex-shrink-0" size="xl" variant="filled" color="#2e6f40">
@@ -65,6 +75,14 @@ const JobList = () => {
             <section>
                 <JobResulte />
             </section>
+            {isVisible && (
+                <button
+                    onClick={scrollToTop}
+                    className="fixed bottom-6 right-6 z-50 p-3 bg-[#2e6f40] text-white rounded-full shadow-lg hover:bg-[#29643a] transition-all duration-300"
+                >
+                    <ArrowUp size={20} />
+                </button>
+            )}
         </>
     );
 };

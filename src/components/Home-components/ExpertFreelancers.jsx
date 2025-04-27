@@ -1,22 +1,13 @@
-import { Card, Image, Text, Button, Group, Skeleton } from '@mantine/core';
+import { Card, Text, Button, Group, Skeleton } from '@mantine/core';
 import axios from 'axios';
-import { ChevronLeft, ChevronRight, Heart, Star } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-
-// const freelancers = [
-//   { name: "John Doe", thumbnail: "https://demoapus2.com/freelanhub/wp-content/themes/freelanhub/images/placeholder.png", rating: 0, reviews: 0, services: 0 },
-//   { name: "Alex Carter", thumbnail: "https://demoapus2.com/freelanhub/wp-content/themes/freelanhub/images/placeholder.png", rating: 0, reviews: 0, services: 0 },
-//   { name: "Sophia Lee", thumbnail: "https://demoapus2.com/freelanhub/wp-content/themes/freelanhub/images/placeholder.png", rating: 0, reviews: 0, services: 0 },
-//   { name: "Michael Johnson", thumbnail: "https://demoapus2.com/freelanhub/wp-content/themes/freelanhub/images/placeholder.png", rating: 0, reviews: 0, services: 0 },
-//   { name: "Olivia Brown", thumbnail: "https://demoapus2.com/freelanhub/wp-content/themes/freelanhub/images/placeholder.png", rating: 0, reviews: 0, services: 0 },
-//   { name: "Ava Martinez", thumbnail: "https://demoapus2.com/freelanhub/wp-content/themes/freelanhub/images/placeholder.png", rating: 0, reviews: 0, services: 0 }
-// ];
 
 function ExpertFreelancers() {
   const scrollRef = useRef(null);
   const cardWidth = 300;
   const cardPadding = 20;
-  
+
   const scroll = (direction) => {
     if (scrollRef.current) {
       const scrollAmount = cardWidth + cardPadding;
@@ -30,18 +21,19 @@ function ExpertFreelancers() {
   const [freelancers, setFreelancers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(()=>{
-    const expertFreelancer = async ()=> {
+  useEffect(() => {
+    const expertFreelancer = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/freelancer`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/user/top-Freelancer`);
         setFreelancers(response.data);
+        console.log(response.data);
         setLoading(false);
       } catch (error) {
         console.error(error);
       }
     }
     expertFreelancer();
-  }, []) 
+  }, [])
 
   if (loading) {
     return (
@@ -86,19 +78,20 @@ function ExpertFreelancers() {
         {freelancers.map((freelancer, index) => (
           <div className='p-3' key={index}>
             <Card className='w-[248px] text-center' shadow="sm" padding="sm" radius="md" withBorder>
-              <div className="relative flex justify-center p-5">
-                <Image src={freelancer.thumbnail || "https://via.placeholder.com/80"} className="w-20 h-20 rounded-full" />
-                <button className="absolute top-0 right-0 p-2 bg-white rounded-full border border-gray-300">
-                  <Heart size={16} />
-                </button>
+              <div className="flex justify-center p-5">
+                <img
+                  src={freelancer.profileDtoForCard.imageUrl || "https://via.placeholder.com/80"}
+                  alt="profile pic"
+                  className='rounded-full h-24 w-24 object-cover border-4 border-white shadow-lg transition-transform duration-300 group-hover:scale-105'
+                />
               </div>
-              <Text fw={600}>{freelancer.name}</Text>
+              <Text fw={600}>{freelancer.profileDtoForCard.fullName}</Text>
               <Group justify="center" mt="xs">
                 <Star size={14} className="text-yellow-500" />
-                <Text size="sm" fw={500}>{freelancer.rating.toFixed(1)}</Text>
-                <Text size="xs" c="dimmed">({freelancer.reviews} Reviews)</Text>
+                <Text size="sm" fw={500}>{freelancer.profileDtoForCard.rating}</Text>
+                <Text size="xs" c="dimmed">({freelancer.profileDtoForCard.reviewCount} Reviews)</Text>
               </Group>
-              <Text size="sm" mt="xs" c="dimmed">{freelancer.services} Success Rate</Text>
+              <Text size="sm" mt="xs" c="dimmed">{freelancer.profileDtoForCard.successRate}% Success Rate</Text>
               <Button variant="filled" color='#2e6f40' fullWidth mt="md" radius="md">View Profile</Button>
             </Card>
           </div>
