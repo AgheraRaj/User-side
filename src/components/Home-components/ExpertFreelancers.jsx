@@ -2,11 +2,14 @@ import { Card, Text, Button, Group, Skeleton } from '@mantine/core';
 import axios from 'axios';
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function ExpertFreelancers() {
   const scrollRef = useRef(null);
   const cardWidth = 300;
   const cardPadding = 20;
+
+  const token = localStorage.getItem('token');
 
   const scroll = (direction) => {
     if (scrollRef.current) {
@@ -92,7 +95,17 @@ function ExpertFreelancers() {
                 <Text size="xs" c="dimmed">({freelancer.profileDtoForCard.reviewCount} Reviews)</Text>
               </Group>
               <Text size="sm" mt="xs" c="dimmed">{freelancer.profileDtoForCard.successRate}% Success Rate</Text>
-              <Button variant="filled" color='#2e6f40' fullWidth mt="md" radius="md">View Profile</Button>
+              <Link to={`${!token ? "/login" : `/freelancer-profile/${freelancer.profileDtoForCard.id}`}`} className="w-full block mt-2">
+                <Button
+                  variant="filled"
+                  color="#2E6F40"
+                  size="md"
+                  fullWidth
+                  className="hover:bg-[#245332] transition-colors"
+                >
+                  View Profile
+                </Button>
+              </Link>
             </Card>
           </div>
         ))}

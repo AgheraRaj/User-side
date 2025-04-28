@@ -26,6 +26,7 @@ import Message from './pages/Header-page/message';
 import ByLocation from './pages/Header-page/freelancer/ByLocation';
 import ByCountry from './pages/Header-page/find-work/ByCountry';
 import ByCategory from './pages/ByCategory';
+import InternatinalFreelancer from './pages/Header-page/InternationalFreelancer';
 
 
 const App = () => {
@@ -58,6 +59,7 @@ const App = () => {
         <Route path='/employer/edit-job/:id' element={<EditJob/>}/>
         <Route path='/messages' element={<Message />} />
         <Route path='/category/:categorys' element={<ByCategory />} />
+        <Route path='/international-freelancer' element={<InternatinalFreelancer />} />
       </Routes>
       {!hideLayout && <Footer />}
     </MantineProvider>

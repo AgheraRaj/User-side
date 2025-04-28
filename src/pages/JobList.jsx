@@ -8,12 +8,15 @@ import JobResulte from "../components/Work&Talent-components/JobResulte";
 const JobList = () => {
     const [isVisible, setIsVisible] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
+    const [searchTrigger, setSearchTrigger] = useState(0);
 
-    const handleSearch = async () => {
+    const handleSearch = () => {
+        // Only trigger search if there's a query
         if (searchQuery.trim()) {
-            setSearchQuery(searchQuery);
+            setSearchTrigger(prev => prev + 1);
         }
     };
+
 
     const toggleVisibility = () => {
         if (window.scrollY > 200) {
@@ -52,7 +55,6 @@ const JobList = () => {
 
                     {/* Input Section */}
                     <div className="p-2.5 flex items-center justify-between rounded-sm bg-white shadow-md">
-                        {/* Job Search Input */}
                         <div className="flex items-center w-xl px-4">
                             <Search className="text-black mr-2" size={20} />
                             <input
@@ -61,12 +63,14 @@ const JobList = () => {
                                 className="w-full bg-transparent text-black placeholder:text-black placeholder:text-sm font-medium focus:outline-none"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                        handleSearch();
+                                    }
+                                }}
                             />
                         </div>
-
-
-                        {/* Search Button */}
                         <Button 
                             className="flex-shrink-0" 
                             size="xl" 
@@ -88,9 +92,7 @@ const JobList = () => {
                     />
                 </div>
             </section>
-            <section>
-            <JobResulte searchQuery={searchQuery} />
-            </section>
+            <JobResulte searchQuery={searchQuery} searchTrigger={searchTrigger} />
             {isVisible && (
                 <button
                     onClick={scrollToTop}

@@ -8,6 +8,14 @@ import JobTalent from "../components/Work&Talent-components/JobTalent";
 const Talent = () => {
 
     const [isVisible, setIsVisible] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchTrigger, setSearchTrigger] = useState(0);
+
+    const handleSearch = () => {
+        if (searchQuery.trim()) {
+            setSearchTrigger(prev => prev + 1);
+        }
+    };
 
     const toggleVisibility = () => {
         if (window.scrollY > 200) {
@@ -46,19 +54,24 @@ const Talent = () => {
 
                     {/* Input Section */}
                     <div className="p-2.5 flex items-center justify-between rounded-sm bg-white shadow-md">
-                        {/* Job Search Input */}
                         <div className="flex items-center w-xl px-4">
                             <Search className="text-black mr-2" size={20} />
                             <input
                                 type="text"
-                                placeholder="Job, title, skills, or company"
+                                placeholder="Full Name, Username, Field of work, Skills, Location"
                                 className="w-full bg-transparent text-black placeholder:text-black placeholder:text-sm font-medium focus:outline-none"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                             />
                         </div>
-
-
-                        {/* Search Button */}
-                        <Button className="flex-shrink-0" size="xl" variant="filled" color="#2e6f40">
+                        <Button 
+                            className="flex-shrink-0" 
+                            size="xl" 
+                            variant="filled" 
+                            color="#2e6f40"
+                            onClick={handleSearch}
+                        >
                             Search
                         </Button>
                     </div>
@@ -74,7 +87,7 @@ const Talent = () => {
                 </div>
             </section>
             <section>
-                <JobTalent />
+                <JobTalent searchQuery={searchQuery} searchTrigger={searchTrigger} />
             </section>
             {isVisible && (
                 <button

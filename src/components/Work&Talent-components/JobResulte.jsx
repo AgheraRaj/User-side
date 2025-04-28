@@ -3,38 +3,59 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const JobResults = ({ searchQuery }) => {
+const JobResults = ({ searchQuery, searchTrigger }) => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [visibleJobs, setVisibleJobs] = useState(8);
 
+  useEffect(() => {
+    const fetchJobs = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = '/login';
+            return;
+        }
+
+        setLoading(true);
+        try {
+            let endpoint = `${import.meta.env.VITE_API_URL}/jobs/alljobs`;
+            let config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            };
+
+            if (searchQuery.trim() && searchTrigger > 0) {
+                endpoint = `${import.meta.env.VITE_API_URL}/jobs/search-jobs`;
+                config = {
+                    ...config,
+                    params: {
+                        keyword: searchQuery.trim(),
+                        fields: 'title,clientName,location,skillsRequired'
+                    }
+                };
+            }
+
+            const response = await axios.get(endpoint, config);
+            setJobs(response.data);
+            setVisibleJobs(8);
+            setLoading(false);
+        } catch (error) {
+            if (error.response?.status === 403) {
+                localStorage.removeItem('token');
+                window.location.href = '/login';
+            }
+            console.error('Error fetching jobs:', error);
+            setLoading(false);
+        }
+    };
+
+    fetchJobs();
+}, [searchQuery, searchTrigger]);
+
   const loadMore = () => {
     setVisibleJobs(prevVisible => prevVisible + 8);
   };
-
-  useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        const endpoint = searchQuery
-          ? `${import.meta.env.VITE_API_URL}/jobs/search?query=${encodeURIComponent(searchQuery)}`
-          : `${import.meta.env.VITE_API_URL}/jobs/alljobs`;
-
-        const response = await axios.get(endpoint, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-        setJobs(response.data);
-        setVisibleJobs(8);
-        console.log(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching jobs:', error);
-        setLoading(false);
-      }
-    };
-    fetchJobs();
-  }, [searchQuery])
 
   if (loading) {
     return (

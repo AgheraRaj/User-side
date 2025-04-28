@@ -173,7 +173,7 @@ function Header() {
           )}
 
 
-          <span className="font-normal hover:text-[#68BA7F] cursor-pointer">Blogs</span>
+          {/* <span className="font-normal hover:text-[#68BA7F] cursor-pointer">Blogs</span> */}
         </div>
 
         <div className="flex items-center space-x-5">
@@ -345,31 +345,38 @@ function Header() {
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
-                    
-                    <div className="flex flex-col border border-black rounded-md size-64">
-                      <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-1.jpg" alt="" className="rounded-t-md" />
-                      <div className="font-semibold rounded-b-md text-start pt-2 px-2">
-                        <p>Working with international freelancers</p>
+
+                    <Link to={`${!authToken ? "/login" : "/international-freelancer" }`}>
+                      <div className="flex flex-col border border-black rounded-md size-64">
+                        <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-1.jpg" alt="" className="rounded-t-md" />
+                        <div className="font-semibold rounded-b-md text-start pt-2 px-2">
+                          <p>Working with international freelancers</p>
+                        </div>
                       </div>
-                    </div>
+                    </Link>
+
                     <div className="flex flex-col border border-black rounded-md size-64">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-2.jpg" alt="" className="rounded-t-md" />
                       <div className="font-semibold rounded-b-md text-start pt-2 px-2">
                         <p>Where to find the best developers</p>
                       </div>
                     </div>
+
+
                     <div className="flex flex-col border border-black rounded-md size-64">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-3.jpg" alt="" className="rounded-t-md" />
                       <div className="font-semibold rounded-b-md text-start pt-2 px-2">
                         <p>Do you need a local freelancer?</p>
                       </div>
                     </div>
-                    <div className="flex flex-col border border-black rounded-md size-64">
-                      <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-4.jpg" alt="" className="rounded-t-md" />
-                      <div className="font-semibold rounded-b-md text-start pt-2 px-2">
-                        <p>Building an international team</p>
+                    <Link to={`${!authToken ? "/login" : "/international-freelancer" }`}>
+                      <div className="flex flex-col border border-black rounded-md size-64">
+                        <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-4.jpg" alt="" className="rounded-t-md" />
+                        <div className="font-semibold rounded-b-md text-start pt-2 px-2">
+                          <p>Building an international team</p>
+                        </div>
                       </div>
-                    </div>
+                    </Link>
                   </div>
                 </div>
               )}
@@ -487,7 +494,7 @@ function Header() {
                 <div className="flex">
 
                   <div className="flex flex-col">
-                    <h2 className="text-lg font-semibold w-xs mb-4">Choose from millions of freelancers worldwide.</h2>
+                    <h2 className="text-lg font-semibold w-[350px] mb-4">Find work from different locations.</h2>
                     <ul className="leading-8">
                       <Link to={`${!authToken ? "/login" : "/by-country/USA"}`}><li className="cursor-pointer">United States</li></Link>
                       <Link to={`${!authToken ? "/login" : "/by-country/UK"}`}><li className="cursor-pointer">United Kingdom</li></Link>
@@ -504,31 +511,35 @@ function Header() {
                     </ul>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="flex flex-col border border-black rounded-md size-64">
-                      <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-1.jpg" alt="" className="rounded-t-md" />
-                      <div className="font-semibold rounded-b-md text-start pt-2 px-2">
-                        <p>Working with international freelancers</p>
-                      </div>
-                    </div>
-                    <div className="flex flex-col border border-black rounded-md size-64">
-                      <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-2.jpg" alt="" className="rounded-t-md" />
-                      <div className="font-semibold rounded-b-md text-start pt-2 px-2">
-                        <p>Where to find the best developers</p>
-                      </div>
-                    </div>
-                    <div className="flex flex-col border border-black rounded-md size-64">
-                      <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-3.jpg" alt="" className="rounded-t-md" />
-                      <div className="font-semibold rounded-b-md text-start pt-2 px-2">
-                        <p>Do you need a local freelancer?</p>
-                      </div>
-                    </div>
-                    <div className="flex flex-col border border-black rounded-md size-64">
-                      <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-4.jpg" alt="" className="rounded-t-md" />
-                      <div className="font-semibold rounded-b-md text-start pt-2 px-2">
-                        <p>Building an international team</p>
-                      </div>
-                    </div>
+                  <div className="grid grid-cols-3 gap-6">
+                    {[
+                      { country: "United States", image: "https://images.pexels.com/photos/356844/pexels-photo-356844.jpeg?auto=compress&cs=tinysrgb&w=600", path: "USA" },
+                      { country: "United Kingdom", image: "https://images.pexels.com/photos/460672/pexels-photo-460672.jpeg?auto=compress&cs=tinysrgb&w=600", path: "UK" },
+                      { country: "India", image: "https://images.pexels.com/photos/3476860/pexels-photo-3476860.jpeg?auto=compress&cs=tinysrgb&w=600", path: "India" },
+                      { country: "Canada", image: "https://images.pexels.com/photos/1519088/pexels-photo-1519088.jpeg?auto=compress&cs=tinysrgb&w=600", path: "Canada" },
+                      { country: "Australia", image: "https://images.pexels.com/photos/995764/pexels-photo-995764.jpeg?auto=compress&cs=tinysrgb&w=600", path: "Australia" },
+                      { country: "Indonesia", image: "https://images.pexels.com/photos/2166553/pexels-photo-2166553.jpeg?auto=compress&cs=tinysrgb&w=600", path: "Indonesia" }
+                    ].map((item, index) => (
+                      <Link
+                        key={index}
+                        to={`${!authToken ? "/login" : `/by-country/${item.path}`}`}
+                        className="transform transition-all duration-300 hover:scale-105"
+                      >
+                        <div className="flex flex-col border border-[#2E6F40]/20 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:border-[#2E6F40]">
+                          <div className="relative h-48 overflow-hidden">
+                            <img
+                              src={item.image}
+                              alt={item.country}
+                              className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                            />
+                            <div className="absolute inset-0 bg-black/20 hover:bg-black/10 transition-all duration-300"></div>
+                          </div>
+                          <div className="font-semibold px-4 py-3 bg-white text-center hover:text-[#2E6F40] transition-colors duration-300">
+                            {item.country}
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
                   </div>
                 </div>
               )}

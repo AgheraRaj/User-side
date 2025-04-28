@@ -4,59 +4,29 @@ import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
 
-const JobTalent = ({ searchQuery, searchTrigger }) => {
+const InternatinalFreelancer = () => {
     const [talents, setTalents] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [visibleTalents, setVisibleTalents] = useState(8);
 
     useEffect(() => {
         const fetchTalents = async () => {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = '/login';
-                return;
-            }
-
-            setLoading(true);
             try {
-                let endpoint = `${import.meta.env.VITE_API_URL}/user`;
-                let config = {
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/user/get-international-freelancer`, {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                    }
-                };
-
-                if (searchQuery.trim() && searchTrigger > 0) {
-                    endpoint = `${import.meta.env.VITE_API_URL}/user/search-freelancer`;
-                    config = {
-                        ...config,
-                        params: {
-                            keyword: searchQuery.trim(),
-                            fields: 'firstName,lastName,username,fieldOfWork,skills,location'
-                        }
-                    };
-                }
-
-                const response = await axios.get(endpoint, config);
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                });
                 setTalents(response.data);
-                setVisibleTalents(8); // Reset pagination on new search
+                console.log(response.data);
                 setLoading(false);
             } catch (error) {
-                if (error.response?.status === 403) {
-                    localStorage.removeItem('token');
-                    window.location.href = '/login';
-                }
                 console.error('Error fetching talents:', error);
                 setLoading(false);
             }
         };
 
         fetchTalents();
-    }, [searchQuery, searchTrigger]);
-
-    const loadMore = () => {
-        setVisibleTalents(prevVisible => prevVisible + 8);
-    };
+    }, []);
 
     if (loading) {
         return (
@@ -69,15 +39,11 @@ const JobTalent = ({ searchQuery, searchTrigger }) => {
     }
 
     return (
-        <div className="pb-10">
-            {/* Header Section */}
-            <div className="flex items-center justify-between px-16 mb-6">
-                <p>Showing 1 &ndash; {Math.min(visibleTalents, talents.length)} of {talents.length} results</p>
-            </div>
+        <div className="py-10">
 
             {/* Card Section */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-6 lg:gap-8 px-4 md:px-8 lg:px-16">
-            {talents.slice(0, visibleTalents).map((talent, index) => (
+            {talents.map((talent, index) => (
                     <Card
                     key={index}
                     padding="xl"
@@ -107,7 +73,7 @@ const JobTalent = ({ searchQuery, searchTrigger }) => {
                             <div className="flex flex-wrap gap-2 justify-center min-h-[60px] max-h-28 overflow-y-auto px-2">
                                 {talent.profileDtoForCard.skills &&
                                     Array.isArray(talent.profileDtoForCard.skills) &&
-                                    talent.profileDtoForCard.skills.slice(0, 4).map((skill, i) => (
+                                    talent.profileDtoForCard.skills.map((skill, i) => (
                                         <Badge
                                             key={i}
                                             size="md"
@@ -159,22 +125,9 @@ const JobTalent = ({ searchQuery, searchTrigger }) => {
                 </Card>
                 ))}
             </div>
-            {/* View More Button */}
-            {visibleTalents < talents.length && (
-                <div className="flex justify-center mt-8">
-                    <Button
-                        onClick={loadMore}
-                        variant="outline"
-                        color="#2E6F40"
-                        size="lg"
-                        className="hover:bg-[#2e6f40] hover:text-white transition-colors"
-                    >
-                        View More
-                    </Button>
-                </div>
-            )}
+    
         </div>
     );
 };
 
-export default JobTalent
+export default InternatinalFreelancer
