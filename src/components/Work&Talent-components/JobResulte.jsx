@@ -3,7 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const JobResults = () => {
+const JobResults = ({ searchQuery }) => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [visibleJobs, setVisibleJobs] = useState(8);
@@ -15,12 +15,17 @@ const JobResults = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/jobs/alljobs`, {
+        const endpoint = searchQuery
+          ? `${import.meta.env.VITE_API_URL}/jobs/search?query=${encodeURIComponent(searchQuery)}`
+          : `${import.meta.env.VITE_API_URL}/jobs/alljobs`;
+
+        const response = await axios.get(endpoint, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
         setJobs(response.data);
+        setVisibleJobs(8);
         console.log(response.data);
         setLoading(false);
       } catch (error) {
@@ -29,7 +34,7 @@ const JobResults = () => {
       }
     };
     fetchJobs();
-  }, [])
+  }, [searchQuery])
 
   if (loading) {
     return (

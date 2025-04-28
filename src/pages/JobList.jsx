@@ -7,6 +7,13 @@ import JobResulte from "../components/Work&Talent-components/JobResulte";
 
 const JobList = () => {
     const [isVisible, setIsVisible] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+
+    const handleSearch = async () => {
+        if (searchQuery.trim()) {
+            setSearchQuery(searchQuery);
+        }
+    };
 
     const toggleVisibility = () => {
         if (window.scrollY > 200) {
@@ -40,7 +47,7 @@ const JobList = () => {
                 <div className="flex flex-col space-y-5 justify-center">
                     <div className="space-y-2">
                         <h1 className="text-3xl font-semibold">Job List</h1>
-                        <p>All the Lorem Ipsum generators on the Internet tend to repeat.</p>
+                        <p>Discover a variety of freelance jobs tailored to your skills.</p>
                     </div>
 
                     {/* Input Section */}
@@ -50,14 +57,23 @@ const JobList = () => {
                             <Search className="text-black mr-2" size={20} />
                             <input
                                 type="text"
-                                placeholder="Service title, key words"
+                                placeholder="Service title, Skill, Location, Company name, etc."
                                 className="w-full bg-transparent text-black placeholder:text-black placeholder:text-sm font-medium focus:outline-none"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                             />
                         </div>
 
 
                         {/* Search Button */}
-                        <Button className="flex-shrink-0" size="xl" variant="filled" color="#2e6f40">
+                        <Button 
+                            className="flex-shrink-0" 
+                            size="xl" 
+                            variant="filled" 
+                            color="#2e6f40"
+                            onClick={handleSearch}
+                        >
                             Search
                         </Button>
                     </div>
@@ -73,7 +89,7 @@ const JobList = () => {
                 </div>
             </section>
             <section>
-                <JobResulte />
+            <JobResulte searchQuery={searchQuery} />
             </section>
             {isVisible && (
                 <button

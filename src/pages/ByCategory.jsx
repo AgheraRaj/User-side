@@ -55,15 +55,10 @@ const ByCategory = () => {
     if (category.length === 0) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center text-center px-4">
-                <Text size="xl" fw={600} color="dimmed">No Freelancers Found</Text>
+                <Text size="xl" fw={600} color="dimmed">No Jobs Found</Text>
                 <Text size="md" color="gray" mt={2}>
                     We couldn't find with this category {categorys}
                 </Text>
-                <Link to="/job" className="mt-6">
-                    <Button variant="light" color="#2E6F40">
-                        Back to All Freelancers
-                    </Button>
-                </Link>
             </div>
         );
     }

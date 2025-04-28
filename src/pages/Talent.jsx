@@ -41,7 +41,7 @@ const Talent = () => {
                 <div className="flex flex-col space-y-5 justify-center">
                     <div className="space-y-3 w-2xl">
                         <h1 className="text-3xl font-semibold">Discover Top Talent</h1>
-                        <p>Access a diverse pool of freelancers ready to meet your needs. Simplify your search for the perfect service provider.</p>
+                        <p>Explore a wide pool of skilled freelancers ready to bring your projects to life.</p>
                     </div>
 
                     {/* Input Section */}

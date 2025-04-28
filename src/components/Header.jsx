@@ -345,6 +345,7 @@ function Header() {
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
+                    
                     <div className="flex flex-col border border-black rounded-md size-64">
                       <img src="https://www.f-cdn.com/assets/main/en/assets/logged-out-navigation/hire-location/location-1.jpg" alt="" className="rounded-t-md" />
                       <div className="font-semibold rounded-b-md text-start pt-2 px-2">
